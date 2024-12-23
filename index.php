@@ -52,6 +52,7 @@ $capsule->setAsGlobal();
 $capsule->bootEloquent();
 $capsule->connection()->enableQueryLog();
 // Disable ONLY_FULL_GROUP_BY globally
+Capsule::statement("SET GLOBAL sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
 
 
 // Used to store actions log at the usage_log table
