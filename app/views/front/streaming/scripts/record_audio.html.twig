@@ -1,0 +1,74 @@
+<script>
+
+$(function() {
+
+    let mediaRecorder;
+    let audioChunks = [];
+    let startTime;
+    let duration = 0;
+
+    document.getElementById('startRecording').addEventListener('click', startRecording);
+    document.getElementById('stopRecording').addEventListener('click', stopRecording);
+    document.getElementById('uploadRecording').addEventListener('click', uploadRecording);
+
+    async function startRecording() {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        
+        mediaRecorder.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+        };
+
+        mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            const audioUrl = URL.createObjectURL(audioBlob);
+            document.getElementById('audioPlayback').src = audioUrl;
+            document.getElementById('audioPlayback').style.display = 'block';
+            document.getElementById('uploadRecording').style.display = 'block';
+            document.getElementById('record-info').style.display = 'block';
+        };
+
+        mediaRecorder.start();
+        startTime = Date.now();
+        document.getElementById('startRecording').style.display = 'none';
+        document.getElementById('stopRecording').style.display = 'block';
+        document.getElementById('equlizer-record').style.display = 'block';
+        
+    }
+
+    function stopRecording() {
+        mediaRecorder.stop();
+        duration = Math.round((Date.now() - startTime) / 1000);
+        document.getElementById('stopRecording').style.display = 'none';
+        document.getElementById('startRecording').style.display = 'block';
+        document.getElementById('equlizer-record').style.display = 'none';
+        document.getElementById('record-info').style.display = 'block';
+    }
+
+    function uploadRecording() {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        const formData = new FormData();
+        formData.append('audio', audioBlob, 'recording.wav');
+        formData.append('type', 'StationMedia.create_record');
+        formData.append('params[title]', jQuery('#stationRecordTitle').val());
+        formData.append('params[start_at]', jQuery('#stationRecordStart').val());
+        formData.append('params[date]', jQuery('#stationRecordDate').val());
+        formData.append('params[station_id]', {{station.station_id}});
+        formData.append('params[duration]', duration);
+
+        fetch('/front_api/create', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(result => {
+            handleResponse(JSON.parse(result))
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Upload failed. Please try again.');
+        });
+    }
+});
+
+</script>

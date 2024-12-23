@@ -1,0 +1,175 @@
+<script>
+$(function(){
+    
+    const shortVideoContainer = document.getElementById('shortVideoContainer');
+    const videoData = [
+        {% for item in video_items.items %}
+        {{item.addView()}}
+        { id: '{{item.media_id}}', likes: '{{item.likescount()}}', comments: '{{item.commentscount()}}', views: '{{item.viewscount()}}', liked: '{{item.liked(app.customer.customer_id).first()}}', src: '/stream_short_video?video={{item.player_object.file}}', poster: '/stream?thumbnail=800&dir=videos/screenshots&image={{item.player_object.poster}}', username: '{{item.player_object.artist}}', avatar: '/stream?thumbnail=100&image={{item.artist.picture_name}}', title: '{{item.player_object.title}}', description: "{{item.description|trim}}" },
+        {% endfor %}
+    ];
+
+    function createVideoElement(data) {
+        const videoItem = document.createElement('div');
+        videoItem.className = 'video-item';
+        
+        const backgroundBlur = document.createElement('div');
+        backgroundBlur.className = 'background-blur';
+        backgroundBlur.style.backgroundImage = `url(${data.poster})`;
+
+        const contentWrapper = document.createElement('div');
+        contentWrapper.className = 'content-wrapper lg:flex block';
+
+        const userInfo = document.createElement('div');
+        userInfo.className = 'user-info absolute bottom-0 left-0 lg:relative text-gray-100 ';
+        userInfo.innerHTML = `
+            <div class="user-profile">
+                <img src="${data.avatar}" alt="User Avatar" class="user-avatar">
+                <span class="username">${data.username}</span>
+            </div>
+            <div class="video-info">
+                <a href="/short_video/${data.id}" class="ajax-load video-title">${data.title}</a>
+                <p class="video-description">${data.description}</p>
+            </div>
+            
+            <div class="absolute block bottom-0  lg:left-4 right-10 py-10 lg:w-full flex gap-6" >
+                <a href="/front_api/create?type=Like.media&params[item_id]=${data.id}" data-params="{item_id: ${data.id} }" class="relative ajax-link cursor-pointer text-sm text-gray-100 flex gap-2 pt-10">
+                    <img class="`+ (data.liked ? 'hidden' : '')+` w-5" x-on:click="jQuery('#heart-${data.id}').addClass('hidden'); jQuery('#unheart-${data.id}').removeClass('hidden'); jQuery('#likes-count-${data.id}').text(parseInt(jQuery('#likes-count-${data.id}').text()) + 1);" id="heart-${data.id}" src="/src/front_assets/svg/{{app.is_dark ? 'white-' : ''}}heart.svg">
+                    <img class="`+ (!data.liked ? 'hidden' : '')+` w-5" x-on:click="jQuery('#unheart-${data.id}').addClass('hidden'); jQuery('#heart-${data.id}').removeClass('hidden'); jQuery('#likes-count-${data.id}').text(parseInt(jQuery('#likes-count-${data.id}').text()) - 1);" id="unheart-${data.id}" src="/src/front_assets/svg/blank-heart.svg">
+                    <span id="likes-count-${data.id}">${data.likes}</span>
+                    <span class="tooltiptext right left-0  text-xs">{{lang.translate('Like')}}</span>
+                </a>
+                <span class="relative  cursor-pointer text-sm text-gray-100 flex gap-2 pt-10">
+                    <img class="w-5" src="/src/front_assets/svg/{{ app.is_dark ? 'views-white' : 'views'}}.svg" />
+                    <span id="views-count-${data.id}">${data.views}</span>
+                    <span class="tooltiptext  text-xs">{{lang.translate('Views')}}</span>
+                </span>
+                <span class="relative  cursor-pointer text-sm text-gray-100 flex gap-2 pt-10">
+                    <img class="w-5" src="/src/front_assets/svg/{{ app.is_dark ? 'comments-white' : 'comments'}}.svg" />
+                    <span id="views-comments-${data.id}">${data.comments}</span>
+                    <span class="tooltiptext  text-xs">{{lang.translate('Comments')}}</span>
+                </span>
+            </div>
+        `;
+
+        const videoWrapper = document.createElement('figure');
+        videoWrapper.className = 'relative  video-wrapper lg:p-4';
+        videoWrapper.setAttribute('id', `videoContainer-${data.id}`);
+
+
+        const video = document.createElement('video');
+        video.src = data.src;
+        video.setAttribute('id', `my-video-${data.id}`);
+        video.poster = data.poster;
+        video.className = 'rounded-lg lg:p-4';
+        video.controls = false;
+        video.volume = getCookie('volume');
+        video.autoplay = {{app.SystemSetting.autoplay_shorts ? 'true' : 'false' }};
+        video.preload = "none";
+        video.dataset.container = `videoContainer-${data.id}`;
+
+        const actionButtons = document.createElement('div');
+        actionButtons.className = 'max-w-full flex px-6 mx-auto gap-4 text-gray-400 absolute rounded-es-xl top-full lg:mb-8 left-0  right-0 mx-auto gradient-top-overlay pt-0 lg:pt-10';
+        actionButtons.setAttribute('id', 'video-controls');
+        actionButtons.style.display = 'none'
+        actionButtons.innerHTML = `
+            <button class="play-video brightness-200" data-player="my-video-${data.id}" id="play" type="button" data-state="play"><img src="/src/front_assets/svg/video-play.svg" class="w-4 brightness-200"/></button>
+            <button class="pause-video brightness-200" data-player="my-video-${data.id}" style="display:none" id="pause" type="button" data-state="pause"><img src="/src/front_assets/svg/video-pause.svg" class="w-4 brightness-200"/></button>
+            <div id="current-time-page"></div>
+            <div class="progress w-full">
+                <progress id="progress" data-player="my-video-${data.id}" class="cursor-pointer bg-gray-800 w-full rounded-2xl overflow-hidden " value="0" min="0" step="1" max="">
+                    <span id="progress-bar"></span>
+                </progress>
+            </div>
+            <span id="video-duration-page"></span>
+            <div class="volume relative show-child ">
+                <button class="brightness-200" id="mute" data-player="my-video-${data.id}" type="button" style="padding-top: 5px" data-state="mute"><img src="/src/front_assets/svg/video-volume.svg" class="w-4 brightness-200"/></button>
+                <input type="range" id="video-volume" data-player="my-video-${data.id}" min="0" step=".1" max="1" class="show-on-hover absolute bottom-0 h-2 left-1 w-20" style="transform-origin: left; transform: rotate(270deg);"/>
+            </div>
+            <button id="fs" class="fullscreen " data-container="videoContainer-${data.id}" data-player="my-video-${data.id}" id="pause" type="button" data-state="go-fullscreen"><img src="/src/front_assets/svg/fullscreen.svg" class="w-4 brightness-200"/></button>
+        `;
+
+        videoWrapper.appendChild(video);
+        videoWrapper.appendChild(actionButtons);
+        contentWrapper.appendChild(userInfo);
+        contentWrapper.appendChild(videoWrapper);
+        videoItem.appendChild(backgroundBlur);
+        videoItem.appendChild(contentWrapper);
+
+        
+        // place a listener on it
+        video.addEventListener( "loadedmetadata", function () {
+            // retrieve dimensions
+            {# actionButtons.style.width = video.videoWidth+'px' #}
+            actionButtons.style.display = 'flex'
+            jQuery(`#progress[data-player=${video.id}]`).attr('max', video.duration)
+            jQuery(`#${videoWrapper.id} #video-duration-page`).html( convertToTime(video.duration))
+        }, false);
+        
+        // place a listener on it
+        video.addEventListener( "timeupdate", function () {
+            // retrieve dimensions
+            jQuery(`#progress[data-player=${video.id}]`).val( video.currentTime )
+            jQuery(`#${videoWrapper.id} #current-time-page`).html( convertToTime(video.currentTime))
+        }, false);
+        
+        // place a listener on it
+        video.addEventListener( "play", function () {
+            // retrieve dimensions
+            jQuery(`#${videoWrapper.id} .play-video`).fadeOut( 200 )
+            jQuery(`#${videoWrapper.id} .pause-video`).fadeIn( 200 )
+        }, false);
+
+        video.addEventListener( "pause", function () {
+            // retrieve dimensions
+            jQuery(`#${videoWrapper.id} .pause-video`).fadeOut( 200 )
+            jQuery(`#${videoWrapper.id} .play-video`).fadeIn( 200 )
+        }, false);
+
+
+        jQuery(document).on('click', 'a', function(){
+            video.pause()
+            video.src =  '';
+        })
+        return videoItem;
+    }
+
+    function handleIntersection(entries) {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                entry.target.className ='video-item active'
+                const video = entry.target.querySelector('video');
+                if (video.autoplay) {
+                    video.load();
+                    video.play();
+                }
+            } else {
+                entry.target.className ='video-item'
+                const video = entry.target.querySelector('video');
+                video.pause();
+            }
+        });
+    }
+
+
+    function loadVideos() {
+        videoData.forEach((data, i) => {
+            const videoElement = createVideoElement(data);
+            shortVideoContainer.appendChild(videoElement);
+        });
+    }
+
+    loadVideos();
+
+    const observer = new IntersectionObserver(handleIntersection, {
+        root: null,
+        threshold: 0.5
+    });
+
+    document.querySelectorAll('.video-item').forEach(item => {
+        observer.observe(item);
+    });
+    
+
+})
+</script>

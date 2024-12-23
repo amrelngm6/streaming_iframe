@@ -1,0 +1,62 @@
+
+
+            <div  class=" text-primary  w-full  rounded-2xl bg-white dark:bg-gray-900  p-8" >
+                <h2 class="text-2xl dark:text-gray-300 ">{{lang.translate('Edit Video')}}</h2>
+                <hr class="my-6 opacity-0" />
+                <form action="/front_api/update" method="post" enctype="multipart/form-data" id="update-video" class="ajax-form w-full  pb-10">
+                
+
+                    <div class="loader absolute w-full h-full left-0 top-0 bg-white dark:bg-gray-900 opacity-50 "></div>
+                
+                    <input type="hidden" name="type" value="Video.update" />
+                    <input type="hidden" name="params[media_id]" value="{{item.media_id}}" />
+                    
+                    <div class=" text-primary mt-6"><h4 class="text-xl dark:text-gray-300">{{lang.translate('Basic info')}}</h4></div>
+                    <hr class="opacity-30 my-6" />
+
+                    <div class="grid-cols-1 lg:grid-cols-2 lg:grid gap-10">
+                        <div class="text-primary w-full block">
+                            <input name="params[name]" placeholder="{{lang.translate('Video Name')}} *" value="{{item.name}}" class=" dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                        </div>         
+                        <div class="text-primary dark:text-gray-300 w-full block ">
+                            <select id="genres" multiple data-multi-select class="multi-select"  name="selected_genres"  data-placeholder="{{lang.translate('Select genres')}}" >
+                                {% for genre in genres %}
+                                <option 
+                                {% if genre.category_id in item.genres|column('category_id') %} 
+                                selected 
+                                {% endif %}  
+                                value="{{genre.category_id}}">{{genre.name}}</option>
+                                {% endfor  %}
+                            </select>
+                        </div>                       
+                    </div>
+                    
+                    <div class="text-primary w-full block my-6">
+                        <textarea rows="3" placeholder="Description *" name="params[description]" class=" dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" >{{item.description}}</textarea>
+                    </div>
+                    
+                    
+                    <div class=" text-primary"><h4 class="text-xl dark:text-gray-300">{{lang.translate('Video cover')}}</h4></div>
+                    <hr class="opacity-30 my-4" />
+                    
+                    <div class="w-full relative overflow-x-auto mb-10">
+                        <div class="overflow-x-auto flex gap-8 py-6" style="width: max-content"  id="screenshots-container">
+                            {% for screenshot in list %}
+                            <label  onclick="(function () { return  jQuery('#item-screenshot-{{loop.index}}').prop('checked', true); })(); return false;  "  class="cursor-pointer relative  dark:bg-gray-800  bg-gray-200 rounded-3xl w-56 border border-1 border-dashed	border-rose-600">
+                                <img id="imagePreview" src="{{screenshot ?? '/src/front_assets/svg/picture.svg'}}" class="rounded-3xl" />
+                                <input  type="radio" {{screenshot == item.picture ? 'checked' : ''}} value="{{screenshot}}" id="item-screenshot-{{loop.index}}" class="hidden" name="params[picture]" />
+                                <span class="checkmark absolute"></span>
+                            </label>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                    
+
+                    <a href="/video/{{item.media_id}}" class="ajax-load dark:text-gray-300 float-left inline-block px-6 py-2 rounded-2xl border transition hover:border-rose-600 border-rose-400">{{lang.translate('View page')}}</a>
+
+
+                    <button class=" dark:text-gray-300 float-right inline-block px-6 py-2 rounded-2xl border transition hover:border-rose-600 border-rose-400">{{lang.translate('Next')}}</button>
+                    
+                </form>
+            </div>

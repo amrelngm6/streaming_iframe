@@ -1,0 +1,50 @@
+ <div class="flex gap-10 container">
+         <div class="categories-nav position-relative w-full" >
+            <h3 class="categories-nav__title py-4 bg-dark mt-8">Browse Categories</h3>
+            <ul class="categories-nav__list list-unstyled">
+            {% for category in items %}
+              <li class="categories-nav__item"><a href="{{category.lang_content.prefix}}">{{category.lang_content.title}}</a></li>
+            {% endfor %}
+            </ul>
+          </div>
+      <div class="slideshow-boxed-right w-full">
+        <section class="swiper-container js-swiper-slider slideshow"
+          data-settings='{
+            "autoplay": {
+              "delay": 5000
+            },
+            "pagination": {
+              "el": ".slideshow-pagination",
+              "type": "bullets",
+              "clickable": true
+            },
+            "slidesPerView": 1,
+            "effect": "fade",
+            "loop": true
+          }'>
+          <div class="swiper-wrapper">
+          {% for slide in gallery.items %}
+            <div class="swiper-slide">
+              <div class="overflow-hidden position-relative h-100">
+                <div class="slideshow-character position-absolute position-right-center mx-3 mx-xl-5">
+                  <img loading="lazy" src="{{slide.media}}" width="350" height="403" alt="Woman Fashion 1" class="slideshow-character__img animate animate_fade animate_btt animate_delay-9 h-auto w-auto" style="max-height: 78%; width: auto;">
+                </div>
+                <div class="slideshow-text container px-4 mx-3 mx-lg-4 mx-xl-5 position-absolute start-50 top-50 translate-middle">
+                  <h6 class="text_dash text-uppercase fs-base fw-medium animate animate_fade animate_btt animate_delay-3 theme-color">{{slide.title}}</h6>
+                  <h2 class="fs-50 fw-bold mb-2 mb-lg-3 animate animate_fade animate_btt animate_delay-5 lh-1 text-shadow-white">{{slide.text}}</h2>
+                  <h2 class="fs-3 fw-normal mb-3 animate animate_fade animate_btt animate_delay-5">{{slide.subtitle}}</h2>
+                  <a href="{{slide.link}}" class="btn-link btn-link_lg default-underline fw-medium text-uppercase animate animate_fade animate_btt animate_delay-7">{{slide.button_text}}</a>
+                </div>
+              </div>
+            </div><!-- /.slideshow-item -->
+          {% endfor %}
+
+          </div><!-- /.slideshow-wrapper js-swiper-slider -->
+
+          <div class="container">
+            <div class="slideshow-pagination d-flex align-items-center position-absolute bottom-0 left-50 mb-4"></div>
+            <!-- /.products-pagination -->
+          </div><!-- /.container -->
+        </section><!-- /.slideshow -->
+      </div>
+    </div>

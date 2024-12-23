@@ -1,0 +1,75 @@
+
+    <div class="pb-20 w-full">
+        
+        <form action="/front_api/update" class="ajax-form" id="calendar-form">
+            <input type="hidden" name="type" value="StationMedia.update" />
+            <input type="hidden" name="params[station_media_id]" value="" id="stationMediaId" />
+            <input type="hidden" name="params[start_at]" value="" id="stationMediaStartTime" />
+            <input type="hidden" name="params[date]" value="" id="stationMediaDate" />
+        </form>
+
+        <div class="pt-10 container mx-auto">
+        {{station.active_item}}
+        {% include 'views/front/' ~ template ~ '/pages/station/station-stream-block.html.twig' %}
+        </div>
+
+        
+        <div class="w-full flex gap-20 relative">
+            <div id="slider-container" class="w-32" >
+                
+                <div class="absolute top-0 bottom-0 mb-20" style=" max-width: 200px; display: grid;  transform: scale(.5);">
+
+                    <!-- put all in a wrapper:-->
+                    <div class="wrap" role="group" aria-label="slider with ruler" style="display: grid; --min: 1; --val: 30; --max: 60">
+                        <!-- slider:-->
+                        <input id="r" type="range" list="l" step="1" min="0" max="60" />
+                        <!-- value display:-->
+                        <output for="r"></output>
+                        <!-- ruler:-->
+                        <datalist id="l">
+                            {% set arr = range(0, 12) %}
+                            {% for i in range(1, 10) %}
+                            <option value="{{((i * 6) - 1) }}" style="--idx: {{((i * 6) - 4)}}" ></option>
+                            <option value="{{((i * 6) - 1) }}" style="--idx: {{((i * 6) - 2)}}" ></option>
+                            <option value="{{((i * 6)) }}" style="--idx: {{((i * 6))}}" label="{{((i * 6))}}" ></option>
+
+                            {% endfor %}
+                            <option value="22" style="--idx: 22"></option>
+
+                        </datalist>
+                    </div>
+                    <section class="range-info">
+                        <p class="box box--fail box--list"></p>
+                        <p class="box box--warn box--trig"></p>
+                        <p class="box box--fail box--cmix"></p>
+                    </section>
+                </div>
+            </div>
+
+            <div class="w-full pt-10">
+                <div class="w-full bg-white p-8 rounded-xl shadow-md dark:bg-gray-900 dark:text-gray-300" id='calendar' style="width: calc(100% - 60px); max-height:calc(100vh - 50px)"></div>
+            </div>
+
+        </div>
+        <div class="max-w-lg mx-auto transition rounded-lg bg-white dark:bg-gray-700 dark:text-gray-300 p-6 fixed left-0 transition-all right-0 top-auto shadow-xl" style="z-index: 999; bottom: -100%" id="calendar-hover-info">
+            <label class="disabled text-slate-800 flex gap-2 w-full items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100">
+                <div class="mr-4 grid place-items-center"><img alt="candice" id="eventHoverPopupPicture" src="{{item.picture}}" class="relative inline-block h-12 w-12 !rounded-full object-cover object-center"></div>
+                <div style="max-width:68%" >
+                    <h6 id="eventHoverPopupName" class="truncate text-slate-800 dark:text-gray-300 font-medium"></h6>
+                    <p id="eventHoverPopupTime"  class=" text-sm dark:text-gray-300"></p>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    {% include 'views/front/' ~ template ~ '/scripts/station_calendar.html.twig' %}
+
+    {% include 'views/front/' ~ template ~ '/popups/station-add-media.html.twig' %}
+    {% include 'views/front/' ~ template ~ '/popups/station-calendar.html.twig' %}
+    {% include 'views/front/' ~ template ~ '/pages/station/station-range-popup.html.twig' %}
+    {% include 'views/front/' ~ template ~ '/popups/station-record.html.twig' %}
+
+
+{% if app.customer.can_do('stations') != true %}
+{% include 'views/front/' ~ app.SystemSetting.template ~ '/popups/subscribe-popup.html.twig' %}
+{% endif %}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="">
+	<head>
+
+		<meta charset="utf-8">
+		<meta content="ie=edge" http-equiv="x-ua-compatible">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Medians</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+		<link rel="stylesheet" href="/src/front_assets/css/tailwind.min.css"/>
+		<link defer rel="stylesheet" href="/src/front_assets/css/main.css"/>
+		<link rel="stylesheet" href="/src/front_assets/css/custom.css"/>
+	    <script src="/src/front_assets/js/jquery.min.js"></script>
+        <script src="/src/front_assets/js/roundslider.js"></script>
+        <script> var rootURL = 'https://streaming.quatre-co.com'; </script>
+	</head>
+
+	<body style="background:transparent"> 
+
+
+		<div class="  h-full overflow-hidden" >
+
+			<div class="relative z-10 w-full   h-full">
+
+                    <video id="my-video" controls class="w-full lg:h-screen" data-container="videoContainer" poster="/stream?thumbnail=1000&dir=videos/screenshots&image={{item.picture_name}}" crossorigin="anonymous" >
+                        <source src="/stream_video?video={{item.main_file.filename}}" type="video/mp4"/>
+                    </video>
+				{# <figure id="videoContainer" class="w-full  shadow-xl relative top-0 left-0 ">
+
+                    <div id="video-controls" class="flex px-6 gap-4 text-gray-400 absolute bottom-0 left-0 w-full gradient-top-overlay pt-10" data-state="hidden">
+                        <button class="play-video brightness-200" data-player="my-video" id="play" type="button" data-state="play"><img src="/src/front_assets/svg/video-play.svg" class="w-4 brightness-200"/></button>
+                        <button class="pause-video brightness-200" data-player="my-video" style="display:none" id="pause" type="button" data-state="pause"><img src="/src/front_assets/svg/video-pause.svg" class="w-4 brightness-200"/></button>
+                        <div id="current-time-page"></div>
+                        <div class="progress w-full">
+                            <progress id="progress" data-player="my-video" class="cursor-pointer bg-gray-800 w-full rounded-2xl overflow-hidden " value="0" min="0" step="1" max="">
+                                <span id="progress-bar"></span>
+                            </progress>
+                        </div>
+                        <span id="video-duration-page"></span>
+                        <div class="volume relative show-child ">
+                            <button class="brightness-200" id="mute" data-player="my-video" type="button" style="padding-top: 5px" data-state="mute"><img src="/src/front_assets/svg/video-volume.svg" class="w-4 brightness-200"/></button>
+                            <input type="range" id="video-volume" data-player="my-video" min="0" step=".1" max="1" class="show-on-hover absolute bottom-0 h-2 left-1 w-20" style="transform-origin: left; transform: rotate(270deg);"/>
+                        </div>
+                        <button id="fs" class="fullscreen " data-container="videoContainer" data-player="my-video" id="pause" type="button" data-state="go-fullscreen"><img src="/src/front_assets/svg/fullscreen.svg" class="w-4 brightness-200"/></button>
+                    </div>
+                </figure> #}
+
+			</div>
+
+		</div>
+
+		<div style="display:none">
+			
+		</div>
+
+        <script src="/src/front_assets/js/main.js"></script>
+        <script src="/src/front_assets/js/slide.js"></script>
+        <script src="/src/front_assets/js/custom.js"></script>
+        <style> #wave-{{item.media_id}} {max-height:10rem} </style>
+        <script>
+        
+$(function(){
+	
+	let video = document.getElementById('my-video')
+	
+	addEventListener('load', e => {
+		
+		playVideo(video, true)
+	})
+})
+</script>
+	</body>
+</html>

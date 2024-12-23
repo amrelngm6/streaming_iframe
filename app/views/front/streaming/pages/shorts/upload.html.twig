@@ -1,0 +1,95 @@
+<div class="container">
+	
+    <div class="py-4 text-center">
+        <h1 class="px-6 text-2xl text-gray-800 dark:text-gray-100">{{lang.translate('Create Short video')}} </h1>
+        <p class="px-6 text-primary">{{lang.translate('You should select uploaded video first')}} </p>
+    </div>
+	<div class="main-content">
+        <p class="text-primary"></p>
+		<div class="video-container p-4 px-2 lg:flex gap-4 block w-full bg-white dark:bg-gray-800">
+			<div class="video-preview w-full">
+				<video id="video-player" width="100%" height="100%" controls>
+					<source type="video/mp4">
+					Your browser does not support the video tag.
+				</video>
+
+
+				<!-- progress bar -->
+				<div class="progress">
+					<div class="progress-bar progress-bar-primary progress-bar-striped" id="cut-left" style="width: 0%">
+						<span class="sr-only"></span>
+					</div>
+					<div class="progress-bar progress-bar-success progress-bar-striped active" id="played" style="width: 0%">
+						<span class="sr-only"></span>
+					</div>
+					<div class="progress-bar progress-bar-warning progress-bar-striped" id="toPlay" style="width: 100%">
+						<span class="sr-only"></span>
+					</div>
+					<div class="progress-bar progress-bar-primary progress-bar-striped" id="cut-right" style="width: 0%">
+						<span class="sr-only"></span>
+					</div>
+				</div>
+
+				<!-- 2. The IONrangeSlider container -->
+				<div class="timeline p-4 overflow-hidden relative dark:bg-gray-900 mt-20" style="">
+					<div id="range"></div>
+				</div>
+			</div>
+			<div class="editing-panel bg-gray-100 dark:bg-gray-900 text-primary w-full text-sm  ">
+
+				<div class="z-20 rounded-2xl w-full  bg-white dark:bg-gray-900 dark:text-gray-300 p-4 ">
+				
+					<form action="/front_api" class="flex items-center max-w-lg mx-auto ajax-form  pt-4" id="new-item-form">
+						<input type="hidden" name="type" value="load-videos-list"/>
+						<label for="voice-search" class="sr-only">{{lang.translate('Search')}}</label>
+						<div class="relative w-full">
+							<div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+								<svg class="w-4 h-4 text-gray-500 dark:text-gray-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 21 21">
+									<path d="M16.6725 16.6412L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</div>
+							<input placeholder="{{lang.translate('Search for videos')}}"   onclick="(function(){ return jQuery('#new-channel-link-item').addClass('hidden'),  jQuery('#new-channel-item,#link-station-submit-button, #media-result-box').removeClass('hidden');})()" name="params[title]" type="text" id="voice-search" data-element="search-result-popup" data-form="new-item-form" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
+							<span class="cursor-pointer absolute inset-y-0 end-0 flex items-center pe-3">
+								{% include 'views/front/streaming/popups/speech-to-text.html.twig' %}
+							</span>
+						</div>
+					</form>
+				</div>
+
+				<form action="/front_api/create" class=" max-w-lg mx-auto ajax-form" id="new-station-link-item">
+					<input type="hidden" name="type" value="ShortVideo.create"/>
+					<input type="hidden" name="params[media_id]" value="{{station.media_id}}"/>
+
+					<div id="media-result-box" class="hidden mt-4 relative flex w-96 max-h-64 overflow-auto flex-col rounded-lg border border-slate-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-sm">
+						<nav class="flex min-w-[240px] flex-col gap-1 p-1.5" id="search-result-popup"></nav>
+					</div>
+                    
+					<div class="mt-4 relative flex w-96 max-h-64 overflow-auto flex-col rounded-lg border border-slate-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-sm">
+						<div class="text-center w-full py-2 hidden" id="link-station-submit-button">
+							<button type="submit" class="mx-auto mt-2 group relative h-12 w-48 overflow-hidden rounded-lg bg-white text-lg shadow">
+								<div class="absolute inset-0 w-3 bg-purple-800 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
+								<span class="relative text-black group-hover:text-white">{{lang.translate('Set Media')}}</span>
+							</button>
+						</div>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+	
+	<div class="timeline bg-gray-100 dark:bg-gray-900 p-4  overflow-x-auto">
+
+		<div class="timeline-track">
+			<div class="timeline-thumbnails " id="timeline-thumbnails"></div>
+			<div class="timeline-cursor" id="timeline-cursor"></div>
+		</div>
+	</div>
+</div>
+
+
+{% include 'views/front/' ~ template ~'/scripts/short_generator_styles.html.twig' %}
+
+{% if app.customer.can_do('shortvideo') != true %}
+{% include 'views/front/' ~ app.SystemSetting.template ~ '/popups/subscribe-popup.html.twig' %}
+{% endif %}

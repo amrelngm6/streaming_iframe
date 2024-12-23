@@ -1,0 +1,49 @@
+
+<script type="text/javascript">
+var recognizing;
+var recognition = new webkitSpeechRecognition();
+recognition.continuous = true;
+reset();
+recognition.onend = reset();
+
+recognition.onresult = function (event) {
+    let value = '';
+    for (var i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+            value += event.results[i][0].transcript;
+        }
+    }
+    jQuery('#voice-search').val(value).trigger('input')
+    jQuery('#voice-search').val(value).trigger('change')
+    let id = jQuery('#voice-search').data('form');
+    let element = jQuery('#voice-search').data('element');
+    submitForm(id, element)
+    recognition.stop();
+
+}
+
+function reset() {
+  
+  recognizing = false;
+  button.innerHTML = '<svg class="w-4 h-4 text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 20">'+
+                        '<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7v3a5.006 5.006 0 0 1-5 5H6a5.006 5.006 0 0 1-5-5V7m7 9v3m-3 0h6M7 1h2a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V4a3 3 0 0 1 3-3Z"/>'+
+                    '</svg>';
+
+  recognition.stop();
+
+}
+
+function toggleStartStop() {
+  if (recognizing) {
+    recognition.stop();
+    reset();
+  } else {
+    recognition.start();
+    recognizing = true;
+      button.innerHTML = '<svg class="w-4 h-4 text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 20">'+
+            '<path stroke="#f30" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7v3a5.006 5.006 0 0 1-5 5H6a5.006 5.006 0 0 1-5-5V7m7 9v3m-3 0h6M7 1h2a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V4a3 3 0 0 1 3-3Z"/>'+
+        '</svg>';
+
+  }
+}
+</script>

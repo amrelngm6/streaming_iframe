@@ -1,0 +1,123 @@
+<div class="max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto" x-data="{priceKey: 'cost_month'}">
+	<div class="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
+		<h2 class="text-2xl font-normal md:text-4xl md:leading-tight dark:text-white">
+			Pricing
+		</h2>
+		<p class="mt-1 text-gray-600 dark:text-neutral-400">
+			Whatever your status, our offers evolve according to your needs.
+		</p>
+	</div>
+	<div class="flex justify-center items-center">
+		<label class="min-w-14 text-sm text-gray-500 me-3 dark:text-neutral-400">Monthly</label>
+		<input onchange="(function() { jQuery('.month,.year').toggleClass('hidden')})()" class="relative w-[3.25rem] h-7 p-px bg-gray-100 border-transparent text-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-blue-600 disabled:opacity-50 disabled:pointer-events-none checked:bg-none checked:text-blue-600 checked:border-blue-600 focus:checked:border-blue-600 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-600 " type="checkbox" id="hs-basic-with-description">
+		<label class=" mr-2 checked:ml-2 checked:mr-0 relative min-w-14 text-sm text-gray-500 ms-3 dark:text-neutral-400">Annual
+			<span class="absolute -top-10 start-auto -end-28 flex items-center"></label>
+		</div>
+		<div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:items-center">
+			{% for package in packages %}
+				<div class="flex flex-col border border-gray-200 text-center rounded-xl p-8 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900">
+					<h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">{{package.name}}</h4>
+					<p>
+						<span class="mt-7 font-normal text-5xl text-gray-800 dark:text-neutral-200 month">{{package.cost_month > 0 ? ('$' ~ package.cost_month ) : 'Free' }}</span>
+						<span class="mt-7 font-normal text-5xl text-gray-800 dark:text-neutral-200 hidden year">{{package.cost_year > 0 ? ('$' ~ package.cost_year) : 'Free' }}</span>
+					</p>
+					<p class="mt-2 text-sm text-gray-500 dark:text-neutral-500">
+						{{package.description}}
+					</p>
+					<ul class="mt-7 space-y-2.5 text-sm">
+
+						{% for feature in package.features %}
+							{% if loop.index < 4 %}
+								<li class="flex gap-x-2 items-center">
+                                    {% if package.feature[feature.code] > 0 %}
+									<svg class="shrink-0 mt-0.5 size-4 text-blue-600 dark:text-blue-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<polyline points="20 6 9 17 4 12"></polyline>
+									</svg>
+                                    {% else %}
+                                    <img src="/src/front_assets/svg/close.svg" class="h-2 px-1" />
+                                    {% endif %}
+
+									<span class="text-gray-800 dark:text-neutral-400">{{package.feature[feature.code]}}
+										{{lang.translate(feature.code)}}</span>
+								</li>
+							{% endif %}
+						{% endfor %}
+
+					</ul>
+					<p>
+						<a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800 ajax-load" href="/package_subscription/{{package.package_id}}">Sign up&nbsp;</a>
+					</p>
+				</div>
+			{% endfor %}
+
+		</div>
+		<div class="mt-20 lg:mt-32">
+			<div class="lg:text-center mb-10 lg:mb-20">
+				<h3 class="text-2xl font-normal dark:text-white">
+					{{lang.translate('Compare plans')}}
+				</h3>
+			</div>
+
+			<div class="space-y-24 lg:hidden">
+    			{% for package in packages %}
+				<section>
+					<div class="px-4 mb-4">
+						<h2 class="text-lg leading-6 font-medium text-gray-800">{{package.name}}</h2>
+					</div>
+					<table class="w-full">
+						<tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                        
+						{% for feature in package.features %}
+
+                        <tr class="border-t border-gray-200 dark:border-neutral-700">
+                            <th class="py-5 px-4 text-sm font-normal text-gray-600 text-start whitespace-nowrap dark:text-neutral-400" scope="row">{{lang.translate(feature.code)}}</th>
+                            <td class="py-5 pe-4">
+                                <span class="font-normal">{{package.feature[feature.code] > 0 ? package.feature[feature.code] : '<img src="/src/front_assets/svg/close.svg" class="h-4" />'}}</span>
+                            </td>
+                        </tr>
+            			{% endfor %}
+						</tbody>
+					</table>
+				</section>
+    			{% endfor %}
+
+			</div>
+
+
+			<div class="hidden lg:block">
+				<figure class="table w-full">
+					<table class="w-full h-px">
+						<thead class="sticky top-0 inset-x-0 bg-white dark:bg-neutral-900">
+							<tr>
+								<th class="py-4 ps-6 pe-6 text-sm font-medium text-gray-800 text-start" scope="col">
+									<span class="sr-only">Feature by</span>
+									<span class="dark:text-white">{{lang.translate('Packages')}}</span>
+								</th>
+								{# {% for feature in package.feature %} #}
+								{% for package in packages %}
+									<th class="w-1/4 py-4 px-6 text-lg leading-6 font-medium text-gray-800 text-center dark:text-white" scope="col">
+										{{package.name}}
+									</th>
+								{% endfor %}
+							</tr>
+						</thead>
+						<tbody class="border-t border-gray-200 divide-y divide-gray-200 dark:border-neutral-700 dark:divide-neutral-700">
+
+							{% for feature in packages[0].features %}
+								<tr>
+									<th class="w-1/4 py-4 px-6 text-lg leading-6 font-medium text-gray-800 text-start dark:text-white" scope="col">
+										{{lang.translate(feature.code)}}
+									</th>
+									{% for package in packages %}
+										<th class="w-1/4 py-4 px-6 text-lg leading-6 font-medium text-gray-800 text-center dark:text-white" scope="col">
+                                            <span class="font-normal">{{package.feature[feature.code] > 0 ? package.feature[feature.code] : '<img src="/src/front_assets/svg/close.svg" class="h-4 mx-auto"  />'}}</span>
+										</th>
+									{% endfor %}
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</figure>
+			</div>
+		</div>
+	</div>

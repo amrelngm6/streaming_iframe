@@ -1,0 +1,85 @@
+
+            <div class="py-4  h-full overflow-hidden rounded-2xl" x-data="{}">                     
+                    
+                <div class="my-4 h-full lg:flex overflow-hidden rounded-2xl">                     
+                    
+                    <div class="overflow-hidden w-full lg:p-0 p-4 lg:w-96 min-w-80 " id="station-parent">
+                        <div class=" p-8 relative overflow-hidden  rounded-2xl w-full lg:w-80" id="station-side" >
+                            <div class="artist-overlay top-[-20px] left-0 absolute w-full h-full py-20 bg-gradient-to-b from-gray-800 to-black"></div>
+                            <img src="/stream?thumbnail=800&image={{item.activeItem.media.picture_name ?? item.picture_name}}"  class="station-streaming-picture{{item.station_id}}  absolute bg-img left-0 top-0" id="stationStreamingPicture" />
+                            <div class=" w-full  rounded-2xl text-white mx-auto text-center relative z-10 ">
+                                <img src="/stream?thumbnail=300&image={{item.activeItem.media.picture_name ?? item.picture_name}}" id="stationStreamingPictureCircle" class="station-streaming-picture{{item.station_id}} w-40 h-40 lg:w-64 lg:h-64 rounded-full shadow-xl" />
+                                <div class="py-8 text-left ">
+                                    <span>{{lang.translate('Station')}}</span>
+                                    <h1 class="lg:text-4xl text-2xl start-station pb-4" data-station="{{item.station_id}}">{{item.name}}</h1>
+                                    
+                                    {% set itemId = item.station_id %}
+                                    {% set itemType = 'station' %}
+                                    {% set customer = app.customer_auth() %}
+                                    {% include 'views/front/' ~ template ~ '/includes/item-stats.html.twig' %}
+                                    <hr class="opacity-20 my-2" />
+                                    <div class="w-full flex gap-2">
+                                        <span x-on:click="jQuery('#show-box-path').val('station/{{item.station_id}}'); jQuery('#share-popup').removeClass('hidden')" class="cursor-pointer mx-2 text-sm text-gray-100"><img src="/src/front_assets/svg/share.svg" class="w-5"></span>
+                                        {% if app.customer.customer_id == item.customer_id %}
+                                        <a href="/stations/edit/{{item.station_id}}" class="ajax-load cursor-pointer mx-2 text-sm text-gray-100"><img src="/src/front_assets/svg/edit.svg" class="w-5"></a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="relative z-10 w-full  gap-4 bg-white dark:bg-gray-900  rounded-2xl py-8 px-2 lg:p-8 h-full">
+                                        
+
+                        <div class="container mx-auto mb-10">
+                        {% set station = item %}
+                        {% include 'views/front/' ~ template ~ '/pages/station/station-stream-block.html.twig' %}
+                        </div>
+                        <div class="max-h-[200px] overflow-auto flex" style="flex-direction: column-reverse;" id="comments-list">
+                            {% set comments = station.comments %}
+                            {% include 'views/front/' ~ template ~ '/pages/station/station-comment-block.html.twig' %}
+                        </div>
+                        <label for="chat" class="sr-only">{{lang.translate('Your comment')}}</label>
+                        <form action="/front_api/create" id="comment-station" class="ajax-form w-full " data-element="comments-list" data-prepend="true" >
+                            <div class="flex items-center py-2 px-3 bg-gray-50 rounded-lg dark:bg-gray-700">
+                                <input type="hidden" name="type" value="Comment.create" />
+                                <input type="hidden" name="params[item_id]" value="{{station.station_id}}" />
+                                <input type="hidden" name="params[item_type]" value="{{station.getClassName()}}" />
+                                <input type="hidden" name="append" value="true" />
+                                <textarea id="chat" name="params[comment]" rows="1" class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."></textarea>
+                                <button type="submit" onclick="(function(){  setTimeout(function(){jQuery('#chat').val(''); }, 1000)})()"  class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
+                                    <svg class="w-6 h-6 rotate-90" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                
+
+            </div>
+
+<script  type="text/javascript">
+var lastId;
+$(function() {
+    loadStationJson({{station.station_id}})
+
+    window.navigation.addEventListener("navigate", (event) => {
+        clearInterval(stationCommentsInterval)
+        window.navigation.removeEventListener("navigate", function(){})
+    })
+
+    let stationIntervalAmount = jQuery('#stations-interval').val();
+    var stationCommentsInterval = setInterval(async function(){
+    
+        // Update Comments list 
+        lastId = jQuery('.comment').first().data('id')
+        loadSection('/front_api?type=comments-list&params[item_id]={{station.station_id}}&params[last_id]='+lastId , 'comments-list', false, true)
+        if (activeStationMedia) {
+            jQuery('.station-stream-name').text(activeStationMedia.title)
+        }
+	}, stationIntervalAmount > 1  ? (stationIntervalAmount * 1000) : 30000);
+});
+
+</script>

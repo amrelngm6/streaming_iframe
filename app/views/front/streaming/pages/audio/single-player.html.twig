@@ -1,0 +1,13 @@
+
+                            <div class="w-full flex gap-6 overflow-hidden">
+                                <div class="slide__audio js-audio pt-7 start-player" id="media-{{item.media_id}}"  data-list="[{{item.player_object|json_encode}}]" data-index="0">
+                                    <div class="slide__audio-player" data-title="{{item.name}}" data-poster="/stream?thumbnail=800&image={{item.picture_name}}" data-artist="{{item.artist.name}}"  data-path="/stream_audio?audio={{item.main_file.filename}}" data-id="{{item.media_id}}" data-wave-id="wave-{{item.media_id}}" data-wave-overlay="wave-overlay{{item.media_id}}">
+                                    </div>
+                                    {% include 'views/front/'~ app.SystemSetting.template ~ '/includes/player-circle.html.twig' %}
+                                </div>
+                                <div class="relative h-28 w-full"  > 
+                                    <img id="wave-{{item.media_id}}" class="w-full left-0 top-0 bottom-0 my-auto absolute " src="/stream?thumbnail=1000&dir=audio{{'/tmp' in item.main_file.path ? '/tmp' : ''}}&image={{item.main_file.wave}}" />
+                                    <div id="wave-overlay{{item.media_id}}"  class="absolute w-full h-full top-0 right-0 opacity-50 dark:bg-gray-900 bg-white z-50 duration-150 transition transition-all"> </div>
+                                </div>
+                            </div>
+                    

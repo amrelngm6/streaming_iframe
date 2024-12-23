@@ -1,0 +1,145 @@
+          
+            <div id="main-side" class="lg:block hidden  flex" x-data="{}">
+                <div class="w-1"></div>
+                {% set customer = app.customer_auth() %}
+                <div class="bg-white dark:bg-gray-900 py-4 lg:px-0 px-1 w-56 sidebar lg:relative fixed left-0 z-10 top-0 overflow-hidden h-full">
+                    <div class="w-full flex gap-4 text-primary">
+                        <img src="{{app.SystemSetting.logo}}" class="overflow-hidden h-8 lg:block hidden rounded-full" />
+                        <img onclick="(function() { return jQuery('#main-side').toggleClass('hidden'); })()" src="/src/front_assets/svg/close.svg" class="overflow-hidden w-5 h-5 my-2 ml-2 block lg:hidden rounded-full" />
+                        <span class="p-1 dark:text-rose-500 "> {{app.SystemSetting.sitename}}</span>
+                    </div>
+                    <hr class="lg:block hidden my-4  opacity-30" />
+                    <div class="lg:block hidden pt-2 px-1 text-slate-400 text-opacity-70  text-base font-normal tracking-wide">{{lang.translate('MENU')}}</div>
+                    <ul class="pt-2 font-normal overflow-auto pb-20" style="max-height:calc(100vh - 135px)"  id="menu-ul" >
+                        {% for menuitem in app.sideMenu %}
+                        <li  onclick="(function(){ jQuery('#menu-ul').find('li.active').removeClass('active'); jQuery('#sidemenu-{{loop.index}}').addClass('active');  return jQuery('#main-side').toggleClass('hidden'); })()"  class="w-full   {{menuitem.link == app.request.pathInfo ? 'active' : '' }}" onclick="(function(){ return jQuery('#main-side').toggleClass('hidden'); })()"  id="sidemenu-{{loop.index}}" >
+                            <a href="{{menuitem.link}}" class="w-full flex gap gap-4 ajax-load ">
+                                <span class="min-w-8  text-center relative my-2">
+                                    <img src="/src/front_assets/svg/{{menuitem.icon}}.svg" class="absolute top-2 left-0 right-0 dark:brightness-200 mx-auto"  width="18" />
+                                    <img src="/src/front_assets/svg/{{menuitem.icon}}-active.svg" class="active-icon absolute top-2 left-0 right-0  mx-auto" 
+                                        width="18" />
+                                </span> <span class="py-2 block dark:text-gray-300 my-1 border-r w-full dark:border-gray-700 border-gray-50">{{lang.translate(menuitem.title)}}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+
+                        {% if customer.customer_id %}
+                        <li><hr class="lg:block hidden my-4  opacity-30"></li>
+                        {% if app.SystemSetting.enable_audio %}
+                        <li class="w-full " onclick="(function(){  jQuery('#main-side').toggleClass('hidden'); })()"  id="upload">
+                            <a href="/upload" title="{{lang.translate('Upload')}}"  class="w-full flex gap gap-4  ajax-load  ">
+                                <span class="min-w-8  text-center relative my-2">
+                                    <img src="/src/front_assets/svg/menu-dot.svg" class="absolute top-2 left-0 right-0 dark:brightness-200 mx-auto"  width="18" />
+                                    <img src="/src/front_assets/svg/menu-dot-active.svg" class="active-icon absolute top-2 left-0 right-0  mx-auto" 
+                                        width="18" />
+                                </span> <span class="py-2 block dark:text-gray-300 my-1 border-r w-full dark:border-gray-700 border-gray-50 ">{{lang.translate('Upload')}}</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if app.SystemSetting.enable_audiobooks %}
+                        <li class="w-full " onclick="(function(){ return jQuery('#main-side').toggleClass('hidden'); })()"  id="uploadaudiobook">
+                            <a href="/upload/audiobook" title="{{lang.translate('Upload Audiobook')}}"  class="w-full flex gap gap-4  ajax-load  ">
+                                <span class="min-w-8  text-center relative my-2">
+                                    <img src="/src/front_assets/svg/menu-dot.svg" class="absolute top-2 left-0 right-0 dark:brightness-200 mx-auto"  width="18" />
+                                    <img src="/src/front_assets/svg/menu-dot-active.svg" class="active-icon absolute top-2 left-0 right-0  mx-auto" 
+                                        width="18" />
+                                </span> <span class="py-2 block dark:text-gray-300 my-1 border-r w-full dark:border-gray-700 border-gray-50 ">{{lang.translate('Upload Audiobook')}}</span>
+                            </a>
+                        </li>
+                        
+                        {% endif %}
+                        {% if app.SystemSetting.enable_videos %}
+
+                        <li class="w-full " onclick="(function(){ return jQuery('#main-side').toggleClass('hidden'); })()"  id="uploadVideo">
+                            <a href="/upload/video" title="{{lang.translate('Upload Video')}}"  class="w-full flex gap gap-4  ajax-load  ">
+                                <span class="min-w-8  text-center relative my-2">
+                                    <img src="/src/front_assets/svg/menu-dot.svg" class="absolute top-2 left-0 right-0 dark:brightness-200 mx-auto"  width="18" />
+                                    <img src="/src/front_assets/svg/menu-dot-active.svg" class="active-icon absolute top-2 left-0 right-0  mx-auto" 
+                                        width="18" />
+                                </span> <span class="py-2 block dark:text-gray-300 my-1 border-r w-full dark:border-gray-700 border-gray-50 ">{{lang.translate('Upload Video')}}</span>
+                            </a>
+                        </li>
+                        
+                        {% endif %}
+                        {% if app.SystemSetting.enable_iframe %}
+
+                        <li class="w-full " onclick="(function(){ return jQuery('#main-side').toggleClass('hidden'); })()"  id="uploadShort">
+                            <a href="/upload/iframe" title="{{lang.translate('Add Iframe')}}"  class="w-full flex gap gap-4  ajax-load  ">
+                                <span class="min-w-8  text-center relative my-2">
+                                    <img src="/src/front_assets/svg/menu-dot.svg" class="absolute top-2 left-0 right-0 dark:brightness-200 mx-auto"  width="18" />
+                                    <img src="/src/front_assets/svg/menu-dot-active.svg" class="active-icon absolute top-2 left-0 right-0  mx-auto" 
+                                        width="18" />
+                                </span> <span class="py-2 block dark:text-gray-300 my-1 border-r w-full dark:border-gray-700 border-gray-50 ">{{lang.translate('Add Iframe')}}</span>
+                            </a>
+                        </li>
+
+                        {% endif %}
+                        {% if app.SystemSetting.enable_short_videos %}
+
+                        <li class="w-full " onclick="(function(){ return jQuery('#main-side').toggleClass('hidden'); })()"  id="uploadShort">
+                            <a href="/shorts/create" title="{{lang.translate('Create shorts')}}"  class="w-full flex gap gap-4  ajax-load  ">
+                                <span class="min-w-8  text-center relative my-2">
+                                    <img src="/src/front_assets/svg/menu-dot.svg" class="absolute top-2 left-0 right-0 dark:brightness-200 mx-auto"  width="18" />
+                                    <img src="/src/front_assets/svg/menu-dot-active.svg" class="active-icon absolute top-2 left-0 right-0  mx-auto" 
+                                        width="18" />
+                                </span> <span class="py-2 block dark:text-gray-300 my-1 border-r w-full dark:border-gray-700 border-gray-50 ">{{lang.translate('Create Short video')}}</span>
+                            </a>
+                        </li>
+
+                        {% endif %}
+                        {% if app.SystemSetting.enable_stations %}
+
+                        <li class="w-full " onclick="(function(){ return jQuery('#main-side').toggleClass('hidden'); })()"  id="uploadStation">
+                            <a href="/stations/create" title="{{lang.translate('Create station')}}"  class="w-full flex gap gap-4  ajax-load  ">
+                                <span class="min-w-8  text-center relative my-2">
+                                    <img src="/src/front_assets/svg/menu-dot.svg" class="absolute top-2 left-0 right-0 dark:brightness-200 mx-auto"  width="18" />
+                                    <img src="/src/front_assets/svg/menu-dot-active.svg" class="active-icon absolute top-2 left-0 right-0  mx-auto" 
+                                        width="18" />
+                                </span> <span class="py-2 block dark:text-gray-300 my-1 border-r w-full dark:border-gray-700 border-gray-50 ">{{lang.translate('Create station')}}</span>
+                            </a>
+                        </li>
+                        
+                        {% endif %}
+                        {% if app.SystemSetting.enable_channels %}
+
+                        <li class="w-full " onclick="(function(){ return jQuery('#main-side').toggleClass('hidden'); })()"  id="uploadChannel">
+                            <a href="/channels/create" title="{{lang.translate('Create channel')}}"  class="w-full flex gap gap-4  ajax-load  ">
+                                <span class="min-w-8  text-center relative my-2">
+                                    <img src="/src/front_assets/svg/menu-dot.svg" class="absolute top-2 left-0 right-0 dark:brightness-200 mx-auto"  width="18" />
+                                    <img src="/src/front_assets/svg/menu-dot-active.svg" class="active-icon absolute top-2 left-0 right-0  mx-auto" 
+                                        width="18" />
+                                </span> <span class="py-2 block dark:text-gray-300 my-1 border-r w-full dark:border-gray-700 border-gray-50 ">{{lang.translate('Create channel')}}</span>
+                            </a>
+                        </li>
+
+                        {% endif %}
+                        {% if app.SystemSetting.enable_playlists %}
+
+
+                        <li class="w-full " onclick="(function(){ return jQuery('#main-side').toggleClass('hidden'); })()"  id="create-playlist">
+                            <a title="{{lang.translate('Create Playlists')}}" href="#!" x-on:click="jQuery('#create-playlist-popup').removeClass('hidden')" class="w-full flex gap gap-4   ">
+                                <span class="min-w-8  text-center relative my-2">
+                                    <img src="/src/front_assets/svg/menu-dot.svg" class="absolute top-2 left-0 right-0 dark:brightness-200 mx-auto"  width="18" />
+                                    <img src="/src/front_assets/svg/menu-dot-active.svg" class="active-icon absolute top-2 left-0 right-0  mx-auto" 
+                                        width="18" />
+                                </span> <span class="py-2 block dark:text-gray-300 my-1 border-r w-full dark:border-gray-700 border-gray-50 ">{{lang.translate('Create playlist')}}</span>
+                            </a>
+                        </li>
+
+                        {% endif %}
+
+                        <li class="w-full " onclick="(function(){ return jQuery('#main-side').toggleClass('hidden'); })()"  id="logout">
+                            <a title="{{lang.translate('Logout')}}" href="/logout"class="w-full flex gap gap-4   ">
+                            <span class="min-w-8  text-center relative my-2">
+                                    <img src="/src/front_assets/svg/menu-dot.svg" class="absolute top-2 left-0 right-0 dark:brightness-200 mx-auto"  width="18" />
+                                    <img src="/src/front_assets/svg/menu-dot-active.svg" class="active-icon absolute top-2 left-0 right-0  mx-auto" 
+                                        width="18" />
+                                </span> <span class="py-2 block dark:text-gray-300 my-1 border-r w-full dark:border-gray-700 border-gray-50 ">{{lang.translate('Logout')}}</span>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+
+                </div>
+            </div>

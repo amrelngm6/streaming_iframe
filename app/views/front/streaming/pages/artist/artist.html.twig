@@ -1,0 +1,238 @@
+<div class=" w-full  lg:h-screen relative gradient-top-overlay" style="min-height: 300px">
+	<img style="z-index:-1" src="/stream?thumbnail=1600&image={{item.picture_name}}" class="w-full h-full shadow-xl absolute top-0 left-0 "/>
+</div>
+<div class=" w-full h-40 absolute top-0 left-0 gradient-overlay" style="z-index:1; "></div>
+
+{% set customer = app.customer_auth() %}
+<div class=" w-full  relative">
+	<div class="absolute lg:bottom-40 lg:left-40 left-10 bottom-10  z-10 w-2/3 text-gray-100 dark:text-gray-300">
+		<h1 class="lg:text-6xl text-4xl text-white">{{item.name}}</h1>
+
+		{% if item.customer_id != customer.customer_id %}
+			{% set following = item.following(customer.customer_id).first() %}
+			<div class="{{ following == null ? '' : ' hidden'}} float-right" x-on:click="jQuery('#follow-{{item.customer_id}}').addClass('hidden'); jQuery('#unfollow-{{item.customer_id}}').removeClass('hidden')" id="follow-{{item.customer_id}}">
+				<a href="/front_api/create?type=Follower.create&params[item_id]={{item.customer_id}}" data-params="{item_id: {{item.customer_id}} }" class="ajax-link hover:border-rose-400 hover:text-rose-400 border border-4 border-white rounded-full py-2 px-6">
+					<span>{{lang.translate('Follow')}}</span>
+				</a>
+			</div>
+
+			<div class="{{ following == null ? 'hidden' : '' }} float-right" x-on:click="jQuery('#unfollow-{{item.customer_id}}').addClass('hidden'); jQuery('#follow-{{item.customer_id}}').removeClass('hidden')" id="unfollow-{{item.customer_id}}">
+				<a href="/front_api/delete?type=Follower.unfollow&params[item_id]={{item.customer_id}}" data-params="{item_id: {{item.customer_id}} }" class="ajax-link hover:border-rose-400 hover:text-rose-400 border border-4 border-white rounded-full py-2 px-6">
+					<span>{{lang.translate('UnFollow')}}</span>
+				</a>
+			</div>
+		{% endif %}
+
+	</div>
+</div>
+<div class="pb-4  h-full overflow-hidden rounded-2xl" x-data="{is_slide: 'slide'}">
+
+	<div class="relative z-10 w-full  gap-4 bg-white dark:bg-gray-900 rounded-2xl p-8 h-full">
+
+		<div class="w-full flex gap-4 ">
+        
+			<span class=" cursor-pointer text-sm flex gap-2 relative">
+				<span class="tooltiptext  text-xs">{{lang.translate('Followers')}}</span>
+				<img class="w-5 brightness-200" src="/src/front_assets/svg/user-tab.svg"/>
+				<span class="pt-1" id="Followers-{{item.customer_id}}">{{item.followers|length}}</span>
+			</span>
+		
+			<span class=" cursor-pointer text-sm flex gap-2 relative">
+				<span class="tooltiptext  text-xs">{{lang.translate('Audio Items')}}</span>
+				<img class="w-5 brightness-200" src="/src/front_assets/svg/audio-tab.svg"/>
+				<span class="pt-1" id="artist-audio-{{item.customer_id}}">{{item.audio_items|length}}</span>
+			</span>
+			<span class=" cursor-pointer text-sm flex gap-2 relative">
+				<span class="tooltiptext  text-xs">{{lang.translate('Videos')}}</span>
+				<img class="w-5 brightness-200" src="/src/front_assets/svg/videos.svg"/>
+				<span class="pt-1" id="artist-videos-{{item.customer_id}}">{{item.videos|length}}</span>
+			</span>
+			<span class=" cursor-pointer text-sm flex gap-2 relative">
+				<span class="tooltiptext  text-xs">{{lang.translate('Audiobooks')}}</span>
+				<img class="w-5 brightness-200" src="/src/front_assets/svg/audiobook-tab.svg"/>
+				<span class="pt-1" id="artist-audiobook-{{item.customer_id}}">{{item.audiobooks|length}}</span>
+			</span>
+			<span class=" cursor-pointer text-sm flex gap-2 relative">
+				<span class="tooltiptext  text-xs">{{lang.translate('Playlists')}}</span>
+				<img class="w-5 brightness-200" src="/src/front_assets/svg/playlist.svg"/>
+				<span class="pt-1" id="artist-playlist-{{item.customer_id}}">{{item.playlists|length}}</span>
+			</span>
+			<span x-on:click="jQuery('#show-box-path').val('artist/{{item.customer_id}}'); jQuery('#share-popup').removeClass('hidden')" class="cursor-pointer mx-2 text-sm text-gray-100"><img src="/src/front_assets/svg/share.svg" class="w-5"></span>
+
+		</div>
+		<span class="block pt-10 text-sm text-gray-500">{{lang.translate('About')}}</span>
+
+		<div class="text-primary overflow-auto" style="max-height: 400px;">
+			<p class="dark:text-gray-300 py-4">{{item.field.about|raw| nl2br  }}</p>
+		</div>
+		{% if app.SystemSetting.enable_audio and item.audio_items|length %}
+		<div class="w-full 	pt-6" id="slide-audio-items" data-count="4">
+            <div class="hs__wrapper" x-data="{is_slide: false}">
+            
+                <div class=" w-full flex gap-4 text-primary pb-10">
+                    <div class=" w-full flex gap-4 dark:text-gray-300 ">
+					<h3 class="text-2xl  font-normal">{{lang.translate('Media items')}}</h3>
+                        <a href="/discover?params[author_id]={{item.customer_id}}" class="ajax-load p-2 transition hover:text-rose-500">{{lang.translate('See all')}}</a>
+                    </div>
+
+                    <div class="hs__arrows flex gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+
+                </div>
+                <ul class="hs" >
+					{% set list = {'items' : item.audio_items} %}
+					{% for media_item in list.items %}
+                    <li class="hs__item  max-w-[250px]"> 
+						{% include 'views/front/'~ app.SystemSetting.template ~ '/includes/track_item.html.twig' %}
+                    </li>
+    				{% endfor %}    
+                </ul>
+            </div>
+
+		</div>
+
+		{% endif %}
+{# 
+		{% if item.likes|length %}
+		<div class="w-full 	pt-6 hidden" id="slide-audiobooks-items" >
+            <div class="hs__wrapper" x-data="{is_slide: false}" data-count="4">
+            
+                <div class=" w-full flex gap-4 text-primary pb-10">
+                    <div class=" w-full flex gap-4 dark:text-gray-300 ">
+    					<h3 class="text-2xl  font-normal">{{lang.translate('Liked items')}}</h3>
+                        <a href="#!" class="p-2 transition hover:text-rose-500">{{lang.translate('See all')}}</a>
+                    </div>
+
+                    <div class="hs__arrows flex gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+
+                </div>
+                <ul class="hs" >
+                
+    				{% set list = {'items' : item.likes|column('item')} %}
+                    {% for media_item in list.items %}
+                    {% if media_item.type == 'audio' %}
+                    <li class="hs__item max-w-[250px]"> 
+				    	{% include 'views/front/'~ app.SystemSetting.template ~ '/includes/track_item.html.twig' %}
+                    </li>
+                    {% endif %}
+    				{% endfor %}    
+                </ul>
+            </div>
+
+		</div>
+		{% endif %} #}
+
+		{% if app.SystemSetting.enable_audiobooks and item.audiobooks|length %}
+		<div class="w-full 	pt-6" id="slide-audiobooks-items">
+            <div class="hs__wrapper" x-data="{is_slide: false}">
+            
+                <div class=" w-full flex gap-4 text-primary pb-10">
+                    <div class=" w-full flex gap-4 dark:text-gray-300 ">
+                        <h3 class="text-2xl  font-normal">{{lang.translate('Audio books')}}</h3>
+                        <a href="/discover/audiobook?params[author_id]={{item.customer_id}}" class="ajax-load p-2 transition hover:text-rose-500">{{lang.translate('See all')}}</a>
+                    </div>
+
+                    <div class="hs__arrows flex gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+
+                </div>
+                <ul class="hs" >
+                    {% set list = {'items' : item.audiobooks} %}
+                    {% for audiobook in list.items %}
+                    <li class="hs__item"> 
+						{% include 'views/front/' ~ template ~ '/pages/audiobook/item.html.twig' %}
+                    </li>
+    				{% endfor %}    
+                </ul>
+            </div>
+
+		</div>
+		{% endif %}
+
+		{% if app.SystemSetting.enable_videos and item.videos|length %}
+        
+		<div class="w-full 	pt-10 " id="slide-videos" data-count="4">
+            <div class="hs__wrapper" x-data="{is_slide: false}">
+            
+                <div class=" w-full flex gap-4 text-primary pb-10">
+                    <div class=" w-full flex gap-4 dark:text-gray-300 ">
+                        <h3 class="text-2xl  font-normal">{{lang.translate('videos')}}</h3>
+                        <a href="/discover/video?params[author_id]={{item.customer_id}}" class="ajax-load p-2 transition hover:text-rose-500">{{lang.translate('See all')}}</a>
+                    </div>
+
+                    <div class="hs__arrows gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+
+                </div>
+                <ul class="hs" >
+                    {% set list = {'items' : item.videos} %}
+                    {% for media_item in list.items %}
+                    <li class="hs__item"> 
+                        {% include 'views/front/' ~ template ~ '/includes/video-item.html.twig' %}
+                    </li>
+    				{% endfor %}    
+                </ul>
+            </div>
+
+		</div>
+		{% endif %}
+
+
+		{% if app.SystemSetting.enable_stations and item.stations|length %}
+        
+		<div class="w-full 	pt-10 " id="slide-stations" data-count="2">
+            <div class="hs__wrapper" x-data="{is_slide: false}">
+            
+                <div class=" w-full flex gap-4 text-primary pb-10">
+                    <div class=" w-full flex gap-4 dark:text-gray-300 ">
+                        <h3 class="text-2xl  font-normal">{{lang.translate('Stations')}}</h3>
+                        <a href="/stations?params[customer_id]={{item.customer_id}}" class="ajax-load p-2 transition hover:text-rose-500">{{lang.translate('See all')}}</a>
+                    </div>
+
+                    <div class="hs__arrows gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+
+                </div>
+                <ul class="hs" >
+                    {% set list = {'items' : item.stations} %}
+                    {% for station in list.items %}
+                    <li class="hs__item"> 
+                        {% include 'views/front/' ~ template ~ '/pages/station/station-block.html.twig' %}
+                    </li>
+    				{% endfor %}    
+                </ul>
+            </div>
+
+		</div>
+		{% endif %}
+
+
+		{% if app.SystemSetting.enable_channels and item.channels|length %}
+        
+		<div class="w-full 	pt-10 " id="slide-channels" data-count="2">
+            <div class="hs__wrapper" x-data="{is_slide: false}">
+            
+                <div class=" w-full flex gap-4 text-primary pb-10">
+                    <div class=" w-full flex gap-4 dark:text-gray-300 ">
+                        <h3 class="text-2xl  font-normal">{{lang.translate('channels')}}</h3>
+                        <a href="/channels?params[customer_id]={{item.customer_id}}" class="ajax-load p-2 transition hover:text-rose-500">{{lang.translate('See all')}}</a>
+                    </div>
+
+                    <div class="hs__arrows gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+
+                </div>
+                <ul class="hs" >
+                    {% set list = {'items' : item.channels} %}
+                    {% for channel in list.items %}
+                    <li class="hs__item"> 
+                        {% include 'views/front/' ~ template ~ '/pages/channel/channel-block.html.twig' %}
+                    </li>
+    				{% endfor %}    
+                </ul>
+            </div>
+
+		</div>
+		{% endif %}
+
+
+
+	</div>
+
+</div>
+

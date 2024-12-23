@@ -1,0 +1,198 @@
+<link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.css' rel='stylesheet' />
+<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.15/index.global.js" integrity="sha512-3I+0zIxy2IkeeCvvhXUEu+AFT3zAGuHslHLDmM8JBv6FT7IW6WjhGpUZ55DyGXArYHD0NshixtmNUWJzt0K32w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+
+    var calendar;
+
+    $(function() {
+
+        addEventListener('load', e => {
+            if (+document.querySelector('option').getBoundingClientRect().width)
+                document.body.style.setProperty('--list', 'none')
+        })
+
+        /* 2. update the --val custom property on dragging slider thumb */
+        addEventListener('input', e => {
+            let _t = e.target;
+            _t.parentNode.style.setProperty('--val', +_t.value)
+        })
+
+        const calendarEl = document.getElementById('calendar');
+
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridDay',
+            slotDuration: '00:30:00', // Time slots every 30 minutes
+            allDaySlot: false, // Disable all-day slot
+            editable: true,
+            selectable: true,
+            droppable: true, 
+            nowIndicator: true,
+            scrollTime: '{{now}}',
+            now: "{{now}}",
+            color: '#333',
+
+            events: '/front_api?type=station-media-json&params[station_id]={{station.station_id}}&load=json',
+
+            {# [
+                {% for item in station.items %}
+                {
+                    title: '{{item.media.name ?? item.title}}',
+                    id: '{{item.station_media_id}}',
+                    picture: '{{item.media.picture}}',
+                    station_id: '{{station.station_id}}',
+                    backgroundColor: '#333',
+                    color: '#111',
+                    start: '{{item.date|date('Y-m-d')}}T{{item.start_at}}',
+                    end: '{{item.date|date('Y-m-d')}}T{{item.start_at|date_modify("+" ~ (item.duration ?? '1') ~ " seconds")|date("H:i:s")}}'
+                },
+                {% endfor %}
+            ], #}
+
+            dateClick: function(info) {
+                
+                jQuery("#stationRecordStart").val(info.dateStr.substr(11, 8));
+                jQuery("#stationMediaStart").val(info.dateStr.substr(11, 8));
+                jQuery("#linkStationMediaStart").val(info.dateStr.substr(11, 8));
+                jQuery('#stationRecordDate').val(info.dateStr.substr(0, 10))
+                jQuery('#stationMediaStartDate').val(info.dateStr.substr(0, 10))
+                jQuery("#linkStationMediaStartDate").val(info.dateStr.substr(0, 10));
+                jQuery('#find-track-popup').toggleClass('hidden')
+
+            },
+
+            select: function(info) {
+                
+                var x = new Date(info.startStr);
+                let seconds = Math.abs(x.getTime() - (new Date(info.endStr)).getTime())/1000;
+                let minutes = seconds/60;
+                let currentduration = jQuery('#r').val()
+                if (currentduration == minutes)  
+                    return;
+
+                jQuery('#edit-station-range-popup').toggleClass('hidden')
+                jQuery('#station-range-date').val(info.startStr.substr(0, 10))
+                jQuery('#station-range-start').val(info.startStr.substr(11, 8))
+                jQuery('#station-range-end').val(info.endStr.substr(11, 8))
+                jQuery('#station-range-time').html(info.startStr.substr(11, 8) + ' | ' + info.endStr.substr(11, 8))
+                jQuery('#station-range-duration').html(toHHMMSS(seconds))
+            },
+
+            eventClick: function(info) {
+
+                let link = '/front_api?type=station-media-popup&params[station_id]={{station.station_id}}&params[station_media_id]='+ info.event.id;
+                loadSection(link, 'editStationPopupContent')
+
+                let props = info.event.extendedProps;
+                jQuery('#editStationStationId').val(props.station_id)
+                jQuery('#link-station-id').val(props.station_id)
+                jQuery('#editStationMediaId').val(info.event.id)
+                jQuery('#stationMediaStart').val(info.event.startStr.substr(11, 8))
+                jQuery('#editStationMediaStartAt').val(info.event.startStr.substr(11, 8))
+                jQuery('#editStationMediaStartDate').val(info.event.startStr.substr(0, 10))
+                jQuery('#stationMediaStartDate').val(info.event.startStr.substr(0, 10))
+                jQuery('#editStationMediaPicture').attr('src', props.picture)
+                jQuery('#editStationMediaName').text(info.event.title)
+                jQuery('#edit-station-track-popup').toggleClass('hidden')
+            },
+            
+            eventMouseEnter: function(info) {
+                let props = info.event.extendedProps;
+                jQuery('#eventHoverPopupName').text(info.event.title)
+                jQuery('#calendar-hover-info').css('bottom', '0')
+                jQuery('#eventHoverPopupPicture').removeClass('hidden').attr('src', props.picture)
+                if (!props.picture) {
+                    jQuery('#eventHoverPopupPicture').addClass('hidden')
+                    jQuery('#eventHoverPopupName').text(info.event.title)
+                    jQuery("#eventHoverPopupTime").text(info.event.startStr.substr(11, 8) + ' - ' +info.event.endStr.substr(11, 8));
+                }
+            },
+            
+            eventMouseLeave: function(info) {
+                jQuery('#calendar-hover-info').css('bottom', '-100%')
+
+            },
+            
+            eventDragStop: function(info) {
+                jQuery("#stationMediaId").val(info.event.id);
+            },
+            eventDrop: function(info) {
+                jQuery("#stationMediaDate").val(info.event.startStr.substr(0, 10));
+                jQuery("#stationMediaStartTime").val(info.event.startStr.substr(11, 8));
+                setTimeout(function(){
+                    jQuery("#calendar-form").submit();
+                }, 50)
+
+            },
+            
+            eventResize: function(info) {
+                alert("This item depends on the media duration");
+                info.revert();
+            }
+        });
+
+        calendar.render();
+
+        {# var slider = document.getElementById('slotDurationRange');
+        var durationValue = document.getElementById('durationValue');
+
+        slider.addEventListener('input', function() {
+            durationValue.textContent = newDuration;
+            updateSlotDuration();
+        }); #}
+
+        loadStation({{station.station_id}}, null)
+
+        
+                
+        function updateSlotDuration (newDuration, calendar) 
+        {
+            if (newDuration < 1) {
+                newDuration = 1
+            }
+
+            // Convert the slider value to the appropriate format for slotDuration (HH:mm:ss)
+            var slotDuration = '00:' + (newDuration.length === 1 ? '0' : '') + newDuration + ':00';
+            
+            // Reconfigure the calendar with the new slotDuration
+            calendar.setOption('slotDuration', slotDuration);
+            
+        }
+        
+        addEventListener('load', e => {
+            if(+document.querySelector('option').getBoundingClientRect().width) {
+                    document.body.style.setProperty('--list', 'none')
+            }
+        })
+
+        /* 2. update the --val custom property on dragging slider thumb */
+        jQuery(document).on('input', 'input[type=range]' , function(e) {
+            let _t = e.target;
+            if (_t.value < 1){
+                _t.value = 1
+            }
+            _t.parentNode.style.setProperty('--val', +_t.value)
+            updateSlotDuration(_t.value, calendar)
+            calendar.scrollToTime( "{{'now'| date('H:i:00')}}");
+
+        })
+        calendar.scrollToTime( "{{'now'| date('H:i:00')}}");
+    });
+
+</script>
+   
+<style>
+.fc-day-today {
+    background: #FFF !important;
+    border: none !important;
+  
+} 
+.dark .fc-day-today {
+    background: #111827 !important;
+}
+.dark .fc-theme-standard td,.dark .fc-theme-standard th ,
+.dark .fc .fc-scrollgrid-liquid
+{
+    border-color: #1f2937;
+}
+</style>

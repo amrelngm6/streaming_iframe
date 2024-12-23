@@ -1,0 +1,29 @@
+
+{% include 'views/front/' ~ template ~ '/includes/head.html.twig' %}
+
+<link rel="stylesheet" crossorigin href="/dist/assets/index.min.css">
+
+<section class="pt-20 ">
+    <div class="container mx-auto">
+
+        <!-- Left column container with background-->
+        <div class="g-6  items-center justify-center lg:justify-between">
+            <!-- Right column container -->
+            <div class="w-full ">
+                <div class="text-white text-lg mb-12 md:mb-0 sidebar sidebar-two rounded-2xl p-10"
+                    style="background-image: url(/uploads/img/background-p.png);">
+                    <h3 class="text-white text-4xl font-normal">{{title}}</h3>
+                    <div class="boder"></div>
+                    <p>{{msg | raw}}</p>
+                </div>
+
+            </div>
+            <div class="shrink-1 mb-12 grow-0 basis-auto md:mb-0 ">
+                <img src="/uploads/img/login-bg.webp" class="w-full" alt="Sample image" />
+            </div>
+
+        </div>
+    </div>
+</section>
+</body>
+</html>

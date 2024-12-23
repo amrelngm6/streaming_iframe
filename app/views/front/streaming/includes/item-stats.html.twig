@@ -1,0 +1,23 @@
+            {% set liked = item.liked(customer.customer_id).count() %}
+            <div class="flex gap-4 stats-icons ">
+
+                <div class="text-sm flex gap-2 relative">
+                    <a href="/front_api/create?type=Like.{{itemType}}&params[item_id]={{itemId}}" data-params="{item_id: {{itemId}} }" class="ajax-link cursor-pointer mx-2 text-sm  flex">
+                        <img class="{{ liked == null ? 'hidden' : ''}} w-5" x-on:click="jQuery('#heart-{{itemType}}-{{itemId}}').addClass('hidden'); jQuery('#unheart-{{itemType}}-{{itemId}}').removeClass('hidden'); jQuery('#likes-count-{{itemType}}-{{itemId}}').text(parseInt(jQuery('#likes-count-{{itemType}}-{{itemId}}').text()) - 1);" id="heart-{{itemType}}-{{itemId}}" src="/src/front_assets/svg/blank-heart.svg">
+                        <img class="{{ liked == null ? '' : 'hidden'}} w-5" x-on:click="jQuery('#unheart-{{itemType}}-{{itemId}}').addClass('hidden'); jQuery('#heart-{{itemType}}-{{itemId}}').removeClass('hidden'); jQuery('#likes-count-{{itemType}}-{{itemId}}').text(parseInt(jQuery('#likes-count-{{itemType}}-{{itemId}}').text()) + 1);" id="unheart-{{itemType}}-{{itemId}}" src="/src/front_assets/svg/{{app.is_dark ? 'white-' : ''}}heart.svg">
+                    </a>
+                    <span class="pt-1" id="likes-count-{{itemType}}-{{itemId}}">{{item.likescount()}}</span>
+                    <span class="tooltiptext  text-xs">{{lang.translate('Like')}}</span>
+                </div>
+
+                <span class=" cursor-pointer text-sm flex gap-2 relative">
+                    <span class="tooltiptext  text-xs">{{lang.translate('Views')}}</span>
+                    <img class="w-5" src="/src/front_assets/svg/{{ app.is_dark ? 'views-white' : 'views'}}.svg"/>
+                    <span class="pt-1" id="views-count">{{item.viewscount()}}</span>
+                </span>
+                <span class=" cursor-pointer text-sm flex gap-2 relative">
+                    <span class="tooltiptext  text-xs">{{lang.translate('Comments')}}</span>
+                    <img class="w-5" src="/src/front_assets/svg/{{ app.is_dark ? 'comments-white' : 'comments'}}.svg"/>
+                    <span class="pt-1" id="comments-">{{item.commentscount()}}</span>
+                </span>
+            </div>

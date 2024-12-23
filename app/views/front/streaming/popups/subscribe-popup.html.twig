@@ -1,0 +1,61 @@
+<div x-data="{}" class="fixed inset-0 z-50 overflow-y-auto  transition-all transition"  id="subscription-popup" role="dialog" aria-modal="true" data-headlessui-state="open">
+	<div class="min-h-full text-center">
+		<div class="fixed inset-0 bg-download_popup blurFilter opacity-100" id="headlessui-dialog-overlay-:r3n:" aria-hidden="true" data-headlessui-state="open"></div>
+		<span class="hidden lg:inline-block h-screen align-middle" aria-hidden="true">​</span>
+		<div  class="inline-block dark:text-white w-full max-w-[42.125rem] sm:w-auto overflow-hidden text-left align-middle transition-all transform shadow-xl h-auto md:h-[29.125rem] rounded-xl border-box opacity-100 scale-100">
+			<div class="grid grid-cols-12 md:grid-cols-12 h-full relative">
+				{# <div id="subscription-cover" class="login_loginImage__1Djxq bg-cover hidden md:block col-span-5 w-full bg-wynk-dark-dark_popup bg-no-repeat" style="background-image: url(/uploads/img/tape.jpg)"></div> #}
+				<div class="align-middle bg-wynk-dark-dark_popup col-span-12 px-8 pb-8 pt-10 md:pb-6 md:pl-[2.125rem] md:pr-7 relative flex flex-col justify-between">
+					<a href="/"  class="ajax-load h-6 w-6 right-4 top-4 dark:text-white hover:text-gray-400 cursor-pointer absolute">
+						<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
+							<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+						</svg>
+					</a>
+
+					<div class="inline-block w-full">
+                        <!-- Hero -->
+						<div class="relative overflow-hidden ">
+							<span class="absolute top-0 start-1/2 bg-no-repeat bg-top size-full  transform -translate-x-1/2" style="background-image: url(/src/front_assets/svg/squared-bg-element{{app.is_dark ? '-dark' : ''}}.svg)" > </span>
+							<div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-10 z-10 relative ">
+								<!-- Announcement Banner -->
+								<div class="flex justify-center">
+								<a class="inline-flex items-center gap-x-2 bg-white border border-gray-200 text-xs text-gray-600 p-2 px-3 rounded-full transition hover:border-gray-300 focus:outline-none focus:border-gray-300 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:hover:border-neutral-600 dark:focus:border-neutral-600 ajax-load" href="/pricing">
+									{{lang.translate('Discover our packages')}}
+									<span class="flex items-center gap-x-1">
+									<span class="border-s border-gray-200 text-blue-600 ps-2 dark:text-blue-500 dark:border-neutral-700">{{lang.translate('Explore')}}</span>
+									<svg class="shrink-0 size-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+									</span>
+								</a>
+								</div>
+								<!-- End Announcement Banner -->
+
+								<!-- Title -->
+								<div class="mt-5 max-w-xl text-center mx-auto">
+								<h1 class="block font-bold text-gray-800 text-4xl md:text-5xl lg:text-6xl dark:text-neutral-200">
+									{{lang.translate('Subscribe to get full access')}}
+								</h1>
+								</div>
+								<!-- End Title -->
+
+								<div class="mt-5 max-w-3xl text-center mx-auto">
+								<p class="text-lg text-gray-600 dark:text-neutral-400">{{lang.translate('Choose from our variety of packages that suits for professional artsts and media agencies')}}.</p>
+								</div>
+
+								<!-- Buttons -->
+								<div class="mt-8 gap-3 flex justify-center">
+								<a class="inline-flex justify-center items-center gap-x-3 text-center bg-gradient-to-tl from-blue-600 to-violet-600 hover:from-violet-600 hover:to-blue-600 focus:outline-none focus:from-violet-600 focus:to-blue-600 border border-transparent text-white text-sm font-medium rounded-full py-3 px-4 ajax-load" href="/pricing">
+									<img src="/src/front_assets/svg/time-white.svg" class="w-4" />
+									{{lang.translate('View packages')}}
+								</a>
+								</div>
+								<!-- End Buttons -->
+							</div>
+						</div>
+						<!-- End Hero -->
+                        <div class="h-10"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

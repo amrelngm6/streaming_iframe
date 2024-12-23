@@ -1,0 +1,38 @@
+
+    <div class="py-4 text-center mb-10">
+        <h1 class="px-6 text-2xl text-gray-800 dark:text-gray-100">{{item.name}} </h1>
+        <p class="px-6 text-primary">{{item.description}} </p>
+    </div>
+ <div class="relative bg-white dark:bg-gray-900  lg:p-8 p-4 rounded-2xl rounded  shadow-md mb-4" id="top-charts-slider" x-data="{is_slide: 'slide'}">
+
+
+    <div class="w-full 	" id="slide-audiobooks-items" >
+        <div class="w-full" >
+        
+            <div class=" w-full flex gap-4 text-primary ">
+                <div class=" w-full flex gap-4 dark:text-gray-300 ">
+                    <h3 class="text-2xl  font-normal">{{lang.translate('Latest articles')}}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full py-10" >
+        {% set customer = app.customer_auth() %}
+        {% for item in list.items %}
+        {% include 'views/front/'~ template ~'/pages/blog/article-item.html.twig'  %}
+        {% endfor %}
+
+        </div>
+        {% include 'views/front/' ~ template ~ '/includes/pagination.html.twig' %}
+
+    </div>
+    
+
+</div>
+
+<style>
+.article-page li {
+    margin: 10px 15px;
+    list-style: circle;
+}
+</style>

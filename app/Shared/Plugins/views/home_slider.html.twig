@@ -1,0 +1,21 @@
+
+<div class="relative w-full h-screen" id="movie-slider-container">
+  <ul class='slider movie-slider-ul'>
+    {% for item in gallery.items %}
+
+    <li class='movie-slider' style="background-image: url('{{item.media}}')">
+      <div class='content'>
+        <h2 class='title lg:text-4xl text-lg'>{{item.title}}</h2>
+        <p class='description text-xl'> {{item.text}} </p>
+        <a href="{{item.link}}" class="ajax-load border border-rose-400 rounded-xl  py-2 px-4">{{item.button_text}}</a>
+      </div>
+    </li>
+
+    {% endfor %}
+  </ul>
+  <nav class='nav'>
+    <span class='material-symbols-outlined btn prev movie-slider-arrow' name="arrow-back-outline">arrow_back_ios</span>
+    <span class='material-symbols-outlined btn next movie-slider-arrow' name="arrow-forward-outline">arrow_forward_ios</span>
+  </nav>
+</div>
+

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="{{lang_key}}" dir="{{lang_key == 'ar' ? 'rtl' : 'ltr'}}" class="{{app.is_dark ? 'dark' : ''}}">
+<head>
+    
+    <meta charset="utf-8">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{item.lang_content.seo_title ? item.lang_content.seo_title : (item.content ? item.lang_content.title : (item.name ?? app.SystemSetting.sitename))}}</title>
+    <meta name="description" content="{{item.lang_content.seo_desc ? item.lang_content.seo_desc : app.SystemSetting.seo_desc}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+    {% set canonicalUrl = app.request.uri|trim('/') %}
+    <link rel='canonical' href='{{ canonicalUrl }}'>
+    <!-- Open Graph / Facebook -->
+    <meta property='og:type' content='website'>
+    <meta property='og:url' content='{{ canonicalUrl}}'>
+    <meta property='og:title' content="{{item.lang_content.title ? item.lang_content.title : (item.name ?? app.SystemSetting.sitename)}}">
+    <meta property='og:image' content='{{app.CONF.url}}stream?{{item.type == 'video' ? 'dir=videos/screenshots&' : ''}}image={{item.picture_name ?? 'logo.png'}}&thumbnail=800'>
+    <meta property='og:description' content="{{item.lang_content.seo_desc ? item.lang_content.seo_desc : app.SystemSetting.seo_desc}}">
+    <!-- Twitter -->
+    <meta property='twitter:card' content='summary_large_image'>
+    <meta property='twitter:title' content="{{item.lang_content.title ? item.lang_content.title : (item.name ?? app.SystemSetting.sitename)}}">
+    <meta property='twitter:image' content='{{app.CONF.url}}stream?{{item.type == 'video' ? 'dir=videos/screenshots&' : ''}}image={{item.picture_name ?? 'logo.png'}}&thumbnail=800'>
+    <meta property='twitter:description' content="{{item.lang_content.seo_desc ? item.lang_content.seo_desc : app.SystemSetting.seo_desc}}">
+    
+    <meta name="msapplication-config" content="none"/>
+
+    <!-- Favicon -->
+    <link rel='shortcut icon' type='image.png' href='{{app.CONF.url}}stream?dir=img&image=favicon.png&thumbnail=48'>
+    <link rel='icon' type='image.png' sizes='48x48' href='{{app.CONF.url}}stream?dir=img&image=favicon.png&thumbnail=48'>
+    <link rel='icon' type='image.png' sizes='32x32' href='{{app.CONF.url}}stream?dir=img&image=favicon.png&thumbnail=32'>
+    <link rel='icon' type='image.png' sizes='16x16' href='{{app.CONF.url}}stream?dir=img&image=favicon.png&thumbnail=16'>
+    <link rel='apple-touch-icon' sizes='180x180' href='{{app.CONF.url}}stream?dir=img&image=favicon.png&thumbnail=180'>
+    <link rel='apple-touch-icon-precomposed' sizes='180x180' href='{{app.CONF.url}}stream?dir=img&image=favicon.png&thumbnail=180'>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{app.CONF.url}}stream?dir=img&image=favicon.png&thumbnail=180">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{app.CONF.url}}stream?dir=img&image=favicon.png&thumbnail=32">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{app.CONF.url}}stream?dir=img&image=favicon.png&thumbnail=16">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+
+
+
+    {% include 'views/front/'~ template ~'/includes/head_assets.html.twig' %}
+    <script> var rootURL = '{{app.CONF.url|slice(0,-1)}}'; </script>
+</head>
+<body class="p-0 m-0 {{lang_key == 'ar' ? 'rtl' : 'ltr'}} text-primary dark:bg-gray-800 bg-gray-50">

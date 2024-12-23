@@ -1,0 +1,41 @@
+                <div class="text-primary  w-full text-center rounded-2xl bg-white dark:bg-gray-900  p-8">
+                    <div class="w-full lg:flex gap-6">
+                        <form action="/customer/login" method="POST" id="login-form" class="ajax-form w-full">
+                            <h2 class="text-2xl dark:text-gray-300 w-full ">Login with your account</h2>
+                            <hr class="opacity-0 my-6" />
+                            <div class="grid-cols-1 grid gap-10 mx-auto w-96">
+                                <div class="text-primary w-full block">
+                                    <input name="params[email]" placeholder="Email" required="" type="email" class=" dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                                </div>
+                                <div class="text-primary w-full block relative">
+                                    <input name="params[password]" placeholder="Password"  required="" type="password" class=" dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                                </div>                        
+                            </div>
+                            <button type="submit" class=" dark:text-gray-300 inline-block my-6 px-6 py-2 rounded-2xl border transition hover:border-rose-600 border-rose-400">Login</button>
+                            <span class="text-sm block ">OR</span>
+                            <a href="signup.html" class=" dark:text-gray-300 inline-block my-6 px-6 py-2 rounded-2xl transition hover:border transition hover:border-rose-600">Create new account</a>
+                        </form>
+                        <div class="w-full mt-12">
+                            <a href="#!" class=" dark:text-gray-300 inline-block px-6 py-2 rounded-2xl ">Continue with social account</a>
+                            <hr class="block dark:opacity-0 my-4" />
+                            <a href="{{app.facebook_login_link}}" class="w-64 bg-blue-600 rounded-full dark:text-gray-300 inline-block p-1 rounded-2xl dark:border-gray-700 transition hover:border transition hover:border-rose-600 border relative">
+                                <span class="w-full gap-3 flex relative">
+                                    <span class="bg-white rounded-full w-8 h-8"><img src="/src/front_assets/svg/facebook.svg" class="w-6 h-6 m-1" /></span>
+                                    <span class="text-left flex-auto text-white py-1">Facebook account </span>
+                                    <span class="bg-white rounded-full py-1 px-2">Login</span>
+                                </span>
+                            </a>
+                            <hr class="block dark:opacity-30 my-4" />
+                            <a href="{{app.google_login_link}}" class="w-64 bg-red-600 rounded-full dark:text-gray-300 inline-block p-1 rounded-2xl dark:border-gray-700  transition hover:border transition hover:border-rose-600 border ">
+                                <span class="w-full gap-3 flex relative">
+                                    <span class="bg-white rounded-full w-8 h-8"><img src="/src/front_assets/svg/gmail.svg" class="w-6 h-6 m-1" /></span>
+                                    <span class="text-left flex-auto text-white py-1">Gmail account </span>
+                                    <span class="bg-white rounded-full py-1 px-2">Login</span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-10"></div>
+
+              

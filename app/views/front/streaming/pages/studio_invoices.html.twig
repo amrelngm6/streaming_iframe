@@ -1,0 +1,46 @@
+<div class="px-2 lg:flex ">
+    {% set customer = app.customer_auth %}
+	{% include 'views/front/' ~ template ~ '/includes/studio_sidemenu.html.twig' %}
+
+	<div class="dark:text-gray-300 w-full gap-6 overflow-hidden dark:bg-gray-900 bg-white   px-2 py-8 lg:p-8  rounded-lg shadow shadow-lg relative">
+
+		<div class="box">
+			<div class="box-header with-border">
+				<h4 class="box-title text-2xl">{{lang.translate('Invoices')}}</h4>
+				<p class="text-fade">{{lang.translate('List of previuos Invoices')}}</p>
+			</div>
+            <hr class="my-6" />
+			<div class="box-body pt-0">
+                <div class="space-y-4">
+				
+                {% for invoice in customer.invoices %}
+                
+                    <!-- First Invoice -->
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md flex justify-between items-center">
+                        <div>
+                            <p class="text-lg  text-gray-500 dark:text-gray-100 ">{{lang.translate('Subscription package')}}: <a href="/invoice/{{invoice.code}}" class="ajax-load font-semibold">{{invoice.item.package.name}}</a> </p>
+                            <p class="text-sm text-gray-500 pt-2">{{lang.translate('Date')}}: <a href="/invoice/{{invoice.code}}" class="ajax-load">{{invoice.date|date('M d, Y')}}</a></p>
+                        </div>
+                        
+                        <div class="flex flex-col items-center">
+                            <p class="text-lg font-semibold text-green-600 pb-2">{{invoice.currency_code}}{{invoice.total_amount}}</p>
+                            <p class="flex gap-4 items-center">
+                                {% if invoice.payment_method == 'paypal' and invoice.status == 'paid' %}
+                                <img src="/uploads/img/payment_methods/paypal.png" class="w-4" />
+                                <span class="block text-sm font-medium text-gray-800 dark:text-gray-100">{{invoice.payment_method}}</span>
+                                {% else %}
+                                <a href="/invoice/{{invoice.code}}" class="mt-2 block relative text-gray-100  bg-gray-800 shadow-md rounded-full py-2 px-6 dark:bg-gray-900 ajax-load">{{lang.translate('Pay now')}} </a>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                {% endfor %}
+                </div>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+

@@ -1,0 +1,65 @@
+                    <div class="w-full lg:flex gap-4  pt-8">
+                        
+                        <div class="w-full lg:w-3/4 ">
+                            {% include 'views/front/' ~ template ~ '/includes/genres_section.html.twig' %}
+                        </div>
+
+                        <div class="min-w-64  relative  mb-4">
+                            <div class="relative p-8 bg-white dark:bg-gray-900 rounded-2xl shadow-md  overflow-hidden hs__wrapper" data-count="1">
+                                <div class="w-full  border-1 text-primary ">
+                                    <div class="w-full text-xl font-bold tracking-wide dark:text-gray-300"> {{lang.translate('Top Authors')}}</div>
+                            
+                                    <div class=" absolute flex float-right gap-4 pt-3 right-0 text-primary top-5 w-20 ">
+                                        <div class="hs__arrows flex gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+                                    </div>
+                                </div>
+                                <hr class="dark:opacity-0 my-4" />
+
+                                
+                                <div class="animated-border-card shadow-lg mb-4">
+                                    <div class="bg bg-white dark:bg-gray-900">
+                                    
+                                        <div >
+                                    
+                                            <ul class="hs " >
+                                            
+                                                {% for artist in channels  %}
+                                                <li class="hs__item "> 
+
+                                                    <div class="w-full mx-auto bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                                                        <div class="border-b px-4 pb-6">
+                                                            <div class="text-center ">
+                                                                <img class="h-20 w-20 rounded-full border-4 border-white dark:border-gray-800 mx-auto my-4"
+                                                                    src="/stream?thumbnail=100&image={{artist.picture_name}}" alt="">
+                                                                <div class="pb-4">
+                                                                    <a href="/artist/{{artist.customer_id}}" class="ajax-load font-bold text-md text-gray-800 dark:text-white mb-1">{{artist.name}}</a>
+                                                                </div>
+                                                            </div>
+                                                            <ul class="w-full hover:text-rose-400 text-gray-700 dark:text-gray-300 flex items-center justify-around">
+                                                                <li class="w-full flex flex-col items-center justify-around">
+                                                                    <img src="/src/front_assets/svg/audiobook-tab.svg" class="dark:brightness-200 w-6" />
+                                                                    <div>{{artist.audiobooks|length}}</div>
+                                                                </li>
+                                                                <li class="w-full flex flex-col items-center justify-between">
+                                                                    <img src="/src/front_assets/svg/audio-tab.svg" class="dark:brightness-200 w-8" />
+                                                                    <div>{{artist.audio_items|length}}</div>
+                                                                </li>
+                                                                <li class="w-full flex flex-col items-center justify-around">
+                                                                    <img src="/src/front_assets/svg/user-tab.svg" class="dark:brightness-200 w-6" />
+                                                                    <div>{{artist.followers|length}}</div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="blob"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+

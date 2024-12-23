@@ -1,0 +1,37 @@
+
+            
+            <div class="py-4 px-2 w-full">                     
+
+
+                <div class="w-full lg:flex gap-6 dark:bg-gray-900 bg-white px-2 py-8 lg:p-8 rounded-lg shadow shadow-lg relative" >
+
+                    <div class="min-w-56  z-10 relative" id="filter-parent" >
+                        {% include 'views/front/' ~ template ~ '/includes/filter-sidebar.html.twig' %}
+                    </div>
+                    <div class="w-full relative  rounded-lg shadow-md  ">
+                        <div class="w-full text-primary border-1 p-8 flex">
+                            <div class="w-full dark:text-gray-300 text-xl font-bold tracking-wide"> {{item.lang_content.title}} </div>
+                            <span class="w-10"> ( {{list.count}} )</span>
+                        </div>
+                        <hr class="opacity-30" />
+                        <div class="w-full py-8 lg:p-8">
+                            <div class="w-full flex">
+                                <div class="w-full ">
+                                    <ul class="w-full space-y-4 pb-20">
+                                    {% for media_item in list.items %}                                   
+                                    {% include 'views/front/' ~ template ~ '/includes/tracks-list.html.twig' %}
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% include 'views/front/' ~ template ~ '/includes/pagination.html.twig' %}
+                        
+                    </div>  
+                </div>
+                
+                <div class="h-10 "></div>
+            </div>
+
+         

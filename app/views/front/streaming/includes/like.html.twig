@@ -1,0 +1,5 @@
+{% set liked = item.liked(app.customer.customer_id).first() %}
+<a href="/front_api/create?type=Like.media&params[item_id]={{item.media_id}}" data-params="{item_id: {{item.media_id}} }" class="ajax-link cursor-pointer mx-2 text-sm text-gray-100  h-10 w-6 flex">
+	<img class="{{liked ? 'hidden' : ''}} dark:brightness-200 w-5" x-on:click="jQuery('#heart-{{item.media_id}}').addClass('hidden'); jQuery('#unheart-{{item.media_id}}').removeClass('hidden')" id="heart-{{item.media_id}}" src="/src/front_assets/svg/{{app.is_dark ? 'white-' : ''}}heart.svg">
+	<img class="{{liked ? '' : 'hidden'}} dark:brightness-200 w-5" x-on:click="jQuery('#unheart-{{item.media_id}}').addClass('hidden'); jQuery('#heart-{{item.media_id}}').removeClass('hidden')" id="unheart-{{item.media_id}}" src="/src/front_assets/svg/blank-heart.svg">
+</a>

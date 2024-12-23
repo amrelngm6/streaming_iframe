@@ -1,0 +1,50 @@
+
+<div class="px-2 lg:flex gap-10">
+
+    {% include 'views/front/' ~ template ~ '/includes/studio_sidemenu.html.twig' %}
+
+    <div class="w-full overflow-hidden">
+
+            <div  class=" text-primary  w-full  rounded-2xl bg-white dark:bg-gray-900  p-8 w-full" x-data="{genres: {{genres ?? []}}, selected_genres: {{ item[genre_type] ?? [] }}, title: '{{item.name}}' }">
+                <form action="/front_api/update" method="post" enctype="multipart/form-data" id="upload-step" class="ajax-form w-full text-gray-600 dark:text-gray-300 pb-10">
+
+                    <div class="loader absolute w-full h-full left-0 top-0 bg-white dark:bg-gray-900 opacity-50 "></div>
+                
+                    <input type="hidden" name="type" value="Customer.update" />
+                    
+                    <div class=" text-primary mt-6"><h4 class="text-xl dark:text-gray-300">{{lang.translate('Extra information')}}</h4></div>
+                    <hr class="opacity-30 my-6" />
+                    <div class="grid-cols-1 lg:grid-cols-2 grid gap-10">
+                        <div class="text-primary w-full block">
+                            <input name="params[field][phone]" placeholder="{{lang.translate('Phone')}}" value="{{item.field.phone}}" class="text-gray-600 dark:text-gray-300 dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                        </div>        
+                        
+                        <div class="text-primary w-full block">
+                            <input name="params[field][website]" placeholder="{{lang.translate('website')}}" value="{{item.field.website}}" class="text-gray-600 dark:text-gray-300 dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                        </div>                    
+                    </div>
+                    <div class="opacity-30 h-10" ></div>
+                    <div class="grid-cols-1 lg:grid-cols-2 grid gap-10 ">
+                        <div class="text-primary w-full block">
+                            <input name="params[field][country]" placeholder="{{lang.translate('Country')}}" value="{{item.field.country}}" class="text-gray-600 dark:text-gray-300 dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                        </div>        
+                        
+                        <div class="text-primary w-full block">
+                            <input name="params[field][city]" placeholder="{{lang.translate('City')}}" value="{{item.field.city}}" class="text-gray-600 dark:text-gray-300 dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                        </div>                    
+                    </div>
+                    <div class="opacity-30 h-10" ></div>
+                    
+                    
+                    <button class=" dark:text-gray-300 float-right inline-block px-6 py-2 rounded-2xl border transition hover:border-rose-600 border-rose-400">{{lang.translate('Save')}}</button>
+                    
+                </form>
+            </div>
+
+            
+    </div>
+
+</div>
+
+
+

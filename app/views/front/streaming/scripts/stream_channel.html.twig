@@ -1,0 +1,199 @@
+
+<script  type="text/javascript">
+$(function()  {
+    const channelPlayer = document.getElementById('channelPlayer');
+    const bufferingIndicator = document.getElementById('bufferingIndicator');
+    let mediaSource;
+    let sourceBuffer;
+    let isSourceOpen = false;
+    let startPosition = 0; // Variable to hold the calculated start time
+
+    function fetchCurrentVideoInfo(channelId) {
+        fetch(`/channel_json/` + channelId)
+            .then(response => response.json())
+            .then(data => {
+
+                if (data && data.active_item) {
+
+                    if (activeChannelMedia && data.active_item.channel_media_id == activeChannelMedia.channel_media_id)
+                    {
+                        return;
+                    }
+
+                    activeChannel = data;
+                    activeChannelMedia = data.active_item;
+                    loadVideoPartially();  // Start loading video
+                    if (activeChannelMedia.channel_media_id)
+                    {
+                        jQuery('#video-overlay').fadeOut(200)
+                        jQuery('.play-channel').fadeOut(200)
+                        jQuery('.pause-channel').fadeIn(200)
+                        jQuery('#channelContainer').css('z-index',  50)
+                    }
+                    jQuery('#channelContainer').css('background-image',  'url(/uploads/videos/live.webp)')
+                    jQuery('#channelPlayer').fadeIn(200)
+                    channelPlayer.play()
+                    jQuery('#channel-volume').val(getCookie('volume'))
+                	channelPlayer.volume = getCookie('volume')
+
+                } else {
+        			jQuery('#video-overlay').fadeIn(200)
+                    jQuery('#channelContainer').css('background-image',  'url(/uploads/videos/offline.webp)')
+                    jQuery('#channelContainer').css('background-position',  'center center')
+                    jQuery('#channelContainer').css('background-size',  'cover')
+                    jQuery('#channelPlayer').fadeOut(200)
+                    jQuery('.pause-channel').fadeOut(200)
+                    jQuery('.play-channel').fadeIn(200)
+                    jQuery('#channelContainer').css('z-index',  0)
+                    channelPlayer.pause()
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function loadVideoPartially() {
+        if (!activeChannelMedia) {
+            return;
+        }
+
+        var a = new Date(activeChannelMedia.start);  // When the media started
+        var b = new Date();  // Current time
+        startPosition = parseInt((b - a) / 1000);  // Calculate the start position in seconds
+
+        const videoUrl = '/stream_channel?channel_id=' + activeChannel.channel_id + '&hash='+Math.random();
+
+        if (mediaSource) {
+            if (mediaSource.readyState === 'open') {
+                mediaSource.endOfStream();
+            }
+            URL.revokeObjectURL(channelPlayer.src);  // Revoke previous source
+        }
+
+        mediaSource = new MediaSource();
+        channelPlayer.src = videoUrl;
+
+        mediaSource.addEventListener('sourceopen', function() {
+            isSourceOpen = true;
+            sourceBuffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
+            sourceBuffer.mode = 'segments';
+
+            fetchInitSegment(videoUrl).then(() => {
+                channelPlayer.currentTime = startPosition;  // Set the correct start time
+                preloadNextSegment(startPosition);  // Preload the next segment
+            });
+
+            channelPlayer.addEventListener('seeking', onSeeking);  // Handle seeking
+        });
+
+        mediaSource.addEventListener('sourceended', function() {
+            isSourceOpen = false;
+        });
+
+        setTimeout(function() {
+            channelPlayer.currentTime = startPosition ?? 0
+            channelPlayer.play();  // Start playback after a short delay
+        }, 500);
+    }
+
+    // Fetch the initial segment (first part of the video)
+    function fetchInitSegment(url) {
+        return fetchWithRetry(url, { headers: { 'Range': 'bytes=0-' } })
+            .then(response => response.arrayBuffer())
+            .then(data => {
+                sourceBuffer.appendBuffer(data);
+                return new Promise(resolve => {
+                    sourceBuffer.addEventListener('updateend', resolve, { once: true });
+                });
+            });
+    }
+
+    // Fetch a specific segment at the given time
+    function fetchSegmentAtTime(time) {
+        const estimatedByteOffset = Math.floor(time * 1000000);  // Rough estimate for byte range
+        const chunkSize = 1024 * 1024;  // 1 MB chunk size
+
+        fetchWithRetry(channelPlayer.src, {
+            headers: { 'Range': `bytes=${estimatedByteOffset}-${estimatedByteOffset + chunkSize - 1}` }
+        })
+        .then(response => response.arrayBuffer())
+        .then(data => {
+            sourceBuffer.appendBuffer(data);
+            bufferingIndicator.style.display = 'none';
+            preloadNextSegment(time);  // Preload the next segment
+        })
+        .catch(error => {
+            console.error('Error fetching video segment:', error);
+            bufferingIndicator.style.display = 'none';
+        });
+    }
+
+    // Preload the next segment for smoother playback
+    function preloadNextSegment(time) {
+        const nextTime = time + 30;  // Preload 5 seconds ahead
+        fetchSegmentAtTime(nextTime);
+    }
+
+    // Handle the seeking event (user scrubs to a different time)
+    function onSeeking() {
+        const currentTime = channelPlayer.currentTime;
+        const buffered = channelPlayer.buffered;
+
+        if (isTimeBuffered(currentTime, buffered)) {
+            return;
+        }
+
+        bufferingIndicator.style.display = 'block';
+        abortCurrentRequests();  // Optionally abort any ongoing fetch requests
+        fetchSegmentAtTime(currentTime);  // Fetch segment for the new time
+    }
+
+    // Check if the current time is already buffered
+    function isTimeBuffered(time, buffered) {
+        for (let i = 0; i < buffered.length; i++) {
+            if (time >= buffered.start(i) && time <= buffered.end(i)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Optional: Abort any ongoing fetch requests (implementation required)
+    function abortCurrentRequests() {
+        // Implement logic to abort ongoing fetch requests if necessary
+    }
+
+    // Retry logic for fetching segments with a maximum number of retries
+    function fetchWithRetry(url, options = {}, retries = 3) {
+        return fetch(url, options).catch(error => {
+            if (retries > 0) {
+                return fetchWithRetry(url, options, retries - 1);
+            } else {
+                throw error;
+            }
+        });
+    }
+
+    // Fetch channel info and start the process when the page loads
+    fetchCurrentVideoInfo({{item.channel_id}});
+
+    // Periodically check for updates (refresh video information at intervals)
+    window.navigation.addEventListener("navigate", (event) => {
+        channelPlayer.pause()
+        channelPlayer.src = ''
+        clearInterval(stationCommentsInterval);
+        window.navigation.removeEventListener("navigate", function(){});
+    });
+
+    let stationIntervalAmount = jQuery('#stations-interval').val();
+    var stationCommentsInterval = setInterval(async function() {
+        fetchCurrentVideoInfo({{item.channel_id}});
+    }, stationIntervalAmount > 1 ? (stationIntervalAmount * 1000) : 60000);
+
+    jQuery(document).on('click', '#main-side a', function(){
+        channelPlayer.pause()
+        channelPlayer.src = ''
+    })
+
+});
+
+</script>

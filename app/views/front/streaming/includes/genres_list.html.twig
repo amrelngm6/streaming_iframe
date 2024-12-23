@@ -1,0 +1,8 @@
+
+                                <div :class="is_slide" class="  dark:text-gray-300 transition hover:text-rose-500 w-48  relative p-2 shadow-md transition hover:shadow-lg py-3 rounded-2xl">
+                                    <a href="/genre/{{genre.lang_content.prefix}}" title="{{genre.lang_content.title}}" class="ajax-load "><img class=" rounded-2xl shadow mx-auto " src="/stream?thumbnail=300&image={{genre.picture_name}}" /></a>
+                                    <a href="/genre/{{genre.lang_content.prefix}}" title="{{genre.lang_content.title}}" class="ajax-load lg:text-base text-xs block px-1 lg:font-normal  pt-4 pb-1 dark:hover:text-rose-400 hover:text-rose-400">{{genre.name}}</a>
+                                    <div class="px-1 relative text-gray-500 text-opacity-75 lg:text-sm text-xs font-normal  tracking-tight">
+                                        {{genre.items.count()}} {{lang.translate('Audio')}} </div>
+                                </div>
+

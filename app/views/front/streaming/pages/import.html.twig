@@ -1,0 +1,27 @@
+                <div class="py-4 px-2 w-full text-primary">             
+
+                        <div class="w-full mb-6">
+                            <h1 class="text-2xl py-4 text-center">{{lang.translate('Import media')}}</h1>
+                        </div>
+
+                    <div class="border-b border-gray-200 dark:border-gray-700">
+                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-300 lg:w-2/3 mx-auto">
+                            {% for menuitem in [
+                                {title:  "Audio",link: "/import/audio", icon: "audio-tab.svg"},
+                                {title: "Audio books",link: "/import/audiobook", icon: "audiobook-tab.svg"},
+                                {title: "Video",link: "/import/video", icon: "station.svg"}
+                            ] %}
+                            <li class=" mx-auto">
+                            
+                                <a href="{{menuitem.link}}" class="ajax-load flex gap-2 items-center justify-center p-4 border-b-2 {{ menuitem.link == app.request.pathInfo ? "border-blue-600 text-primary active dark:text-blue-500 dark:border-blue-500" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}} rounded-t-lg  group text-lg">
+                                    <img src="/src/front_assets/svg/{{menuitem.icon}}" class="w-6 h-6 dark:brightness-200" />
+                                    {{ lang.translate(menuitem.title)}}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    {% include 'views/front/' ~ template ~ '/pages/'~ sub_layout ~'.html.twig' %}
+                    
+                </div>

@@ -1,0 +1,123 @@
+
+<div x-data="{}" class="fixed inset-0  overflow-y-auto hidden transition-all transition" id="edit-station-range-popup" role="dialog" aria-modal="true" data-headlessui-state="open" style="z-index:99">
+	<div class="min-h-full text-center">
+		<div class="fixed inset-0 bg-download_popup blurFilter opacity-100" id="headlessui-dialog-overlay-:r3n:" aria-hidden="true" data-headlessui-state="open"></div>
+		<span class="hidden lg:inline-block h-screen align-middle" aria-hidden="true">​</span>
+		<div data-testid="loginContainer" class="inline-block dark:text-white w-full max-w-1/3 sm:w-auto overflow-hidden text-left align-middle transition-all transform shadow-xl h-auto md:h-[29.125rem] rounded-xl border-box opacity-100 scale-100">
+			<div class="grid grid-cols-7 md:grid-cols-12 h-full relative show-child">
+				<div class="show-child align-middle bg-wynk-dark-dark_popup col-span-12 px-8 pb-8 pt-10 md:pb-6 md:pl-[2.125rem] md:pr-7 relative flex flex-col justify-between">
+					<div x-on:click="jQuery('#edit-station-range-popup').addClass('hidden')" data-testid="loginCrossButton" class="h-6 w-6 right-4 top-4 dark:text-white hover:text-gray-400 cursor-pointer absolute">
+						<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
+							<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="lg:flex w-full gap-10 " >
+						<div class="w-96">
+							<div class="w-full  flex gap-2  py-4 max-w-lg">
+								<div class="panel panel-info w-full" >
+									<div class="panel-heading ">
+										<h3 class="panel-title">{{lang.translate('Audio')}} / {{lang.translate('Time')}}</h3>
+									</div>
+									<div class="panel-body text-gray-500 dark:text-gray-300">
+										<div id="curTime"></div>
+									</div>
+								</div>
+							</div>
+
+							<form action="/front_api/create" class="w-full ajax-form" id="submit-range-items" >
+
+								<input type="hidden" name="type" value="StationMedia.bulk_create"/>
+
+								<input type="hidden" name="params[date]" id="station-range-date" />
+								<input type="hidden" id="station-range-start" />
+								<input type="hidden" id="station-range-end" />
+								<input type="hidden" id="station-range-selected-duration" value="0" />
+
+								<div id="selected_media_list" class="w-full max-h-80 overflow-y-auto"></div>
+
+								<input type="hidden" name="params[station_id]" value="{{station.station_id}}"/>
+							</form>
+
+						</div>
+						<div class="block w-full relative  max-w-lg" >
+
+							<div class="text-primary  rounded-2xl max-w-lg" id="station-find-track-form" >
+								<div class="w-full ">
+									<div class="z-20 rounded-2xl w-full  bg-white dark:bg-gray-900 dark:text-gray-300 p-4 ">
+										<form action="/front_api" class="flex items-center max-w-lg mx-auto ajax-form" id="new-list-form">
+											<input type="hidden" name="type" value="load-audio-checkbox"/>
+											<label for="voice-search-list" class="sr-only">{{lang.translate('Search')}}</label>
+											<div class="relative w-full">
+												<div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+													<svg class="w-4 h-4 text-gray-500 dark:text-gray-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 21 21">
+														<path d="M16.6725 16.6412L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+													</svg>
+												</div>
+												<input placeholder="{{lang.translate('Search for Audio')}}"   
+													oninput="(function(){   jQuery('#link-item-submit-button, #media-result-box').removeClass('hidden'); (jQuery('#voice-search-list').val().replace(' ','') ? '' : jQuery('#media-result-box').addClass('hidden'))})()" 
+													name="params[title]" 
+													type="text" 
+													id="voice-search-list" 
+													data-element="search-result-list-popup" 
+													data-form="new-list-form" 
+													class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+													required/>
+												<span class="cursor-pointer absolute inset-y-0 end-0 flex items-center pe-3">
+													{% include 'views/front/streaming/popups/speech-to-text.html.twig' %}
+												</span>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+
+							<div id="media-result-box" style="max-height: 200px" class="max-height[200px] relative z-10 hidden  w-full flex  max-h-64 overflow-auto flex-col rounded-lg border border-slate-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-sm">
+								<nav class="flex w-full flex-col gap-1 p-1.5" id="search-result-list-popup"></nav>
+							</div>
+
+							<div class="w-full   text-center py-4 flex-col flex gap-6">
+								<div class="panel panel-info w-full flex gap-6" >
+									<div class="panel-heading ">
+										<h3 class="panel-title">{{lang.translate('Playing Time')}}</h3>
+									</div>
+									<div class="panel-body text-gray-500 dark:text-gray-300">
+										<div id="station-range-time"></div>
+									</div>
+								</div>
+
+								<div class="panel panel-info w-full flex gap-6" >
+									<div class="panel-heading">
+										<h3 class="panel-title">{{lang.translate('Total Duration')}}</h3>
+									</div>
+									<div class="panel-body text-gray-500 dark:text-gray-300">
+										<div id="station-range-duration" ></div>
+									</div>
+								</div>
+
+								<div class="panel panel-info w-full flex gap-6" >
+									<div class="panel-heading">
+										<h3 class="panel-title">{{lang.translate('Selected duration')}}</h3>
+									</div>
+									<div class="panel-body text-gray-500 dark:text-gray-300">
+										<div id="station-range-selected-duration-text" ></div>
+									</div>
+								</div>
+							</div>
+						
+						</div>
+
+					</div>
+					
+                    <div class="show-on-hover mt-2 absolute bottom-10 right-0 mt-4 flex-col rounded-lg shadow-sm">
+                        <div class="text-center w-full py-2 hidden" id="range-item-submit-button">
+                            <button onclick="(function(){ return jQuery('form#submit-range-items').submit(); })()" class="mx-auto mt-2 group relative h-12 w-48 overflow-hidden rounded-lg bg-white text-lg shadow">
+                                <div class="absolute inset-0 w-3 bg-purple-800 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
+                                <span class="relative text-black group-hover:text-white">{{lang.translate('Save')}}</span>
+                            </button>
+                        </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

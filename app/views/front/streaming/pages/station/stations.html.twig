@@ -1,0 +1,20 @@
+                
+                <div class="p-4 w-full text-primary ">
+                	
+                    <div class="py-4 text-center mb-10">
+                        <h1 class="px-6 text-2xl text-gray-800 dark:text-gray-100">{{item.name}} </h1>
+                        <p class="px-6 text-primary">{{item.description}} </p>
+                    </div>
+
+                    <div id="channel-list"  class="w-full  grid lg:grid-cols-2 grid-cols-1 py-4 gap-4" >
+                        {% set customer = app.customer_auth() %}
+                        {% for station in items  %}
+                        {% include 'views/front/' ~ template ~ '/pages/station/station-block.html.twig' %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+				{% set view_items_limit = app.SystemSetting.view_stations_limit %}
+                {% include 'views/front/' ~ template ~ '/includes/pagination.html.twig' %}
+
+                <div class="h-10"></div>

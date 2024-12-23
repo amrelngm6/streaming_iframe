@@ -1,0 +1,29 @@
+  
+                        <div class="relative bg-white dark:bg-gray-900  lg:p-8 p-4 rounded-2xl rounded  shadow-md mb-4" id="top-charts-slider" x-data="{is_slide: 'slide'}">
+
+
+                            <div class="w-full 	" id="slide-audiobooks-items" >
+                                <div class="hs__wrapper" x-data="{is_slide: false}" data-count="5">
+                                
+                                    <div class=" w-full flex gap-4 text-primary ">
+                                        <div class=" w-full flex gap-4 dark:text-gray-300 ">
+                                            <h3 class="text-2xl  font-normal">{{lang.translate('Top genres')}}</h3>
+                                            <a href="/genres" class="ajax-load p-2 transition dark:hover:text-rose-400 hover:text-rose-400">{{lang.translate('See all')}}</a>
+                                        </div>
+
+                                        <div class="hs__arrows flex gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+
+                                    </div>
+                                    <ul class="hs" >
+                                    
+                                        {% for genre in genres %}
+                                        <li class="hs__item "> 
+                                            {% include 'views/front/' ~ template ~ '/includes/genres_list.html.twig' %}
+                                        </li>
+                                        {% endfor %}    
+                                    </ul>
+                                </div>
+
+                            </div>
+                            
+                        </div>

@@ -1,0 +1,66 @@
+<div class="px-2 lg:flex gap-10">
+
+	{% include 'views/front/' ~ template ~ '/includes/studio_sidemenu.html.twig' %}
+
+	<div class="dark:text-gray-300  w-full gap-6 overflow-hidden dark:bg-gray-900 bg-white   px-2 py-8 lg:p-8  rounded-lg shadow shadow-lg relative">
+
+		<div class="box">
+			<div class="box-header with-border">
+				<h4 class="box-title text-2xl">{{lang.translate('Media List')}}</h4>
+				<p class="text-fade">{{lang.translate('List of uploaded media items')}}</p>
+			</div>
+            <hr class="my-6" />
+			<div class="box-body pt-0">
+				<div class="table-responsive">
+					<table class="table mb-0 w-full">
+						<thead class="py-4">
+							<tr class="py-4 text-left">
+								<th style="width: 50px">{{lang.translate('Title')}}</th>
+								<th class="min-w-40 lg:min-w-56"></th>
+								<th style="min-width: 100px">{{lang.translate('Likes')}}</th>
+								<th style="min-width: 100px">{{lang.translate('Views')}}</th>
+								<th style="min-width: 100px">{{lang.translate('Comments')}}</th>
+								<th class="text-right py-8 min-h-20" >{{lang.translate('Edit')}}</th>
+							</tr>
+						</thead>
+						<tbody>
+                        {% for item in list.items %}
+							<tr >
+								<td class="py-2">
+									<div class="bg-lightest h-50 w-50 l-h-50 rounded text-center overflow-hidden">
+										<img src="/stream?thumbnail=100&image={{item.picture_name}}" class="h-50 align-self-end" alt="">
+									</div>
+								</td>
+								<td class="px-2 ">
+									<a href="/video/{{item.media_id}}" class="ajax-load text-dark font-weight-600 text-primary font-size-16">{{item.name}}</a>
+								</td>
+								<td>
+									<span class="text-fade block">
+										{{item.likes|length}}
+									</span>
+								</td>
+								<td>
+									<span class="text-fade block">{{item.views|length}}</span>
+								</td>
+								<td>
+									<span class="text-fade block">{{item.comments|length}}</span>
+								</td>
+								<td class="text-right py-4">
+									<a href="/video/edit/{{item.media_id}}" class="ajax-load waves-effect waves-light btn btn-primary rounded-full ">
+										<img src="/src/front_assets/svg/edit-2.svg" class="w-5" />
+									</a>
+								</td>
+							</tr>
+                            {% endfor %}
+						</tbody>
+					</table>
+				</div>
+				{% set view_items_limit = app.SystemSetting.view_videos_limit %}
+				{% include 'views/front/' ~ template ~ '/includes/pagination.html.twig' %}
+			</div>
+		</div>
+
+	</div>
+
+</div>
+

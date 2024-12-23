@@ -1,0 +1,59 @@
+
+            
+            <div class="py-4 px-2 w-full">                     
+
+                {% include 'views/front/' ~ template ~ '/includes/genres_section.html.twig' %}
+
+
+                <div class="z-20 w-full relative dark:bg-gray-900 bg-white   lg:p-8 p-4 rounded-lg rounded  shadow-md mb-4" id="artists-list"  data-count="5">
+                    <div class="hs__wrapper" >
+                        <div class=" w-full flex gap-4 text-primary pb-10">
+                            <div class=" w-full flex gap-4 dark:text-gray-300 ">
+                                <h3 class="text-2xl  font-normal">{{lang.translate('Top Artists')}}</h3>
+                                <a href="/discover?params[author_id]={{item.customer_id}}" class="ajax-load p-2 transition hover:text-rose-500">{{lang.translate('See all')}}</a>
+                            </div>
+
+                            <div class="hs__arrows flex gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+                        </div>
+                        <ul class="hs" >
+                            {% for artist in artists.items %}
+                            <li class="hs__item  max-w-[250px]"> 
+                                {% include 'views/front/'~ app.SystemSetting.template ~ '/includes/artist-item.html.twig' %}
+                            </li>
+                            {% endfor %}    
+                        </ul>
+                    </div>
+
+                </div>
+                
+
+
+                <div class="w-full lg:flex gap-6 dark:bg-gray-900 bg-white lg:p-8 py-8 px-2 rounded-lg shadow shadow-lg relative" >
+
+                    <div class="min-w-56  z-10 relative" id="filter-parent" >
+                        {% include 'views/front/' ~ template ~ '/includes/filter-sidebar.html.twig' %}
+                    </div>
+                    <div class="w-full relative  rounded-lg shadow-md  ">
+                        <div class="w-full text-primary border-1 lg:p-8 py-8 px-2">
+                            <div class="w-full dark:text-gray-300 text-xl font-bold tracking-wide"> {{lang.translate('Explore what is trending')}}</div>
+                        </div>
+                        <hr class="opacity-30" />
+                        <div class="w-full lg:p-8 py-8 px-2">
+                            <div class="w-full flex">
+                                <div class="w-full ">
+                                    <ul class="w-full space-y-4 pb-20">
+                                    {% for media_item in list.items %}                                   
+                                    {% include 'views/front/' ~ template ~ '/includes/tracks-list.html.twig' %}
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% include 'views/front/' ~ template ~ '/includes/pagination.html.twig' %}
+                        
+                    </div>  
+                </div>
+                
+            </div>
+
+         

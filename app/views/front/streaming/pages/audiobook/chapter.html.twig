@@ -1,0 +1,19 @@
+
+                                        <li class="relative" >
+                                            <div class="py-1 pl-4 flex text-primary transition " >
+                                                
+                                                <div class="slide__audio js-audio start-player" id="media-{{file.media_file_id}}" data-list="{{audiobook.files|column('player_object')|json_encode}}" data-index="{{loop.index - 1}}">
+                                                    <div class="slide__audio-player"  data-title="{{file.title}}" data-poster="/stream?thumbnail=300&image={{audiobook.picture_name}}" data-artist="{{audiobook.artist.name}}" data-path="/stream_audio?audio={{audiobook.main_file.filename}}" data-id="{{file.media_file_id}}" >
+                                                    </div>
+                                                    {% set item = audiobook %}
+                                                    {% include 'views/front/'~ app.SystemSetting.template ~ '/includes/book-player-circle.html.twig' %}
+                                                </div>
+                                                <div class="px-4 lg:pr-6 w-full hover:text-rose-500 max-w-[90%] pt-1">
+                                                    <a href="/audiobook/{{audiobook.media_id}}"  class="ajax-load block truncate  text-lg font-normal transition hover:text-rose-500  dark:text-gray-300 text-left">{{file.title}}</a>
+                                                </div>
+                                                
+                                                
+                                            </div>
+                                            
+                                        </li>
+                                                

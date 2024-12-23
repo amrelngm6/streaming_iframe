@@ -1,0 +1,20 @@
+
+<div x-data="{}" class="fixed inset-0  overflow-y-auto hidden transition-all transition" id="edit-station-track-popup" role="dialog" aria-modal="true" data-headlessui-state="open" style="z-index:99">
+	<div class="min-h-full text-center">
+		<div class="fixed inset-0 bg-download_popup blurFilter opacity-100" id="headlessui-dialog-overlay-:r3n:" aria-hidden="true" data-headlessui-state="open"></div>
+		<span class="hidden lg:inline-block h-screen align-middle" aria-hidden="true">​</span>
+		<div data-testid="loginContainer" class="inline-block dark:text-white w-full max-w-[42.125rem] sm:w-auto overflow-hidden text-left align-middle transition-all transform shadow-xl h-auto md:h-[29.125rem] rounded-xl border-box opacity-100 scale-100">
+			<div class="grid grid-cols-7 md:grid-cols-12 h-full relative">
+				<div class="align-middle bg-wynk-dark-dark_popup col-span-12 px-8 pb-8 pt-10 md:pb-6 md:pl-[2.125rem] md:pr-7 relative flex flex-col justify-between">
+					<div x-on:click="jQuery('#edit-station-track-popup').addClass('hidden')" data-testid="loginCrossButton" class="h-6 w-6 right-4 top-4 dark:text-white hover:text-gray-400 cursor-pointer absolute">
+						<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
+							<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+					<div class="inline-block w-full" id="editStationPopupContent"></div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

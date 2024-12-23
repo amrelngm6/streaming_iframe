@@ -1,0 +1,35 @@
+@import './base.css';
+
+#app {
+  /* max-width: 1400px; */
+  margin: 0 auto;
+  font-weight: normal;
+}
+#app > div {
+  padding: .5rem .5rem 0 .5rem ;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: rgba(248, 40, 90,1);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: rgba(248, 40, 90,.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+    grid-template-columns: 1fr 1fr;
+  }
+}

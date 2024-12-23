@@ -1,0 +1,54 @@
+
+
+            <div  class=" text-primary  w-full  rounded-2xl bg-white dark:bg-gray-900  p-8" >
+                <h2 class="text-2xl dark:text-gray-300 ">{{lang.translate('Create new station')}}</h2>
+                <hr class="my-6 opacity-0" />
+                <form action="/front_api/create" method="post" enctype="multipart/form-data" id="create-station" class="ajax-form w-full  pb-10">
+                
+                    <div class=" text-primary"><h4 class="text-xl dark:text-gray-300">{{lang.translate('Station cover')}}</h4></div>
+                    <hr class="opacity-30 my-4" />
+                    <div class="lg:flex gap-10 pb-6 relative" id="upload-media-form">
+                        <label class="flex cursor-pointer py-4 px-2 dark:bg-gray-800  bg-gray-200 rounded-3xl w-40 border border-1 border-dashed	border-rose-600">
+                            <img id="imagePreview" src="{{item.picture ?? '/src/front_assets/svg/picture.svg'}}" class="dark:opacity-30" />
+                            <input id="imageInput" type="file" name="file" class="hidden" />
+                        </label>
+                        <div class="w-full">
+                        
+                            <p class="block my-4 text-gray-400">{{lang.translate('Click to upload your file')}}</p>
+                            <label for="imageInput" class="inline-block px-6 py-3 rounded-2xl border dark:text-gray-300 border-gray-100 transition hover:border-rose-600">
+                            {{lang.translate('Upload Station Cover')}}
+                            </label>    
+                        </div>
+                    </div>
+                    
+
+                    <div class="loader absolute w-full h-full left-0 top-0 bg-white dark:bg-gray-900 opacity-50 "></div>
+                
+                    <input type="hidden" name="type" value="Station.create" />
+                    <input type="hidden" name="params[type]" value="{{type}}" />
+                    
+                    <div class=" text-primary mt-6"><h4 class="text-xl dark:text-gray-300">{{lang.translate('Basic info')}}</h4></div>
+                    <hr class="opacity-30 my-6" />
+                    <div class="grid-cols-1 lg:grid-cols-2 grid gap-10">
+                        <div class="text-primary w-full block">
+                            <input name="params[name]" placeholder="{{lang.translate('Station Name')}} *" x-model="title" value="{{item.name}}" class=" dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                        </div>                       
+                    </div>
+                    
+                    <div class="text-primary w-full block my-6">
+                        <textarea rows="3" placeholder="Description *" name="params[description]" class=" dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" >{{item.description}}</textarea>
+                    </div>
+                    
+                    <button class=" dark:text-gray-300 float-right inline-block px-6 py-2 rounded-2xl border transition hover:border-rose-600 border-rose-400">{{lang.translate('Next')}}</button>
+                    
+                </form>
+            </div>
+
+        </div>
+         
+    </div>
+</div>
+    
+{% if app.customer.can_do('stations') != true %}
+{% include 'views/front/' ~ app.SystemSetting.template ~ '/popups/subscribe-popup.html.twig' %}
+{% endif %}

@@ -1,0 +1,90 @@
+
+{% include 'views/front/' ~ template ~ '/includes/head.html.twig' %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<link rel="stylesheet" href="/src/front_assets/css/style.css">
+<link rel="stylesheet" crossorigin href="/dist/index.min.css">
+
+<section class="pt-20 ">
+    <div class="container mx-auto">
+
+        <!-- Left column container with background-->
+        <div class="g-6 lg:flex items-center justify-center lg:justify-between">
+            <div class="shrink-1 mb-12 grow-0 basis-auto md:mb-0 w-2/4">
+                <img src="/uploads/img/login-bg.webp" class="w-full" alt="Sample image" />
+            </div>
+
+            <!-- Right column container -->
+            <div class="w-1/3 ">
+                <div class="mb-12 md:mb-0 sidebar sidebar-two"
+                    style="background-image: url(/uploads/img/background-p.png);">
+                    <div class="w-full flex justify-between">
+                        <h3 class="">{{lang.translate('Login')}}</h3>
+                        <a class="flex-end text-white" href="/reset-password" >{{lang.translate('Forgot password')}}</a>
+                    </div>
+                    <div class="boder"></div>
+                    <p>{{lang.translate('LOGIN_MSG') | raw}}</p>
+                    <form action="/dashboard/login" method="POST" id="login-form">
+                        <label class="relative block  "><input required="true" type="email" name="params[email]"
+                                class="rounded-input with-icon" value="" placeholder="Enter your Email address..."><i
+                                class="fa fa-envelope py-2 w-4 absolute right-4 left-4 top-5"></i></label>
+                        <label class="relative block  "><input required="true" value="" type="password" name="params[password]"
+                                class="rounded-input with-icon" placeholder="Enter your Password..."><i
+                                class="fa fa-circle-check py-2 w-4 absolute right-4 left-4 top-5"></i></label>
+                        <div class="flex gap-6">
+                          <button class="btn mt-2 px-8 py-2  text-white fw-bold">{{lang.translate('Login')}}</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="share-post block">
+                    
+                    <ul class="social-icon">
+                        <li><h5 class="px-3 pt-4">{{lang.translate('Login with')}}:</h5></li>
+                        {% if app.setting.allow_google_login %}
+                        <li><a href="{{google_login}}"><i class="fa-brands fa-google"></i>Google</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<!--Jquery 3 6 0 Min Js-->
+<script src="/src/assets/jquery.min.js"></script>
+
+<script>
+
+    jQuery(document).on('submit', 'form', function (e) {
+        e.preventDefault();
+
+        let action = $(this).attr('action');
+
+        $.ajax({
+            url: action,
+            type: "POST",
+            data: new FormData(this),
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (html) {
+                if (html && html.error) {
+                    alert(html.error)
+                } else {
+                    window.location.href = '/dashboard';
+                }
+
+            }
+        });
+    });
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+$(function(){
+        
+    const chartsOptions = {
+        textPosition: true,
+        responsive: true,
+        scales: {
+            y: {
+                display: false
+            }
+        },
+        plugins: {
+            legend: false,
+        }
+    };
+
+    {% set audioCharts = customer.chartsMedia('audio') %}
+    const audioCharts = {
+        labels: JSON.parse('{{audioCharts|column('label')|json_encode|raw}}'),
+        datasets: [{
+            label: '# {{lang.translate('of')}} {{lang.translate('Items')}}',
+            data: JSON.parse('{{audioCharts|column('y')|json_encode|raw}}'),
+            borderWidth: 1,
+            backgroundColor: '#9BD0F5',
+            borderColor: '#9BD0F5',
+            color: '#9BD0F5',
+        }]
+    };
+
+        
+    {% set videoCharts = customer.chartsMedia('video') %}
+    const videoCharts = {
+        labels: JSON.parse('{{videoCharts|column('label')|json_encode|raw}}'),
+        datasets: [{
+            label: '# {{lang.translate('of')}} {{lang.translate('Items')}}',
+            data: JSON.parse('{{videoCharts|column('y')|json_encode|raw}}'),
+            borderWidth: 1,
+            backgroundColor: '#9BD0F5',
+            borderColor: '#9BD0F5',
+            color: '#9BD0F5',
+        }]
+    };
+    
+    {% set audiobookCharts = customer.chartsMedia('audiobook') %}
+    const audiobookCharts = {
+        labels: JSON.parse('{{audiobookCharts|column('label')|json_encode|raw}}'),
+        datasets: [{
+            label: '# {{lang.translate('of')}} {{lang.translate('Items')}}',
+            data: JSON.parse('{{audiobookCharts|column('y')|json_encode|raw}}'),
+            borderWidth: 1,
+            backgroundColor: '#9BD0F5',
+            borderColor: '#9BD0F5',
+            color: '#9BD0F5',
+        }]
+    };
+
+    setTimeout(function(){
+        
+        new Chart(jQuery('#myChart')[0], {
+            type: 'line',
+            data: audioCharts,
+            options: chartsOptions
+        });
+
+        new Chart(jQuery('#myChart2')[0], {
+            type: 'line',
+            data: audiobookCharts,
+            options: chartsOptions
+        });
+
+
+        new Chart(jQuery('#myChart3')[0], {
+            type: 'line',
+            data: videoCharts,
+            options: chartsOptions
+        });
+    }, 100)
+})
+
+</script>

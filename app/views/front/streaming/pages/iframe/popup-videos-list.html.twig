@@ -1,0 +1,12 @@
+
+                                            <label onclick="(function () { return  jQuery('#item-input-{{item.media_id}}').prop('checked', true), jQuery('#item-title-{{item.media_id}}').prop('checked', true), jQuery('#item-path-{{item.media_id}}').prop('checked', true); })(); return false;  " role="button" class="text-slate-800 flex gap-2 w-full items-center rounded-md p-3 transition-all dark:hover:bg-gray-600 hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100">
+                                                <input  type="radio" value="{{item.media_id}}" id="item-input-{{item.media_id}}" class="hidden" name="params[media_id]" />
+                                                <input  type="radio" value="{{item.main_file.path}}" id="item-path-{{item.media_id}}" class="hidden" name="params[media_path]" />
+                                                <input  type="radio" value="{{item.name}}" id="item-title-{{item.media_id}}" class="hidden" name="params[title]" />
+                                                <span class="checkmark relative"></span>
+                                                <div class="mr-4 grid place-items-center"><img alt="candice" src="{{item.picture}}" class="relative inline-block h-12 w-12 !rounded-full object-cover object-center"></div>
+                                                <div style="max-width:78%" >
+                                                    <h6 class="truncate text-slate-800 dark:text-gray-300 font-medium">{{item.name}}</h6>
+                                                    <p class="text-slate-500 dark:text-gray-300 text-sm">{{item.artist.name}}</p>
+                                                </div>
+                                            </label>

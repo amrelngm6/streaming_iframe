@@ -1,0 +1,80 @@
+
+<div class="px-2 lg:flex gap-10">
+
+    {% include 'views/front/' ~ template ~ '/includes/studio_sidemenu.html.twig' %}
+
+    <div class="w-full overflow-hidden">
+
+            <div  class=" text-primary  w-full  rounded-2xl bg-white dark:bg-gray-900  p-8 w-full" x-data="{genres: {{genres ?? []}}, selected_genres: {{ item[genre_type] ?? [] }}, title: '{{item.name}}' }">
+                <form action="/front_api/update" method="post" enctype="multipart/form-data" id="upload-step" class="ajax-form w-full text-gray-600 dark:text-gray-300 pb-10">
+                
+                    <div class=" text-primary"><h4 class="text-xl dark:text-gray-300">{{lang.translate('Profile picture')}} </h4></div>
+                    <hr class="opacity-30 my-4" />
+                    <div class="flex gap-10 pb-6 relative" id="upload-media-form">
+                        <label class="cursor-pointer py-4 px-2 dark:bg-gray-800  bg-gray-200 rounded-3xl w-40 border border-1 border-dashed	border-rose-600">
+                            <img id="imagePreview" src="{{item.picture ?? '/src/front_assets/svg/picture.svg'}}" class="dark:opacity-30" />
+                            <input id="imageInput" type="file" name="file" class="hidden" />
+                        </label>      
+                    </div>
+
+                    <div class="loader absolute w-full h-full left-0 top-0 bg-white dark:bg-gray-900 opacity-50 "></div>
+                
+                    <input type="hidden" name="type" value="Customer.update" />
+                    
+                    <div class=" text-primary mt-6"><h4 class="text-xl dark:text-gray-300">{{lang.translate('Basic info')}}</h4></div>
+                    <hr class="opacity-30 my-2" />
+                    <div class="grid-cols-1 lg:grid-cols-2 grid gap-10">
+                        <div class="text-primary w-full block">
+                            <input name="params[name]" placeholder="{{lang.translate('Full Name')}} *" value="{{item.name}}" class="text-gray-600 dark:text-gray-300 dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                        </div>           
+                        <div class="text-primary w-full block">
+                            <input disabled type="text" disabled value="{{item.email}}" class="text-gray-600 dark:text-gray-300 dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                        </div>              
+                    </div>
+                    
+                    <div class="text-primary w-full block my-6">
+                        <textarea rows="3" placeholder="{{lang.translate('About')}} *" name="params[field][about]" class="text-gray-600 dark:text-gray-300 dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" >{{item.field.about}}</textarea>
+                    </div>
+                    
+                    <button class=" dark:text-gray-300 float-right inline-block px-6 py-2 rounded-2xl border transition hover:border-rose-600 border-rose-400">{{lang.translate('Save')}}</button>
+                    
+                </form>
+            </div>
+
+            
+            <div  class=" text-primary  w-full my-4 rounded-2xl bg-white dark:bg-gray-900  p-8 w-full" x-data="{genres: {{genres ?? []}}, selected_genres: {{ item[genre_type] ?? [] }}, title: '{{item.name}}' }">
+                <form action="/front_api/update" method="post" enctype="multipart/form-data" id="password-update" class="ajax-form w-full text-gray-600 dark:text-gray-300 pb-10">
+                
+                    <div class=" text-primary"><h4 class="text-xl dark:text-gray-300">{{lang.translate('Change password')}} </h4></div>
+                    <div class="opacity-30 h-10" ></div>
+                    <div class="loader absolute w-full h-full left-0 top-0 bg-white dark:bg-gray-900 opacity-50 "></div>
+                
+                    <input type="hidden" name="type" value="Customer.changePassword" />
+                    
+                    <div class="grid-cols-1 lg:grid-cols-2 grid gap-10">
+                        <div class="text-primary w-full block">
+                            <input required type="password" name="params[old_password]" placeholder="{{lang.translate('Current password')}} *" class="text-gray-600 dark:text-gray-300 dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                        </div>                 
+                    </div>
+                    <div class="opacity-30 h-10" ></div>
+                    <div class="grid-cols-1 lg:grid-cols-2 grid gap-10">
+                        <div class="text-primary w-full block">
+                            <input required type="password" name="params[password]" placeholder="{{lang.translate('New password')}} *" class="text-gray-600 dark:text-gray-300 dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                        </div>                    
+                        <div class="text-primary w-full block">
+                            <input required type="password" name="params[confirm_password]" placeholder="{{lang.translate('Confirm password')}} *" class="text-gray-600 dark:text-gray-300 dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                        </div>                    
+                    </div>
+                    <div class="opacity-30 h-10" ></div>
+                    
+                    <button class=" dark:text-gray-300 float-right inline-block px-6 py-2 rounded-2xl border transition hover:border-rose-600 border-rose-400">{{lang.translate('Save')}}</button>
+                    
+                </form>
+            </div>
+
+    </div>
+
+</div>
+
+
+

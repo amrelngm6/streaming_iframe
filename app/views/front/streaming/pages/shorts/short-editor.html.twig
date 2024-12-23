@@ -1,0 +1,172 @@
+<div class="container">
+	
+	<div class="main-content">
+		
+		<div class="video-container p-4 px-2 lg:flex gap-4 block w-full bg-white dark:bg-gray-800">
+			<div id="video-preview" class="video-preview w-full">
+				<video id="video-player"  width="100%" height="100%" controls>
+					<source src="/stream_video?video={{item.main_file.filename}}" type="video/mp4">
+					Your browser does not support the video tag.
+				</video>
+
+
+				<!-- progress bar -->
+				<div class="progress">
+					<div class="progress-bar progress-bar-primary progress-bar-striped" id="cut-left" style="width: 0%">
+						<span class="sr-only"></span>
+					</div>
+					<div class="progress-bar progress-bar-success progress-bar-striped active" id="played" style="width: 0%">
+						<span class="sr-only"></span>
+					</div>
+					<div class="progress-bar progress-bar-warning progress-bar-striped" id="toPlay" style="width: 100%">
+						<span class="sr-only"></span>
+					</div>
+					<div class="progress-bar progress-bar-primary progress-bar-striped" id="cut-right" style="width: 0%">
+						<span class="sr-only"></span>
+					</div>
+				</div>
+
+				<!-- 2. The IONrangeSlider container -->
+				<div class="timeline p-4 overflow-hidden relative dark:bg-gray-900 mt-20" style="">
+					<div id="range"></div>
+				</div>
+			</div>
+			<div class="editing-panel bg-gray-100 dark:bg-gray-900 text-primary w-full lg:w-1/3 text-sm  ">
+
+				<div class="z-20 rounded-2xl w-full  bg-white dark:bg-gray-900 dark:text-gray-300 py-4 ">
+				
+					<nav class="flex  gap-4 pt-4" >
+						<span class="text-lg">{{lang.translate('Original Video')}} </span>
+						<span  onclick="(function () { return  jQuery('#new-item-form, #selected-label, #media-result-box').toggleClass('hidden'); })(); return false;  " class="cursor-pointer pt-1 dark:text-gray-100" id="change-media-btn">{{lang.translate('Change')}} </span>
+					</nav>
+					<label id="selected-label"  role="button" class="text-slate-800 flex gap-2 w-full items-center rounded-md p-3 transition-all dark:hover:bg-gray-600 hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100">
+						<div class="mr-4 grid place-items-center"><img alt="candice" src="{{item.picture}}" class="relative inline-block h-12 w-12 !rounded-full object-cover object-center"></div>
+						<div style="max-width:78%" >
+							<h6 class="truncate text-slate-800 dark:text-gray-300 font-medium">{{item.name}}</h6>
+							<p class="text-slate-500 dark:text-gray-300 text-sm">{{item.artist.name}}</p>
+						</div>
+					</label>
+					<form action="/front_api" class="flex items-center max-w-lg mx-auto ajax-form hidden pt-4" id="new-item-form">
+						<input type="hidden" name="type" value="load-videos-list"/>
+						<label for="voice-search" class="sr-only">{{lang.translate('Search')}}</label>
+						<div class="relative w-full">
+							<div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+								<svg class="w-4 h-4 text-gray-500 dark:text-gray-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 21 21">
+									<path d="M16.6725 16.6412L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</div>
+							<input placeholder="{{lang.translate('Search for videos')}}"   
+								oninput="(function(){ return  (jQuery('#voice-search').val().length ? '' : jQuery('#new-item-form, #selected-label, #media-result-box, #link-item-submit-button ').toggleClass('hidden')) , jQuery('#new-channel-link-item').addClass('hidden'),  jQuery('#new-channel-item,#link-item-submit-button').removeClass('hidden');})()" 
+								name="params[title]" 
+								type="text" 
+								id="voice-search" 
+								data-element="search-result-popup" 
+								data-form="new-item-form" 
+								class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+								required/>
+							<span class="cursor-pointer absolute inset-y-0 end-0 flex items-center pe-3">
+								{% include 'views/front/streaming/popups/speech-to-text.html.twig' %}
+							</span>
+						</div>
+					</form>
+				</div>
+
+				<form action="/front_api/update" class=" max-w-lg mx-auto ajax-form" id="new-item-link-item">
+					<input type="hidden" name="type" value="ShortVideo.update"/>
+
+					<div id="media-result-box" class="hidden mt-4 relative flex  max-h-64 overflow-auto flex-col rounded-lg border border-slate-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-sm">
+						<nav class="flex min-w-[240px] flex-col gap-1 p-1.5" id="search-result-popup"></nav>
+					</div>
+				
+					<div class="mt-4 relative flex max-h-64 overflow-auto flex-col rounded-lg border border-slate-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-sm">
+						<div class="text-center w-full py-2 hidden" id="link-item-submit-button">
+							<button type="submit" class="mx-auto mt-2 group relative h-12 w-48 overflow-hidden rounded-lg bg-white text-lg shadow">
+								<div class="absolute inset-0 w-3 bg-purple-800 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
+								<span class="relative text-black group-hover:text-white">{{lang.translate('Update')}}</span>
+							</button>
+						</div>
+					</div>
+					<input type="hidden" name="params[media_id]" value="{{item.media_id}}"/>
+				</form>
+				
+				<form action="/front_api/update" class=" max-w-lg mx-auto ajax-form" id="new-file-item">
+					<input type="hidden" name="type" value="ShortVideo.update_video"/>
+						
+					<div class="w-full  flex gap-2 text-center py-4">
+						<div class="panel panel-info w-full" >
+							<div class="panel-heading ">
+								<h3 class="panel-title">Current Time</h3>
+							</div>
+							<div class="panel-body text-gray-500 dark:text-gray-300">
+								<div id="curTime"></div>
+							</div>
+						</div>
+
+						<div class="panel panel-info w-full">
+							<div class="panel-heading">
+								<h3 class="panel-title">Duration</h3>
+							</div>
+							<div class="panel-body text-gray-500 dark:text-gray-300">
+								<div id="finalDuration" ></div>
+							</div>
+						</div>
+					</div>
+					
+					<nav class="flex min-w-[240px] flex-col gap-1 pt-4" >
+						<span class="">{{lang.translate('Video title')}}</span>
+					</nav>
+						
+					<div class="mt-4 relative flex max-h-64 overflow-auto flex-col rounded-lg border border-slate-200 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-sm">
+						
+						<nav class="flex  flex-col gap-1 p-1.5" id="item-link-nav">
+							<input value="{{item.name}}" placeholder="{{lang.translate('Media Title')}}" name="params[name]"  type="text"  data-form="new-item-link-form" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required/>
+						</nav>
+						
+					</div>
+						<div class="text-center w-full py-2 " id="new-file-item-submit-button" >
+							<button onclick="(function(){  
+							Swal.fire({
+								title: '{{lang.translate('Finished editing')}}',
+								text: '{{lang.translate('Once you save the file you can not update it later')}}',
+								icon: 'warning',
+								showCancelButton: true,
+								confirmButtonColor: '#3085d6',
+								cancelButtonColor: '#d33',
+								confirmButtonText: 'Confirm'
+							}).then((result) => {
+								if (result.isConfirmed) {
+									jQuery('#new-file-item').submit()
+								}
+							})
+							;})(); return false;" type="button" class="mx-auto mt-2 group relative h-12 w-48 overflow-hidden rounded-lg bg-white dark:bg-gray-700  text-lg shadow">
+								<div class="absolute inset-0 w-3 bg-purple-800 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
+								<span class="relative text-gray-300 group-hover:text-white">{{lang.translate('Save Short video')}}</span>
+							</button>
+						</div>
+					<input type="hidden" name="params[media_id]" value="{{item.media_id}}"/>
+					<input type="hidden" name="params[start]" id="shortVideoStart" />
+					<input type="hidden" name="params[end]" id="shortVideoEnd" />
+					<input type="hidden" name="params[duration]" id="shortVideoDuration" />
+				</form>
+
+			</div>
+		</div>
+	</div>
+	
+	<div class="timeline bg-gray-100 dark:bg-gray-900 p-4  overflow-x-auto mx-2">
+
+		<div class="timeline-track">
+			<div class="timeline-thumbnails " id="timeline-thumbnails"></div>
+			<div class="timeline-cursor" id="timeline-cursor"></div>
+		</div>
+	</div>
+</div>
+
+
+{% include 'views/front/' ~ template ~'/scripts/short_generator_script.html.twig' %}
+{% include 'views/front/' ~ template ~'/scripts/short_generator_styles.html.twig' %}
+
+
+{% if app.customer.can_do('shortvideo') != true %}
+{% include 'views/front/' ~ app.SystemSetting.template ~ '/popups/subscribe-popup.html.twig' %}
+{% endif %}

@@ -1,0 +1,105 @@
+
+
+
+
+            <div  class=" text-primary  w-full  rounded-2xl bg-white dark:bg-gray-900  p-8" x-data="{'media_id':'{{item.media_id}}', 'chapters': {{item.files ?? [] }}, 'title': '{{item.name}}' }">
+                <div class=" text-primary"><h4 class="text-xl dark:text-gray-300"> <a href="/audiobook/{{item.media_id}}" class="ajax-load">{{item.name}}</a> </h4></div>
+                <hr class="opacity-0 my-4" />
+                <form action="/front_api/update" method="post" enctype="multipart/form-data" id="upload-step" class="ajax-form w-full  pb-10">
+
+                    <input type="hidden" name="params[media_id]" value="{{item.media_id}}" />
+                    <input type="hidden" name="type" value="Audiobook.update_chapters" />
+                    
+                    <div class="flex gap-4 text-primary mt-6"><h4 class="text-xl dark:text-gray-300" >{{lang.translate('Chapters list')}}</h4> </div>
+                    <hr class="opacity-20 my-4" />
+                    <template x-for="(chapter, i) in chapters">
+    
+                        <template x-if="chapter">
+                            <div class="w-full">
+                                <div class="flex gap-10 pb-6 relative" :id="'upload-media-form'+chapter.media_file_id">
+                                    <input type="hidden" name="params[chapters][media_file_id][]" x-model="chapter.media_file_id" />
+                                    <input type="hidden" name="params[chapters][path][]" x-model="chapter.path" />
+
+                                    <label  class="cursor-pointer py-4 px-2 dark:bg-gray-800  bg-gray-200 rounded-3xl w-40 border border-1 border-dashed	border-rose-600">
+                                        <img id="" src="/stream?thumbnail=300&image={{item.picture_name}}" class="dark:opacity-30" />
+                                        {# <input :id="'imageInput'+chapter.media_file_id" type="file" name="file[]" class="hidden" /> #}
+                                    </label>  
+                                    
+                                    <div class="w-full dark:text-gray-300 ">
+                                        <div class="flex gap-10 w-full relative z-10">
+                                            <div class="w-1/2">
+                                                <p class="text-lg py-2">{{lang.translate('Chapter name')}} </p>
+                                                <input name="params[chapters][title][]" placeholder="{{lang.translate('Chapter Name')}} *" x-model="chapter.title" value="{{chapter.title}}" class=" dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200 w-full"  />
+                                            </div>
+                                            <div class="text-primary dark:text-gray-300   block">
+                                                
+                                                <div class="float-right w-64 pt-4 flex gap-10">
+                                                    <div x-on:click='Swal.fire({ title: "{{lang.translate('Remove chapter')}}", text: "Confirm to remove this chapter", icon: "warning", showCancelButton: true, confirmButtonColor: "#3085d6", cancelButtonColor: "#d33", confirmButtonText: "Confirm" }).then((result) => { if (result.isConfirmed) { chapter = null; } })' class="hover:text-gray-200  cursor-pointer py-4 block flex gap-2 mt-4">
+                                                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M10 12V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M14 12V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        </svg>
+                                                        {{lang.translate('Remove')}}
+                                                    </div>
+                                                    <div x-on:click="chapters = moveItem(chapters, i, 'up')" class="hover:text-gray-400  cursor-pointer py-4 block flex gap-2 mt-4">
+                                                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M5 15L10 9.84985C10.2563 9.57616 10.566 9.35814 10.9101 9.20898C11.2541 9.05983 11.625 8.98291 12 8.98291C12.375 8.98291 12.7459 9.05983 13.0899 9.20898C13.434 9.35814 13.7437 9.57616 14 9.84985L19 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        </svg>
+                                                    </div>
+                                                    <div x-on:click="chapters = moveItem(chapters, i, 'down')" class="hover:text-gray-400  cursor-pointer py-4 block flex gap-2 mt-4">
+                                                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="w-full flex gap-10 py-4" >
+                                        
+
+                                            <div style="top:0"  class="slide__audio js-audio start-single-player pt-0 mt-0" :id="'media-'+chapter.media_id"  data-list="{{item.files ?? [] }}" :data-index="i">
+                                                <div class="slide__audio-player" :data-title="chapter.title" data-poster="/stream?thumbnail=800&image={{item.picture_name}}" data-artist="{{item.artist.name}}"  :data-id="chapter.media_file_id">
+                                                </div>
+                                                <div class="audio__controls " >
+                                                    <svg version="1.1" id="circle" width="50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100">
+                                                        <path class="seekbar" :id="'seekbar-'+chapter.media_file_id" fill="none" stroke-meterlimit="10" d="M50,2.9L50,2.9C76,2.9,97.1,24,97.1,50v0C97.1,76,76,97.1,50,97.1h0C24,97.1,2.9,76,2.9,50v0C2.9,24,24,2.9,50,2.9z"/>
+                                                    </svg>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="equalizer" viewBox="0 0 100 100">
+                                                        <g class="equalizer-group">
+                                                            <rect class="bar"></rect>
+                                                            <rect class="bar"></rect>
+                                                            <rect class="bar"></rect>
+                                                            <rect class="bar"></rect>
+                                                            <rect class="bar"></rect>
+                                                        </g>
+                                                    </svg>
+                                                    <div class="audio__slider" :id="'circle-'+chapter.media_file_id"></div>
+                                                    <span class="play-pause"></span>
+                                                </div>
+                                                
+                                            </div>  
+                                            
+                                            <div class="relative  w-full"  >
+                                                <img :id="'wave-'+chapter.media_file_id" class="w-full left-0 top-0 bottom-0 my-auto absolute " :src="'/stream?thumbnail=1000&dir=audio'+(chapter.path.includes('/tmp') ? '/tmp' : '')+'&image='+chapter.wave" />
+                                                <div :id="'wave-overlay'+chapter.media_file_id"  class="absolute w-full h-full top-0 right-0 opacity-50 dark:bg-gray-900 bg-white z-50 duration-150 transition transition-all"> </div>
+                                            </div>    
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </template>
+                    </template>
+                    <div class="my-4"></div>
+                    <span  class="cursor-pointer dark:text-gray-300 float-left inline-block px-6 py-2 rounded-2xl border transition hover:border-rose-600 border-rose-400" x-on:click="jQuery('#upload-file-popup').removeClass('hidden'), jQuery('#upload-file-media').val('{{item.media_id}}')">{{lang.translate('Add chapter')}}</span>
+
+                    <button class=" dark:text-gray-300 float-right inline-block px-6 py-2 rounded-2xl border transition hover:border-rose-600 border-rose-400">{{lang.translate('Save')}}</button>
+                    
+                </form>
+                {% set view_items_limit = app.SystemSetting.view_audiobooks_limit %}
+                {% include 'views/front/'~ template ~'/popups/upload-file.html.twig' %}
+            </div>

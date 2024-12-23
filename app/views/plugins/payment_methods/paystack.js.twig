@@ -1,0 +1,56 @@
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+async function completePaystack()  
+{
+    var handler = await PaystackPop.setup({
+        key: '{{app.setting.paystack_public_key}}',
+        email: '{{order.customer.email}}',
+        order_id: '{{order.order_id}}',
+        amount: (Math.round({{app.currency_converter(order.total_amount, 'NGN') | replace({',':''})}}, 2) * 100)  , 
+        currency: 'NGN', 
+        metadata: {
+            order_id: '{{order.order_id}}',
+        },
+        callback: function(response) {
+
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    var defaultParams = {
+                        type:  'Transaction.verify',
+                        params: {
+                            payment_method: 'Paystack',
+                            order_id: '{{order.order_id}}',
+                            transaction: JSON.stringify(response)
+                        },
+                    };
+                    var formData = $.param($.extend(defaultParams, settings.data));
+                    settings.data = formData;
+                }
+            });
+
+            let a = $.ajax({
+                url: '/front_api/create',
+                type: 'POST',
+                contentType: 'application/x-www-form-urlencoded',
+                data:  {}, // Your data to send
+                processData:false,
+                success: function(data) {
+                    
+                    let a = JSON.parse(data.responseText);
+                    if (a.result.code)
+                        window.location.href = '/invoice/'+a.result.code;
+
+                    return data.responseText
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching data:', error);
+                }
+            }); 
+
+        }
+    });
+    // Open Paystack inline payment form
+    handler.openIframe();
+}
+</script>

@@ -1,0 +1,74 @@
+<div class="px-2 w-full flex  my-2 lg:gap-4 gap-1 z-[60] relative" x-data="{}">
+	<div class="w-full flex  gap-2 text-gray-400">
+    
+        <div class=" lg:block hidden h-12" style="scale: .4; transform-origin: left;">  
+            {% include 'views/front/streaming/includes/switch-mode.html.twig' %}
+        </div>
+
+		<h2 class="text-xl lg:hidden flex gap-4 cursor-pointer py-2" onclick="(function(){ return  jQuery('#main-side').toggleClass('hidden'); })()">
+			<img src="/src/front_assets/svg/menu.svg" class="w-8"/>
+		</h2>
+		<a href="/" class="lg:hidden ajax-load"><img src="{{app.is_dark ? app.SystemSetting.dark_logo : app.SystemSetting.logo }}" class="lg:w-24 w-20 py-2 mt-1"/></a>
+	</div>
+	<a href="/search/audio" class="ajax-load py-6 min-w-8">
+		<img src="/src/front_assets/svg/search.svg" class="w-6 h-6 lg:w-5 lg:h-5"/>
+	</a>
+
+	<div class="relative show-child min-w-8  pt-6 cursor-pointer text-primary">
+		<img src="/uploads/img/flags/{{lang_key}}.svg" class="rounded-full lg:w-5  lg:h-5  w-6 h-6" width="14"/>
+		<div class="show-on-hover absolute right-0 p-4 bg-white dark:bg-gray-900 rounded-lg w-40 flex-col flex gap-2">
+			{% for l in app.Languages %}
+				<a href="/switch-lang/{{l.language_code}}" class="flex w-full gap-4">
+					<img src="{{l.icon}}" class="" width="14"/>
+					<span>{{l.name}}</span>
+				</a>
+			{% endfor %}
+		</div>
+	</div>
+
+	{% if app.customer %}
+		<div class="lg:min-w-40 w-auto justify-start items-center inline-flex show-child " >
+			<div class="show-on-hover absolute  top-full p-4 bg-white dark:bg-gray-900  text-primary rounded-lg w-40 flex-col flex gap-4">
+				<a href="/studio" class="ajax-load flex w-full gap-4">
+					-
+					{{lang.translate('Studio')}}
+				</a>
+				<a href="/studio/audio" class="ajax-load flex w-full gap-4"> - {{lang.translate('Audio')}} </a>
+				<a href="/studio/videos" class="ajax-load flex w-full gap-4"> - {{lang.translate('Videos')}} </a>
+				<a href="/studio/shorts" class="ajax-load flex w-full gap-4"> - {{lang.translate('Short videos')}} </a>
+				<a href="/studio/audiobooks" class="ajax-load flex w-full gap-4"> - {{lang.translate('Audiobooks')}} </a>
+				<a href="/studio/stations" class="ajax-load flex w-full gap-4"> - {{lang.translate('Stations')}} </a>
+				<a href="/studio/channels" class="ajax-load flex w-full gap-4"> - {{lang.translate('channels')}} </a>
+				<a href="/studio/subscriptions" class="ajax-load flex w-full gap-4"> - {{lang.translate('Subscriptions')}} </a>
+				<a href="/studio/profile" class="ajax-load flex w-full gap-4"> - {{lang.translate('Settings')}} </a>
+				<a href="/artist/{{app.customer.customer_id}}" class="ajax-load flex w-full gap-4"> - {{lang.translate('Profile')}} </a>
+				<a href="/logout" class="flex w-full gap-4"> - {{lang.translate('Logout')}} </a>
+                <div class="w-full lg:hidden block"  style="scale: .4; transform-origin: left;">  
+    				{% include 'views/front/streaming/includes/switch-mode.html.twig' %}
+                </div>
+
+			</div>
+			<div class=" justify-start items-center gap-4 flex">
+                <img class="relative rounded-full w-8 h-8 min-w-10 min-h-10" src="/stream?thumbnail=50&image={{app.customer.picture_name}}"/>
+                <a href="/studio" class="ajax-load ">
+                    <div class="lg:flex hidden text-primary flex-col justify-start items-start  ">
+                        <span class="text-slate-400 text-opacity-70 text-xs font-normal ">{{lang.translate('Welcome')}}</span>
+                        <div class="dark:text-rose-400 text-base font-normal">{{app.customer_auth.name}}</div>
+                    </div>
+                </a>
+			</div>
+		</div>
+	{% else %}
+		<span x-on:click="jQuery('#login-popup').removeClass('hidden')" class="items-center transition hover:opacity-60 cursor-pointer dark:text-white flex p-2 transition">
+			<span class="dark:text-wynk-heading_light1 lg:block">
+				<span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none">
+						<path d="M12 15C15.3137 15 18 12.3137 18 9C18 5.68629 15.3137 3 12 3C8.68629 3 6 5.68629 6 9C6 12.3137 8.68629 15 12 15Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+						<path d="M2.90625 20.2508C3.82775 18.6544 5.15328 17.3287 6.74958 16.407C8.34588 15.4853 10.1567 15 12 15C13.8433 15 15.6541 15.4853 17.2504 16.407C18.8467 17.3287 20.1722 18.6544 21.0938 20.2508" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+					</svg>
+				</span>
+			</span>
+			<div class=" lg:block ml-2 font-light dark:text-wynk-heading_light1">{{lang.translate('Login')}}</div>
+		</span>
+	{% endif %}
+</div>

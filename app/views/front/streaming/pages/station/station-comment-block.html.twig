@@ -1,0 +1,11 @@
+{% for comment in comments %}
+<div class="flex flex-col gap-1 w-full p-2 py-4 comment " data-id="{{comment.comment_id}}" >
+    <div class="flex items-center space-x-2 rtl:space-x-reverse">
+        <span class="text-sm font-normal text-gray-900 dark:text-white">{{comment.customer.name}}</span>
+        <span class="text-sm font-normal text-gray-500 dark:text-gray-300">{{comment.created_at|date("M d, Y")}} | {{comment.created_at|date("H:i")}}</span>
+    </div>
+    <div class="w-full  leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700">
+        <p class="text-sm font-normal text-gray-900 dark:text-white w-full max-h-64 overflow-auto"> {{comment.comment|nl2br}}</p>
+    </div>
+</div>
+{% endfor %}

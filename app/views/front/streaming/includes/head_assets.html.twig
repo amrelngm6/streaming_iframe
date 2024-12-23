@@ -1,0 +1,52 @@
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/src/front_assets/css/tailwind.min.css" />
+    <link defer rel="stylesheet" href="/src/front_assets/css/main.css" />
+    <link rel="stylesheet" href="/src/front_assets/css/custom.css" />
+
+
+    
+    <style>
+    [lang="ar"] body, 
+    [lang="ar"] h1,[lang="ar"] h2,[lang="ar"] h3,[lang="ar"] h4,[lang="ar"] h5,[lang="ar"] h6,[lang="ar"] .main_font
+    { font-family: "{{app.SystemSetting.headers_font ?? 'Tajawal' }}"}
+    
+    [lang="ar"] p, 
+    [lang="ar"] div, 
+    [lang="ar"] span:not(.material-symbols-outlined)
+    { font-family: "{{app.SystemSetting.text_font ?? 'Rubik' }}"}
+
+
+    [lang="en"] body, 
+    [lang="en"] h1,[lang="en"] h2,[lang="en"] h3,[lang="en"] h4,[lang="en"] h5,[lang="en"] h6,[lang="en"] .main_font
+    { font-family: "{{app.SystemSetting.english_headers_font ?? 'balooregular' }}"}
+    
+    [lang="en"] p, 
+    [lang="en"] div, 
+    [lang="en"] span:not(.material-symbols-outlined)
+    { font-family: "{{app.SystemSetting.english_text_font ?? 'Poppins' }}"}
+
+    </style>
+    <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp|{{ app.SystemSetting.english_headers_font}}|{{ app.SystemSetting.english_text_font ?? 'Poppins' }}|{{ app.SystemSetting.arabic_headers_font ?? 'Tajawal' }}|{{ app.SystemSetting.arabic_text_font ?? 'Amaranth' }}:wght@300;400;500;600">
+    <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Material+Symbols+Outlined:wght@100&icon_names=favorite,home,search,settings,arrow_forward_ios,arrow_back_ios">
+
+    
+    <!-- JQuery -->
+    <script src="/src/front_assets/js/jquery.min.js"></script>
+
+    <!-- Player Circle  -->
+    <script defer src="/src/front_assets/js/roundslider.js"></script>
+    
+    <!-- Sweet Alert Popup -->
+    <script defer src="/src/front_assets/js/sweetalert2-11.js"></script>
+    
+    <!-- Alpine JS -->
+    <script defer src="/src/assets/alpine.min.js" ></script>
+
+    <!-- Multi-select dropdown -->
+    <script defer src="/src/front_assets/js/multi-select.js"></script>
+    
+    <!-- Video Editor Duration Range slider -->
+    <script defer src="/src/front_assets/js/nouislider.min.js"></script>
+    <link defer rel="stylesheet" href="/src/front_assets/css/nouislider.min.css">

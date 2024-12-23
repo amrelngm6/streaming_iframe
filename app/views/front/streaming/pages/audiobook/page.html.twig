@@ -1,0 +1,157 @@
+
+            <div class="py-4  h-full overflow-hidden rounded-2xl" x-data="{}">                     
+                    
+                <div class="my-4 h-full lg:flex overflow-hidden rounded-2xl">                     
+                    
+                    <div class="overflow-hidden lg:w-96 w-full " id="playlist-parent">
+                        <div class="p-8 relative overflow-hidden  rounded-2xl   w-full lg:w-80" id="playlist-side" >
+                            <div class="artist-overlay top-[-20px] left-0 absolute w-full h-full py-20 bg-gradient-to-b from-gray-800 to-black"></div>
+                            <img src="/stream?thumbnail=800&image={{item.picture_name}}"  class="absolute bg-img left-0 top-0" />
+                            <div class=" w-full overflow-hidden rounded-2xl text-white mx-auto text-center relative z-10 ">
+                                <img src="/stream?thumbnail=300&image={{item.picture_name}}"  class="w-32 h-32 lg:w-56 lg:h-56 rounded-full shadow-xl" />
+                                <div class="py-8 text-left ">
+                                    <span>{{lang.translate('Audiobook')}}</span>
+                                    <h1 class="lg:text-2xl text-xl pb-4">{{item.name}}</h1>
+                                    
+                                        {% set customer = app.customer_auth() %}
+                                        {% set itemId = item.media_id %}
+                                        {% set itemType = 'media' %}
+                                        {% include 'views/front/' ~ template ~ '/includes/item-stats.html.twig' %}
+                                    <hr class="opacity-20 my-2" />
+                                    <div class="w-full flex gap-2">
+                                        <span x-on:click="jQuery('#show-box-path').val('audiobook/{{item.media_id}}'); jQuery('#share-popup').removeClass('hidden')" class="cursor-pointer mx-2 text-sm text-gray-100"><img src="/src/front_assets/svg/share.svg" class="w-5"></span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="relative z-10 w-full  gap-4 bg-white dark:bg-gray-900  rounded-2xl py-8 lg:p-8 h-full">
+                        
+                        <div class="w-full 	mb-10 relative" id="latest-uploads">
+                            <span class="dark:text-gray-300">{{lang.translate('Chapters')}}</span>
+                            <hr class="w-10 my-4 " />
+                            <div id="tracks-list" class="">
+                                <ul class="w-full space-y-4 pb-20">
+                                
+                                {% set audiobook = item %}
+                                {% for file in item.files %}
+                                {% include 'views/front/' ~ template ~ '/pages/audiobook/chapter.html.twig' %}
+                                {% endfor %}
+
+                                </ul>
+                            </div>
+                            <div class="my-10 " ></div>
+                            <div class="z-10 absolute bottom-0 bg-gradient-to-b from-transparent dark:to-gray-900 to-white w-full h-20"></div>
+                        </div>
+
+                        
+                        <div class="w-full 	py-10">
+                            <div class="w-full relative rounded-2xl rounded  mb-4" id="related-items-slider">
+                                
+                                <div class="flex w-full pb-4">
+                                    <div class=" w-full flex gap-4 text-primary ">
+                                        <h3 class="text-2xl font-normal dark:text-gray-300">{{lang.translate('Related Books')}}</h3>
+                                    </div>
+                                    <div class="flex gap gap-4">
+                                        <button class="prev-btn" data-slider="related-items"><img class="w-8" src="/src/front_assets/svg/left.svg"></button>
+                                        <button class="next-btn" data-slider="related-items"><img class="w-8" src="/src/front_assets/svg/right.svg"></button>
+                                    </div>
+                                </div>
+                                <hr class="opacity-30 mb-4" />
+
+                                <div id="related-items" class="carousel-container lg:flex gap-2" data-count="2" x-data="{'is_slide': 'slide'}"  >
+                                    {% set list = {'items' : item.related(10, item.type)} %}
+                                    {% for audiobook in list.items %}
+                                    {% include 'views/front/' ~ template ~ '/pages/audiobook/item.html.twig' %}			
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+
+
+                            {% set relatedVideo = item.related(10, 'video') %}
+                            {% if app.SystemSetting.enable_videos and relatedVideo|length %}
+                            <div class="w-full 	pt-6" id="slide-video-items" data-count="4">
+                                <div class="hs__wrapper" x-data="{is_slide: false}">
+                                
+                                    <div class=" w-full flex gap-4 text-primary pb-10">
+                                        <div class=" w-full flex gap-4 dark:text-gray-300 ">
+                                        <h3 class="text-2xl  font-normal">{{lang.translate('Fans also watched')}}</h3>
+                                            <a href="/discover/video?params[author_id]={{item.customer_id}}" class="ajax-load p-2 transition hover:text-rose-500">{{lang.translate('See all')}}</a>
+                                        </div>
+
+                                        <div class="hs__arrows flex gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+                                    </div>
+                                    <ul class="hs" >
+                                        {% set list = {'items' : relatedVideo } %}
+                                        {% for media_item in list.items %}
+                                        <li class="hs__item  max-w-[250px]"> 
+                                            {% include 'views/front/'~ app.SystemSetting.template ~ '/includes/video-item.html.twig' %}
+                                        </li>
+                                        {% endfor %}    
+                                    </ul>
+                                </div>
+
+                            </div>
+                            {% endif %}
+                            
+                            {% set related = item.related(10, 'audio') %}
+                            {% if app.SystemSetting.enable_audio and related|length %}
+                            <div class="w-full 	pt-6" id="slide-audio-items" data-count="4">
+                                <div class="hs__wrapper" x-data="{is_slide: false}">
+                                
+                                    <div class=" w-full flex gap-4 text-primary pb-10">
+                                        <div class=" w-full flex gap-4 dark:text-gray-300 ">
+                                        <h3 class="text-2xl  font-normal">{{lang.translate('Related Audio')}}</h3>
+                                            <a href="/discover?params[author_id]={{item.customer_id}}" class="ajax-load p-2 transition hover:text-rose-500">{{lang.translate('See all')}}</a>
+                                        </div>
+
+                                        <div class="hs__arrows flex gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+                                    </div>
+                                    <ul class="hs" >
+                                        {% set list = {'items' : related } %}
+                                        {% for media_item in list.items %}
+                                        <li class="hs__item  max-w-[250px]"> 
+                                            {% include 'views/front/'~ app.SystemSetting.template ~ '/includes/track_item.html.twig' %}
+                                        </li>
+                                        {% endfor %}    
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                            {% endif %}
+
+                            
+                            <div class="w-full 	my-10 relative text-primary pb-10" id="latest-comments">
+                                <h3 class="text-2xl font-normal dark:text-gray-300">{{lang.translate('Fans commented')}} <a href="javascript:;" x-on:click="jQuery('#comments-form').toggleClass('hidden')" class="float-right text-base font-normal">{{lang.translate('Add your comment')}}</a></h3>
+                                <div class="my-4 " ></div>
+                                <div id="tracks-list" class=" overflow-auto  ">
+                                    <div class="w-full mx-auto hidden" id="comments-form" >
+                                        {% set id = item.media_id %}
+                                        {% set comments = item.comments %}
+                                        {% include 'views/front/' ~ template ~ '/includes/comment-form.html.twig' %}
+                                    </div>
+                                    {% if item.comments|length > 0 %}
+                                    <div class="w-full mx-auto">
+                                        {% include 'views/front/' ~ template ~ '/includes/comments.html.twig'%}
+                                    </div>
+                                    {% endif  %}
+                                </div>
+                                <div class="my-10 " ></div>
+                                <div class="z-10 absolute bottom-0 bg-gradient-to-b from-transparent dark:to-gray-900 to-white w-full h-20"></div>
+                            </div>
+                            
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+                
+
+            </div>
+

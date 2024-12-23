@@ -1,0 +1,21 @@
+<div class="py-4 px-2 w-full">
+
+    <div class="py-4 text-center">
+        <h1 class="px-6 text-2xl text-gray-800 dark:text-gray-100">{{item.name}} </h1>
+        <p class="px-6 text-primary">{{item.description}} </p>
+    </div>
+
+    {% include 'views/front/' ~ template ~ '/includes/filter-top.html.twig' %}
+
+    {% set customer = app.customer_auth() %}
+    {% include 'views/front/' ~ template ~ '/includes/home_videos.html.twig' %}
+
+    <div class="w-full relative  rounded-lg ">
+        <div class="w-full ">
+            {% set list = video_items %}
+            {% set view_items_limit = app.SystemSetting.view_videos_limit %}
+            {% include 'views/front/' ~ template ~ '/includes/pagination.html.twig' %}
+        </div>
+    </div>
+	<div class="h-10"></div>
+</div>

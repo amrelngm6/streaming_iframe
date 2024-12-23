@@ -1,0 +1,29 @@
+
+            
+                
+
+                <div class="w-full lg:flex gap-6 dark:bg-gray-900 bg-white   p-8 rounded-lg shadow shadow-lg relative">
+
+                    <div class="w-full relative  rounded-lg shadow-md  ">
+                        <div class="w-full text-primary border-1 p-8">
+                            <div class="w-full dark:text-gray-300 text-xl font-bold tracking-wide">{{lang.translate('Found similar Channels')}} {{app.params.title}}</div>
+                        </div>
+                        <hr class="opacity-30"/>
+                        <div class="w-full lg:p-8 py-8 px-2">
+                            <div class="w-full flex">
+                                <div class="w-full ">
+                                    <ul class="w-full lg:grid-cols-2 grid-cols-1 grid gap-10 pb-20">
+                                        {% for channel in search_list.items %}
+                                        {% include 'views/front/' ~ template ~ '/pages/channel/channel-block.html.twig' %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+            				{% set view_items_limit = app.SystemSetting.view_channels_limit %}
+                            {% include 'views/front/' ~ template ~ '/includes/pagination.html.twig' %}
+
+                        </div>
+                    </div>
+                </div>
+
+         

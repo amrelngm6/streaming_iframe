@@ -1,0 +1,58 @@
+
+                <div class="w-full p-4">
+                    <h2 class="text-primary text-2xl py-4"><span class="dark:text-gray-300">{{lang.translate('Discover most played playlists')}}</span></h2>
+                    
+                    {% for playlist in items %}
+                    <div class="my-4 h-full lg:flex z-10 relative rounded-2xl">                     
+                    
+                        <div class="overflow-hidden w-full lg:w-96 " >
+                            <div class=" lg:p-8 p-4 relative overflow-hidden  rounded-2xl" >
+                                <div class="artist-overlay top-[-20px] left-0 absolute w-full h-full py-20 bg-gradient-to-b from-gray-800 to-black"></div>
+                                <img src="/stream?thumbnail=300&image={{playlist.items[0].media.picture_name}}"  class="absolute bg-img left-0 top-0 w-full" />
+                                <div class="lg:block flex gap-4 w-full overflow-hidden rounded-2xl text-white mx-auto lg:text-center relative z-10 ">
+                                    <a href="/playlist/{{playlist.playlist_id}}"  class="ajax-load"><img src="/stream?thumbnail=300&image={{playlist.items[0].media.picture_name}}"  class="mx-auto w-28 h-28 lg:w-32 lg:h-32 rounded-full shadow-xl" /></a>
+                                    <div class="block gap-4 ">
+                                        <div class="pt-4 text-left ">
+                                            <a href="/playlist/{{playlist.playlist_id}}" class="ajax-load lg:text-2xl text-lg hover:text-gray-100">{{playlist.name}}</a>
+                                        </div>
+                                    
+                                        <div class="flex gap-4  h-8">
+                                        
+                                            {% set customer = app.customer_auth() %}
+                                            {% set item = playlist %}
+                                            {% set itemId = playlist.playlist_id %}
+                                            {% set itemType = 'playlist' %}
+                                            {% include 'views/front/' ~ template ~ '/includes/item-stats.html.twig' %}
+                                            <span x-on:click="jQuery('#show-box-path').val('playlist/{{playlist.playlist_id}}'); jQuery('#share-popup').removeClass('hidden')" class="cursor-pointer mx-2 text-sm text-gray-100 pt-2"><img src="/src/front_assets/svg/share.svg" class="w-5"></span>
+
+                                        </div>
+                                        <span class="text-sm text-gray-100">{{lang.translate('Items')}} : {{playlist.items|length}}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="relative z-10 w-full  gap-4 dark:bg-gray-900 bg-white rounded-2xl  lg:px-8 pt-8 pb-4   lg:left-[-25px] lg:right-[-25px]">
+                            
+                            <div class="text-primary w-full relative" id="latest-uploads">
+                                <div id="playlist-items-list" class="">
+                                        <ul class="w-full space-y-4 ">
+                                                        
+                                            {% for playlist_item in playlist.items %}                                   
+                                            {% if loop.index < 4 %}
+                                            {% set media_item = playlist_item.media %}
+                                            {% set list = {'items': playlist.items|column('media')} %}
+                                            {% include 'views/front/' ~ template ~ '/includes/tracks-list.html.twig' %}
+                                            {% endif %}
+                                            {% endfor %}
+                                                
+                                        </ul>
+                                </div>
+                                <a href="/playlist/{{playlist.playlist_id}}" title="{{playlist.name}}" class="ajax-load dark:text-rose-500 hover:text-gray-200 transition block pt-2  ">{{lang.translate('See all')}} {{playlist.items|length}}</a>
+                            </div>
+    
+                        </div>
+    
+                    </div>
+                    {% endfor %}
+                </div>

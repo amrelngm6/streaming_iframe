@@ -1,0 +1,84 @@
+
+            <div class="py-4  h-full overflow-hidden rounded-2xl" x-data="{}">                     
+                    
+                <div class="my-4 px-2 h-full lg:flex overflow-hidden rounded-2xl">                     
+                    
+                    <div class="overflow-hidden lg:w-96 " id="playlist-parent">
+                        <div class=" px-2 py-8 lg:p-8  relative overflow-hidden  rounded-2xl w-full lg:w-80" id="playlist-side" >
+                            <div class="artist-overlay top-[-20px] left-0 absolute w-full h-full py-20 bg-gradient-to-b from-gray-800 to-black"></div>
+                            <img src="/stream?thumbnail=800&image={{item.items[0].media.picture_name}}"  class="absolute bg-img left-0 top-0" />
+                            <div class=" w-full overflow-hidden rounded-2xl text-white mx-auto text-center relative z-10 ">
+                                <img src="/stream?thumbnail=300&image={{item.items[0].media.picture_name}}"  class="w-full h-full lg:w-56 lg:h-56 rounded-full shadow-xl lg:p-0 p-4" />
+                                <div class="px-2 py-8 lg:p-8  text-left ">
+                                    <span>{{lang.translate('Playlist')}}</span>
+                                    <h1 class="lg:text-4xl text-2xl ">{{item.name}}</h1>
+                                    
+                                    <div class="flex gap-4 py-2">
+                                        <span class="text-sm text-gray-100">{{lang.translate('Likes')}} : {{item.likes_count}}</span>
+                                        <span class="text-sm text-gray-100">{{lang.translate('Items')}} : {{item.items|length}}</span>
+                                    </div>
+                                    <hr class="opacity-20 my-2" />
+                                    <div class="w-full flex gap-2">
+                                        {% set liked = item.liked(app.customer.customer_id).first() %}
+                                        <a href="/front_api/create?type=Like.playlist&params[item_id]={{item.playlist_id}}" data-params="{item_id: {{item.media_id}} }" class="ajax-link cursor-pointer text-sm text-gray-100">
+                                        
+                                        <img class="{{liked ? 'hidden' : ''}} w-5" x-on:click="jQuery('#heart-{{item.media_id}}').addClass('hidden'); jQuery('#unheart-{{item.media_id}}').removeClass('hidden')" id="heart-{{item.media_id}}" src="/src/front_assets/svg/{{app.is_dark ? 'white-' : ''}}heart.svg">
+                                        <img class="{{liked ? '' : 'hidden'}} w-5" x-on:click="jQuery('#unheart-{{item.media_id}}').addClass('hidden'); jQuery('#heart-{{item.media_id}}').removeClass('hidden')" id="unheart-{{item.media_id}}" src="/src/front_assets/svg/blank-heart.svg">
+
+                                        </a>
+                                        <span x-on:click="jQuery('#show-box-path').val('audio/{{item.playlist_id}}'); jQuery('#share-popup').removeClass('hidden')" class="cursor-pointer mx-2 text-sm text-gray-100"><img src="/src/front_assets/svg/share.svg" class="w-5"></span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="relative z-10 w-full  gap-4 bg-white dark:bg-gray-900  rounded-2xl px-2 py-8 lg:p-8  h-full">
+                        
+                        <div class="w-full 	mb-10 relative" id="latest-uploads">
+                            <span class="dark:text-gray-300">{{lang.translate('Playlist')}}</span>
+                            <hr class="w-10 my-4 " />
+                            <div id="tracks-list" class="">
+                                <ul class="w-full space-y-4 pb-20">
+                                {% for playlist_item in item.items %}                                   
+                                {% set media_item = playlist_item.media %}
+                                {% set list = {'items': item.items|column('media')} %}
+                                {% include 'views/front/' ~ template ~ '/includes/tracks-list.html.twig' %}
+                                {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="my-10 " ></div>
+                            <div class="z-10 absolute bottom-0 bg-gradient-to-b from-transparent dark:to-gray-900 to-white w-full h-20"></div>
+                        </div>
+
+                        
+                        
+                        <div class="w-full 	py-10">
+                            <div class="w-full relative rounded-2xl rounded  mb-4" id="top-playlists">
+                                
+                                <div class="flex w-full pb-4">
+                                    <div class=" w-full flex gap-4 text-primary ">
+                                        <h3 class="text-2xl font-normal dark:text-gray-300">Fans also played</h3>
+                                    </div>
+                                    <div class="flex gap gap-4">
+                                        <button class="prev-btn" data-slider="public-playlists"><img class="w-8" src="/src/front_assets/svg/left.svg"></button>
+                                        <button class="next-btn" data-slider="public-playlists"><img class="w-8" src="/src/front_assets/svg/right.svg"></button>
+                                    </div>
+                                </div>
+                                <hr class="opacity-30 mb-4" />
+
+                                <div id="public-playlists" class="carousel-container" data-count="3"></div>
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+                
+
+            </div>
+

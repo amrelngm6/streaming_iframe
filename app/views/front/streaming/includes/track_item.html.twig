@@ -1,0 +1,15 @@
+
+                            <div :class="is_slide" class="overflow-hidden lg:mx-0 mx-auto  dark:text-gray-300  transition hover:text-rose-500 lg:w-full  relative p-2 py-3 rounded-2xl">
+                                <a href="/audio/{{media_item.media_id}}" class="ajax-load "><img class="lg:mx-0 mx-auto rounded-2xl shadow transition hover:shadow-lg  transition hover:shadow-lg w-48 h-48" width="300" height="300" src="/stream?thumbnail=300&image={{media_item.picture_name}}" /></a>
+                                <div class="  gap-1 flex py-4 " >
+                                    <div class="slide__audio js-audio start-player" id="media-{{media_item.media_id}}"  data-list="{{list.items|column('player_object')|json_encode}}" data-index="{{loop.index - 1}}">
+                                        <div class="slide__audio-player" data-title="{{media_item.name}}" data-poster="/stream?thumbnail=300&image={{media_item.picture_name}}" data-artist="{{media_item.artist.name}}" data-path="/stream_audio?audio={{media_item.main_file.filename}}" data-id="{{media_item.media_id}}" >
+                                        </div>
+                                        {% include 'views/front/'~ app.SystemSetting.template ~ '/includes/player-circle.html.twig' %}
+                                    </div>
+                                    <div class="px-1 relative p-1 truncate"> 
+                                        <a href="/audio/{{media_item.media_id}}" class="ajax-load relative text-opacity-75 text-sm tracking-tight font-normal truncate  dark:hover:text-rose-400 hover:text-rose-400">{{media_item.name}} </a>
+                                        <a href="/artist/{{media_item.author_id}}" class="ajax-load block relative text-gray-500 text-opacity-75 text-sm  tracking-tight  dark:hover:text-rose-400 hover:text-rose-400">{{media_item.artist.name}}</a>
+                                    </div>
+                                </div>
+                            </div>

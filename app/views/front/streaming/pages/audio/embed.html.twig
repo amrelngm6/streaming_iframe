@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="">
+	<head>
+
+		<meta charset="utf-8">
+		<meta content="ie=edge" http-equiv="x-ua-compatible">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Medians</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+		<link rel="stylesheet" href="/src/front_assets/css/tailwind.min.css"/>
+		<link defer rel="stylesheet" href="/src/front_assets/css/main.css"/>
+		<link rel="stylesheet" href="/src/front_assets/css/custom.css"/>
+	    <script src="/src/front_assets/js/jquery.min.js"></script>
+        <script src="/src/front_assets/js/roundslider.js"></script>
+        <script> var rootURL = 'https://streaming.quatre-co.com'; </script>
+	</head>
+
+	<body>
+
+
+		<div class="  h-full overflow-hidden rounded-2xl" x-data="{is_slide: 'slide'}">
+
+			<div class="relative z-10 w-full  gap-4 bg-white dark:bg-gray-900 rounded-2xl h-full">
+
+				{% include 'views/front/'~app.SystemSetting.template ~'/pages/audio/single-player.html.twig' %}
+
+			</div>
+
+		</div>
+
+		<div style="display:none">
+			<div id="app-cover" class="hidden">
+				<div id="player">
+					<div id="player-track" class="active dark:text-gray-300">
+						<div id="album-name" class="truncate"></div>
+						<div id="track-name" class="truncate"></div>
+						<div id="track-time" class="active">
+							<div id="current-time"></div>
+							<div id="track-length"></div>
+						</div>
+						<div id="s-area">
+							<div id="ins-time"></div>
+							<div id="s-hover"></div>
+							<div id="seek-bar"></div>
+						</div>
+					</div>
+					<div id="player-content">
+						<div id="album-art" class="active">
+							<img src="" class="active" id="track-poster">
+							<div id="buffer-box">Buffering ...</div>
+						</div>
+						<div id="player-controls">
+							<div class="control relative">
+								<div id="volume-mute" class="text-xs button" style="background-color:transparent; padding:3px; margin:0">
+									<img id="volume-mute-img" class="dark:brightness-200" src="/src/front_assets/svg/player-volume.svg" width="24"/>
+									<div id="volume-bar" class="absolute lg:block hidden pt-2">
+										<input type="range" class="volume w-20" id="player-audio" min="0" max="1" step="0.1" value="1" data-css="0.5">
+									</div>
+								</div>
+							</div>
+
+							<div class="control">
+								<div class="button" id="player-previous">
+									<img
+									width="24" class="dark:brightness-200" src="/src/front_assets/svg/player-start.svg">
+								{# <img src="/src/front_assets/svg/" > #}
+								</div>
+							</div>
+							<div class="control">
+								<div class="button" id="player-pause-button">
+									<img width="24" class="play dark:brightness-200" src="/src/front_assets/svg/player-play.svg">
+									<img width="24" class="pause dark:brightness-200" src="/src/front_assets/svg/player-pause.svg">
+								</div>
+							</div>
+							<div class="control">
+								<div class="button" id="player-next">
+									<img width="24" class="dark:brightness-200" src="/src/front_assets/svg/player-end.svg">
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<audio autoplay id="main_audio"></audio>
+		</div>
+
+        <script src="/src/front_assets/js/main.js"></script>
+        <script src="/src/front_assets/js/slide.js"></script>
+        <script src="/src/front_assets/js/custom.js"></script>
+        <style> #wave-{{item.media_id}} {max-height:10rem} </style>
+	</body>
+</html>

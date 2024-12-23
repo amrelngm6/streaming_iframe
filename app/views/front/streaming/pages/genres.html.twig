@@ -1,0 +1,22 @@
+
+                    <div class="w-full p-4 lg:p-8 bg-white dark:bg-gray-900 text-primary mb-6 rounded-2xl">
+
+                        <h2 class="text-2xl font-normal dark:text-gray-300">{{lang.translate('Top Genres')}}</h2>
+                        <hr class=" dark:opacity-30 my-2" />
+                        
+                        <div class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap gap-4" x-data="{is_slide: 'w-full'}">
+                        
+                            {% for genre in genres %}
+                                {% include 'views/front/' ~ template ~ '/includes/genres_list.html.twig' %}
+                            {% endfor %}
+                            
+                        </div>
+                    </div>
+                    
+                    {% set genres = audiobook_genres %}
+                	{% include 'views/front/' ~ app.SystemSetting.template ~ '/includes/book_genres_section.html.twig' %}
+
+
+                    {% set genres = video_genres %}
+                	{% include 'views/front/' ~ app.SystemSetting.template ~ '/includes/video_genres_section.html.twig' %}
+                    

@@ -1,0 +1,172 @@
+
+            <div class="my-4  h-full overflow-hidden rounded-2xl" x-data="{is_slide: 'slide'}">                     
+                    
+                <div class="w-full  ">
+                    <div class=" p-8 relative " >
+                        <div class="artist-overlay top-[-20px] left-0 absolute w-full h-full py-20 bg-gradient-to-b from-gray-800 to-black"></div>
+                        <img src="/stream?thumbnail=900&image={{item.picture_name}}"  class="absolute bg-img left-20px top-0 w-full" />
+                        <div class="lg:flex w-full text-white mx-auto text-center relative z-10">
+                            <img src="/stream?thumbnail=300&image={{item.picture_name}}"  class="w-40 h-40 lg:w-56 lg:h-56 rounded-full shadow-xl" />
+                            <div class="lg:p-8 py-8 text-left w-full">
+                                <a href="/artist/{{item.author_id}}" class="ajax-load pb-1 hover:text-rose-500">{{item.artist.name}}</a>
+                                <h1 class="lg:text-2xl text-lg ">{{item.name}}</h1>
+                                <div class="py-2 font-thin">
+                                    <p class="truncate-text truncate">{{item.description}} </p>
+                                </div>
+                                <div class="lg:flex gap-4 py-2">
+                                    <div >
+                                        {% set itemId = item.media_id %}
+                                        {% set itemType = 'media' %}
+                                        {% set customer = app.customer_auth() %}
+                                        {% include 'views/front/' ~ template ~ '/includes/item-stats.html.twig' %}
+
+                                    </div>
+                                    <div class="lg:w-auto px-2 w-full flex gap-4 lg:pt-0 pt-4">
+                                        <span class="flex  gap-2 text-sm text-gray-100"><img src="/src/front_assets/svg/time{{app.is_dark ? '-white' : ''}}.svg" class="w-4" /> : <span x-text="convertToTime({{item.field.duration}})"></span> </span>
+                                        <span x-on:click="jQuery('#show-box-path').val('audio/{{item.media_id}}'); jQuery('#share-popup').removeClass('hidden')" class="cursor-pointer mx-2 text-sm text-gray-100"><img src="/src/front_assets/svg/share.svg" class="w-5"></span>
+                                        <a href="/media/edit/{{item.media_id}}" class="ajax-load cursor-pointer mx-2 text-sm text-gray-100"><img src="/src/front_assets/svg/edit.svg" class="w-5"></a>
+                                        <div class="w-4 relative">
+                                            <span class="active-parent cursor-pointer mx-2 text-gray-100 leading-3 text-xl font-extrabold" >...</span>
+                                            <div class="show-active active-child hidden z-20 rounded-2xl w-40 right-0 top-0 absolute bg-white dark:bg-gray-900 dark:text-gray-300 p-4 ">
+                                                <a  class="cursor-pointer text-gray-600 flex w-full gap-2 py-2"   x-on:click="jQuery('#add-playlist-cover').css('background-image', 'url( /stream?thumbnail=800&image={{item.picture_name}} )'); jQuery('#add-playlist-media').val({{item.media_id}}); jQuery('#add-playlist-popup').removeClass('hidden')" >
+                                                    <img src="/src/front_assets/svg/queue_list.svg" width="24" />
+                                                    <span class="w-full text-xs pt-1">{{lang.translate('Add to playlist')}}</span>
+                                                </a>
+                                                <a  class="cursor-pointer text-gray-600 flex w-full gap-2 py-2"   x-on:click="(function(){ 
+                                                    navigator.clipboard.writeText(embedIframeCode('{{app.CONF.url}}embed_audio/{{item.media_id}}'));
+                                                    Swal.fire('{{lang.translate('Done')}}', '{{lang.translate('Iframe code copied to your clipboard')}}', 'success'); })()" >
+                                                    <img src="/src/front_assets/svg/embed.svg" width="24" />
+                                                    <span class="w-full text-xs pt-1">{{lang.translate('Embed Iframe')}}</span>
+                                                </a>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+                
+                <div class="relative z-10 w-full  gap-4 bg-white dark:bg-gray-900 rounded-2xl p-8 h-full">
+                    
+                    <div class="w-full ">
+                        {% include 'views/front/'~app.SystemSetting.template ~'/pages/audio/single-player.html.twig' %}        
+                    </div>
+                    <span class="block pt-10 text-sm text-gray-500">{{lang.translate('Description')}}</span>
+                    <div class="text-primary">
+                        <p class="dark:text-gray-300 py-4">{{item.description}}</p>
+                    </div>
+
+                                
+                    {% set related = item.related(10, item.type) %}
+                    {% if related|length %}
+                    <div class="w-full 	pt-6" id="slide-audio-items" data-count="4">
+                        <div class="hs__wrapper" x-data="{is_slide: false}">
+                        
+                            <div class=" w-full flex gap-4 text-primary pb-10">
+                                <div class=" w-full flex gap-4 dark:text-gray-300 ">
+                                <h3 class="text-2xl  font-normal">{{lang.translate('Media items')}}</h3>
+                                    <a href="/discover" class="ajax-load p-2 transition hover:text-rose-500">{{lang.translate('See all')}}</a>
+                                </div>
+
+                                <div class="hs__arrows flex gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+                            </div>
+                            <ul class="hs" >
+                                {% set list = {'items' : related } %}
+                                {% for media_item in list.items %}
+                                <li class="hs__item  max-w-[250px]"> 
+                                    {% include 'views/front/'~ app.SystemSetting.template ~ '/includes/track_item.html.twig' %}
+                                </li>
+                                {% endfor %}    
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+
+
+
+                    {% set relatedAudiobooks = item.related(10, 'audiobook') %}
+                    {% if app.SystemSetting.enable_audiobooks and relatedAudiobooks|length %}
+                    <div class="w-full 	pt-6" id="slide-audiobooks-items" data-count="4">
+                        <div class="hs__wrapper" x-data="{is_slide: false}">
+                        
+                            <div class=" w-full flex gap-4 text-primary pb-10">
+                                <div class=" w-full flex gap-4 dark:text-gray-300 ">
+                                <h3 class="text-2xl  font-normal">{{lang.translate('Audiobooks')}}</h3>
+                                    <a href="/discover/audiobook" class="ajax-load p-2 transition hover:text-rose-500">{{lang.translate('See all')}}</a>
+                                </div>
+
+                                <div class="hs__arrows flex gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+                            </div>
+                            <ul class="hs" >
+                                {% set list = {'items' : relatedAudiobooks } %}
+                                {% for audiobook in list.items %}
+                                <li class="hs__item  max-w-[250px]"> 
+                                    {% include 'views/front/'~ app.SystemSetting.template ~ '/pages/audiobook/item.html.twig' %}
+                                </li>
+                                {% endfor %}    
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+
+
+                    {% set relatedVideo = item.related(10, 'video') %}
+                    {% if app.SystemSetting.enable_videos and relatedVideo|length %}
+                    <div class="w-full 	pt-6" id="slide-video-items" data-count="4">
+                        <div class="hs__wrapper" x-data="{is_slide: false}">
+                        
+                            <div class=" w-full flex gap-4 text-primary pb-10">
+                                <div class=" w-full flex gap-4 dark:text-gray-300 ">
+                                <h3 class="text-2xl  font-normal">{{lang.translate('Videos')}}</h3>
+                                    <a href="/discover/video" class="ajax-load p-2 transition hover:text-rose-500">{{lang.translate('See all')}}</a>
+                                </div>
+
+                                <div class="hs__arrows flex gap-4"><a class="arrow disabled arrow-prev"></a><a class="arrow arrow-next"></a></div>
+                            </div>
+                            <ul class="hs" >
+                                {% set list = {'items' : relatedVideo } %}
+                                {% for media_item in list.items %}
+                                <li class="hs__item  max-w-[250px]"> 
+                                    {% include 'views/front/'~ app.SystemSetting.template ~ '/includes/video-item.html.twig' %}
+                                </li>
+                                {% endfor %}    
+                            </ul>
+                        </div>
+
+                    </div>
+                    {% endif %}
+
+
+
+
+                    <div class="w-full 	my-10 relative text-primary " id="latest-comments">
+                        <h3 class="text-2xl font-normal dark:text-gray-300">{{lang.translate('Fans commented')}} <a href="javascript:;" x-on:click="jQuery('#comments-form').toggleClass('hidden')" class="float-right text-base font-normal">{{lang.translate('Add your comment')}}</a></h3>
+                        <div class="my-4 " ></div>
+                        <div id="tracks-list" class=" overflow-auto  ">
+                            <div class="w-full mx-auto hidden" id="comments-form" >
+                                {% set id = item.media_id %}
+                                {% set comments = item.comments %}
+                                {% include 'views/front/' ~ template ~ '/includes/comment-form.html.twig' %}
+                            </div>
+                            <div class="w-full mx-auto">
+                                {% include 'views/front/' ~ template ~ '/includes/comments.html.twig'%}
+                            </div>
+                        </div>
+                        <div class="my-10 " ></div>
+                        <div class="z-10 absolute bottom-0 bg-gradient-to-b from-transparent dark:to-gray-900 to-white w-full h-20"></div>
+                    </div>
+
+                </div>
+
+            </div>
+

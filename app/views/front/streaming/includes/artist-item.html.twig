@@ -1,0 +1,7 @@
+                                
+                                <div class=" dark:bg-gray-900 dark:text-gray-300  transition hover:text-rose-500 dark:hover:text-rose-400 w-full  relative p-2 py-3 shadow-md rounded-3xl text-center bg-white">
+                                    <a href="/artist/{{artist.customer_id}}" class="ajax-load "> <img class=" rounded-full shadow-md transition hover:shadow-lg  mx-auto lg:w-40 lg:h-40 h-32 w-32" src="/stream?thumbnail=100&image={{artist.picture_name}}" /></a>
+                                    <p class="pt-2"><a href="/artist/{{artist.customer_id}}" class="ajax-load ">{{artist.name}}</a></p>
+                                    <span class="px-1 relative text-gray-500 text-opacity-75 lg:text-sm text-xs font-normal  tracking-tight">{{lang.translate('Followers')}}:  {{artist.followers().count()}}</span>
+                                    <span class="px-1 relative text-gray-500 text-opacity-75 lg:text-sm text-xs font-normal  tracking-tight">{{lang.translate('Media')}}:  {{artist.media_items|length}}</span>
+                                </div>  

@@ -1,0 +1,74 @@
+
+
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.css' rel='stylesheet' />
+
+
+    <div class="pt-10 pb-20 w-full">
+    
+        <div class="pt-4 text-center">
+            <p class="px-6 text-gray-300 dark:text-gray-300">{{lang.translate('Manage streaming')}} </p>
+            <h1 class="px-6 text-2xl text-gray-800 dark:text-gray-100">{{channel.name}} </h1>
+            <p class="px-6 text-primary">{{lang.translate('You should set the Videos to display at specified time')}} </h1>
+        </div>
+
+        <form action="/front_api/update" class="ajax-form" id="calendar-form">
+            <input type="hidden" name="type" value="ChannelMedia.update" />
+            <input type="hidden" name="params[channel_media_id]" value="" id="channelMediaId" />
+            <input type="hidden" name="params[start_at]" value="" id="channelMediaStartTime" />
+            <input type="hidden" name="params[date]" value="" id="channelMediaDate" />
+        </form>
+
+        <div class="w-full flex gap-20 relative">
+            <div id="slider-container" class="w-32" >
+                
+                <div class="absolute top-0 bottom-0 mb-20" style=" max-width: 200px; display: grid;  transform: scale(.5);">
+
+                    <!-- put all in a wrapper:-->
+                    <div class="wrap" role="group" aria-label="slider with ruler" style="display: grid; --min: 1; --val: 30; --max: 60">
+                        <!-- slider:-->
+                        <input id="r" type="range" list="l" step="1" min="0" max="60" />
+                        <!-- value display:-->
+                        <output for="r"></output>
+                        <!-- ruler:-->
+                        <datalist id="l">
+                            {% set arr = range(0, 12) %}
+                            {% for i in range(1, 10) %}
+                            <option value="{{((i * 6) - 1) }}" style="--idx: {{((i * 6) - 4)}}" ></option>
+                            <option value="{{((i * 6) - 1) }}" style="--idx: {{((i * 6) - 2)}}" ></option>
+                            <option value="{{((i * 6)) }}" style="--idx: {{((i * 6))}}" label="{{((i * 6))}}" ></option>
+
+                            {% endfor %}
+                            <option value="22" style="--idx: 22"></option>
+
+                        </datalist>
+                    </div>
+                    <section class="range-info">
+                        <p class="box box--fail box--list"></p>
+                        <p class="box box--warn box--trig"></p>
+                        <p class="box box--fail box--cmix"></p>
+                    </section>
+                </div>
+            </div>
+
+            <div class="w-full pt-10">
+                <div class="w-full bg-white p-8 rounded-xl shadow-md dark:bg-gray-900 dark:text-gray-300" id='calendar' style="width: calc(100% - 60px); max-height:calc(100vh - 50px)"></div>
+            </div>
+        </div>
+        <div class="max-w-lg mx-auto transition rounded-lg bg-white p-6 fixed left-0 transition-all right-0 top-auto shadow-xl" style="z-index: 999; bottom: -100%" id="calendar-hover-info">
+            <label class="disabled text-slate-800 flex gap-2 w-full items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100">
+                <div class="mr-4 grid place-items-center"><img alt="candice" id="eventHoverPopupPicture" src="{{channel.picture}}" class="relative inline-block h-12 w-12 !rounded-full object-cover object-center"></div>
+                <div style="max-width:78%" >
+                    <h6 id="eventHoverPopupName" class="truncate text-slate-800 font-medium"></h6>
+                    <p id="eventHoverPopupTime"  class=" text-sm"></p>
+                </div>
+            </label>
+        </div>
+    </div>
+
+
+
+    {% include 'views/front/' ~ template ~ '/scripts/channel_calendar.html.twig' %}
+
+    {% include 'views/front/' ~ template ~ '/popups/channel-add-media.html.twig' %}
+    {% include 'views/front/' ~ template ~ '/pages/channel/channel-calendar.html.twig' %}
+    {% include 'views/front/' ~ template ~ '/pages/channel/channel-range-popup.html.twig' %}

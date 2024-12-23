@@ -1,0 +1,65 @@
+<div x-data="{}" class="fixed inset-0 z-50 overflow-y-auto hidden transition-all transition"  id="signup-popup" role="dialog" aria-modal="true" data-headlessui-state="open">
+	<div class="min-h-full text-center">
+		<div class="fixed inset-0 bg-download_popup blurFilter opacity-100" id="headlessui-dialog-overlay-:r3n:" aria-hidden="true" data-headlessui-state="open"></div>
+		<span class="hidden lg:inline-block h-screen align-middle" aria-hidden="true">​</span>
+		<div data-testid="loginContainer" class="inline-block dark:text-white w-full max-w-[42.125rem] sm:w-auto overflow-hidden text-left align-middle transition-all transform shadow-xl h-auto md:h-[29.125rem] rounded-xl border-box opacity-100 scale-100">
+			<div class="grid grid-cols-7 md:grid-cols-12 h-full relative">
+				<div class="login_loginImage__1Djxq bg-cover hidden md:block col-span-5 w-full bg-wynk-dark-dark_popup bg-no-repeat" style="background-image: url(https://wynk.in/_next/static/media/login.62a05998.png)"></div>
+				<div class="align-middle bg-wynk-dark-dark_popup col-span-7 px-8 pb-8 pt-10 md:pb-6 md:pl-[2.125rem] md:pr-7 relative flex flex-col justify-between">
+					<div x-on:click="jQuery('#signup-popup').addClass('hidden')" data-testid="loginCrossButton" class="h-6 w-6 right-4 top-4 dark:text-white hover:text-gray-400 cursor-pointer absolute">
+						<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
+							<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+						</svg>
+					</div>
+
+					<div class="inline-block w-full">
+                        <div class="text-primary  w-full  rounded-2xl ">
+                            <div class="w-full ">
+                                <form action="/customer/signup" method="POST" id="signup-form" class="ajax-form w-full">
+                                    <h2 class="text-2xl dark:text-gray-300 w-full ">{{lang.translate('Create your account')}}</h2>
+
+                                    <hr class="opacity-0 my-4" />
+                                    <div class="grid-cols-1 grid gap-4 mx-auto ">
+                                    
+                                        <div class="text-primary w-full block">
+                                            <input name="params[name]" placeholder="Name" type="text" class=" dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                                        </div>
+                                        <div class="text-primary w-full block">
+                                            <input name="params[email]" placeholder="Email" required="" type="email" class=" dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                                        </div>
+                                        <div class="text-primary w-full block relative">
+                                            <input name="params[password]" placeholder="Password"  required="" type="password" class=" dark:bg-gray-900 dark:border-gray-700 py-2 px-4 w-full rounded-2xl bg-gray-100 border focus:outline-none focus:border-rose-400  border-gray-200" />
+                                        </div>                        
+                                    </div>
+                                    <div class="w-full flex ">
+                                        <button type="submit" class=" dark:text-gray-300 inline-block my-6 px-6 py-2 rounded-2xl border transition hover:border-rose-600 border-rose-400">{{lang.translate('Signup')}}</button>
+                                        <span x-on:click="jQuery('#login-popup').removeClass('hidden'); jQuery('#signup-popup').addClass('hidden'); " class="cursor-pointer flex-end dark:text-gray-300 inline-block my-6 px-6 py-2 rounded-2xl transition dark:hover:text-rose-600 hover:text-rose-600">{{lang.translate('Already have account')}}</span>
+
+                                    </div>
+                                </form>
+                                <div class="w-full flex gap-6">
+                                    <span class="text-xs pt-3 text-center text-gray-600 dark:text-gray-300 mb-2">OR</span>
+                                    <a href="{{app.facebook_login_link}}" class=" bg-blue-600 rounded-full dark:text-gray-300 inline-block p-1 rounded-2xl dark:border-gray-700 transition hover:border transition hover:border-rose-600 border relative">
+                                        <span class="w-full gap-3 flex relative">
+                                            <span class="bg-white rounded-full w-8 h-8"><img src="/src/front_assets/svg/facebook.svg" class="w-6 h-6 m-1" /></span>
+                                        </span>
+                                        <span class="tooltiptext">{{lang.translate('Login with Facebook')}}</span>
+                                    </a>
+                                    <a href="{{app.google_login_link}}" class=" bg-red-600 rounded-full dark:text-gray-300 inline-block p-1 rounded-2xl dark:border-gray-700  transition hover:border transition hover:border-rose-600 border relative">
+                                        <span class="w-full gap-3 flex relative">
+                                            <span class="bg-white rounded-full w-8 h-8"><img src="/src/front_assets/svg/gmail.svg" class="w-6 h-6 m-1" /></span>
+                                        </span>
+                                        <span class="tooltiptext">{{lang.translate('Login with Gmail')}}</span>
+                                    </a>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="h-2"></div>
+					</div>
+                    
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

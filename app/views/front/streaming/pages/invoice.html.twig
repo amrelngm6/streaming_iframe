@@ -1,0 +1,306 @@
+<!-- Invoice -->
+<div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto my-4 sm:my-10">
+	<div class="sm:w-11/12 lg:w-3/4 mx-auto">
+		<!-- Card -->
+
+        <div class="bg-gradient-to-r  rounded-2xl overflow-hidden from-red-500 via-purple-400 to-blue-500"> 
+            {% if invoice.status != 'paid' %}
+            <!-- Announcement Banner -->
+            <div
+                class="max-w-[85rem] px-4 py-4 sm:px-6 lg:px-8 mx-auto">
+                <div class="grid justify-center md:grid-cols-2 md:justify-between md:items-center gap-2">
+                    <div class="text-center md:text-start">
+                        <p class="text-xs text-white/80 uppercase tracking-wider">
+                            {{lang.translate('Unpaid invoice')}}
+                        </p>
+                        <p class="mt-1 text-white font-medium">
+                            {{lang.translate('This invoice is unpaid yet')}}.
+                        </p>
+                    </div>
+
+                    <div class="mt-3 text-center md:text-start md:flex md:justify-end md:items-center">
+                             
+                        <div x-data="{}" class="flex gap gap-10">
+                            <a href="#!" x-on:click="completePayPal()" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:bg-gray-800" >
+                                <img src="/uploads/img/payment_methods/paypal.png" class="inline w-6 h-6" /> {{lang.translate('Pay with PayPal')}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Announcement Banner -->
+            {% else  %}
+            <!-- Announcement Banner -->
+                <div style="background-image:url(/src/front_assets/svg/invoice-cover.svg)" class="bg-no-repeat bg-cover bg-center p-4  text-center">
+                    <p class="me-2 inline-block text-white">
+                    {{lang.translate('Thanks for payment')}}
+                    </p>
+                </div>
+            <!-- End Announcement Banner -->
+            {% endif %}
+
+            <div  id="invoice-print"
+                class=" flex flex-col p-4 sm:p-10 bg-white shadow-md rounded-xl dark:bg-gray-900">
+                <!-- Grid -->
+                <div id="paypal-button-container"></div>
+                <div class="flex justify-between">
+                    <div>
+                        <img class="h-20" src="{{app.SystemSetting.logo}}" />
+
+                        <h1 class="mt-2 text-lg md:text-xl font-normal text-blue-600 dark:text-white">{{app.SystemSetting.sitename}}
+                            Inc.</h1>
+                    </div>
+                    <!-- Col -->
+
+                    <div class="text-end">
+                        <h2 class="text-2xl md:text-3xl font-normal text-gray-800 dark:text-gray-100">{{lang.translate('Invoice')}}
+                            #</h2>
+                        <span class="mt-1 block text-gray-500 dark:text-gray-400">'{{invoice.code}}'</span>
+
+                    </div>
+                    <!-- Col -->
+                </div>
+                <!-- End Grid -->
+                <!-- Grid -->
+                <div class="mt-8 grid sm:grid-cols-2 gap-3">
+                    <div>
+                        <h3 class="text-lg font-normal text-gray-800 dark:text-gray-100">{{lang.translate('Customer info')}}:</h3>
+                        <h3 class="text-lg font-normal text-gray-800 dark:text-gray-100">{{invoice.customer.name}}</h3>
+                        <address class="mt-2 not-italic text-gray-500 dark:text-gray-400">
+                            {{invoice.customer.field.city}},<br>
+                            {{invoice.customer.field.country}},<br>
+                            {{invoice.customer.mobile}}<br>
+                        </address>
+                    </div>
+                    <!-- Col -->
+
+                    <div
+                        class="sm:text-end space-y-2">
+                        <!-- Grid -->
+                        <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
+                            <dl class="grid sm:grid-cols-5 gap-x-3">
+                                <dt class="col-span-3 font-normal text-gray-800 dark:text-gray-100">{{lang.translate('Invoice date')}}:</dt>
+                                <dd class="col-span-2 text-gray-500 dark:text-gray-400">{{invoice.date|date("M d, Y")}}</dd>
+                            </dl>
+                        </div>
+                        <div class="gap-20 font-normal flex ">
+                            <span class="w-full">{{lang.translate('Payment method')}} </span>
+                            <div class="flex items-center gap-x-2 flex-none">
+                                {% if invoice.payment_method == 'paypal' %}
+                                <img src="/uploads/img/payment_methods/paypal.png" class="w-4" />
+                                <span class="block text-sm font-medium text-gray-800 dark:text-gray-100">{{invoice.payment_method}}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="gap-20 font-normal flex">
+                            <span class="w-full">{{lang.translate('Payment status')}} </span>
+                            <div class=" items-center gap-x-2 w-28">
+                                <span class="block text-lg font-medium text-{{invoice.status == 'paid' ? 'green' : 'rose'}}-500">{{lang.translate(invoice.status)}}</span>
+                            </div>
+                        </div>
+                        <!-- End Grid -->
+                    </div>
+                    <!-- Col -->
+                </div>
+                <!-- End Grid -->
+
+                <!-- Table -->
+                <div class="mt-6">
+                    <div class="border border-gray-200 p-4 rounded-lg space-y-4 dark:border-gray-700">
+                        <div class="hidden sm:grid sm:grid-cols-5">
+                            <div class="sm:col-span-2 text-xs font-medium text-gray-500 uppercase dark:text-gray-400">{{lang.translate('Package')}}</div>
+                            <div class="text-start text-xs font-medium text-gray-500 uppercase dark:text-gray-400">{{lang.translate('Duration')}}</div>
+                            <div class="text-end text-xs font-medium text-gray-500 uppercase dark:text-gray-400">{{lang.translate('Amount')}}</div>
+                        </div>
+
+                        <div class="hidden sm:block border-b border-gray-200 dark:border-gray-700"></div>
+
+                        <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                            <div class="col-span-full sm:col-span-2">
+                                <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-gray-400">{{lang.translate('Package')}}</h5>
+                                <p class="font-medium text-gray-800 dark:text-gray-100">{{invoice.item.package.name}}</p>
+                            </div>
+                            <div>
+                                <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-gray-400">{{lang.translate('Duration')}}</h5>
+                                <p class="text-gray-800 dark:text-gray-100">{{invoice.item.duration}}</p>
+                            </div>
+                            <div>
+                                <h5 class="sm:hidden text-xs font-medium text-gray-500 uppercase dark:text-gray-400">{{lang.translate('Amount')}}</h5>
+                                <p class="sm:text-end text-gray-800 dark:text-gray-100">{{invoice.currency_code}}{{invoice.subtotal}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Table -->
+
+                <!-- Flex -->
+                <div class="mt-8 flex sm:justify-end">
+                    <div
+                        class="w-full max-w-2xl sm:text-end space-y-2">
+                        <!-- Grid -->
+                        <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
+                            <dl class="grid sm:grid-cols-5 gap-x-3">
+                                <dt class="col-span-3 font-normal text-gray-800 dark:text-gray-100">{{lang.translate('Subtotal')}}:</dt>
+                                <dd class="col-span-2 text-gray-500 dark:text-gray-400">{{invoice.currency_code}}{{invoice.subtotal}}</dd>
+                            </dl>
+
+                            <dl class="grid sm:grid-cols-5 gap-x-3">
+                                <dt class="col-span-3 font-normal text-gray-800 dark:text-gray-100">{{lang.translate('Discount amount')}}:</dt>
+                                <dd class="col-span-2 text-gray-500 dark:text-gray-400">{{invoice.currency_code}}{{invoice.discount_amount}}</dd>
+                            </dl>
+
+
+                            <dl class="grid sm:grid-cols-5 gap-x-3">
+                                <dt class="col-span-3 font-normal text-gray-800 dark:text-gray-100">{{lang.translate('Total amount')}}:</dt>
+                                <dd class="col-span-2 text-gray-500 dark:text-gray-400">{{invoice.currency_code}}{{invoice.total_amount}}</dd>
+                            </dl>
+
+                        </div>
+                        <!-- End Grid -->
+                    </div>
+                </div>
+                <!-- End Flex -->
+
+                <div class="mt-8 sm:mt-12">
+                    <h4 class="text-lg font-normal text-gray-800 dark:text-gray-100">{{lang.translate('Thank you')}}!</h4>
+                    <p class="text-gray-500 dark:text-gray-400">{{lang.translate('If you have any questions concerning this invoice, use the following contact information')}}:</p>
+                    <div class="mt-2">
+                        <p class="block text-sm font-medium text-gray-800 dark:text-gray-100">{{app.SystemSetting.footer_email}}</p>
+                        <p class="block text-sm font-medium text-gray-800 dark:text-gray-100">{{app.SystemSetting.footer_phone}}</p>
+                    </div>
+                </div>
+
+                <p class="mt-5 text-sm text-gray-500 dark:text-gray-400">©
+                    {{"now"| date("Y")}}
+                    {{app.SystemSetting.sitename}}.</p>
+                    
+                <!-- Buttons -->
+                <div class="mt-6 flex justify-end gap-x-3">
+                    <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:focus:bg-gray-800" href="#">
+                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        {{lang.translate('Invoice PDF')}}
+                    </a>
+                    <a onclick="printNow()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" href="#!">
+                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+                        {{lang.translate('Print')}}
+                    </a>
+                </div>
+            </div>
+            <!-- End Card -->
+
+		<!-- End Buttons -->
+        </div>
+	</div>
+
+</div>
+<!-- End Invoice -->
+
+
+
+
+<script src="https://www.paypal.com/sdk/js?client-id={{app.SystemSetting.paypal_api_key}}"></script>
+
+<script>
+function completePayPal() 
+{
+
+    paypal.Buttons({
+        style: {
+            layout: 'vertical',
+            color:  'blue',
+            shape:  'rect',
+            label:  'paypal'
+        },
+        createOrder: function (data, actions) {
+            // Set up the transaction details
+            return actions.order.create({
+                purchase_units: [
+                    {
+                        reference_id: '{{invoice.code}}',
+                        description: '{{lang.translate('Package subscription')}} {{invoice.item.package.name}}',
+                        custom_id: '{{invoice.code}}',
+                        amount: {
+                            currency_code: 'USD',
+                            value: '{{invoice.total_amount}}', // Set your payment amount here
+                            breakdown: {
+                                item_total: {
+                                    currency_code: "USD",
+                                    value: '{{invoice.total_amount}}'
+                                }
+                            },
+                        },
+                    }
+                ],
+            });
+        },
+        onApprove: function (data, actions) {
+            // Capture the payment when the user approves
+            return actions.order.capture().then(function (response) {
+                // Handle the successful payment
+                
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings) {
+                        var defaultParams = {
+                            type:  'Transaction.verify',
+                            params: {
+                                payment_method: 'PayPal',
+                                invoice_id: '{{invoice.invoice_id}}',
+                                transaction: JSON.stringify(response)
+                            },
+                        };
+                        var formData = $.param($.extend(defaultParams, settings.data));
+                        settings.data = formData;
+                    }
+                });
+
+                let a = $.ajax({
+                    url: '/front_api/create',
+                    type: 'POST',
+                    contentType: 'application/x-www-form-urlencoded',
+                    data:  {}, // Your data to send
+                    processData:false,
+                    success: function(data) {
+                        console.log(data)
+                        let a = JSON.parse(data);
+                        if (a.success)
+                            window.location.reload();
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
+                }); 
+                
+            });
+        },
+    }).render('#paypal-button-container');
+}
+
+function printNow() {
+    var divContent = document.getElementById("invoice-print").innerHTML;
+    var printWindow = window.open('', '', 'height=400,width=800');
+    printWindow.document.write('<html><head><title>Print Div</title>');
+    printWindow.document.write('</head><body >');
+    printWindow.document.write(divContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+}
+</script>
+
+<style>
+@media print {
+    #invoice-print {
+        background-color: white;
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 15px;
+        font-size: 14px;
+        line-height: 18px;
+    }
+}
+</style>

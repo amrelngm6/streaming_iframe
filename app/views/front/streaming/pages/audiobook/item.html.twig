@@ -1,0 +1,34 @@
+                                <div class="shadow-lg pCard_card max-w-96 " id="audiobook-card-{{loop.index}}" :class="is_slide" >
+
+									<div class="pCard_up" style=" background-image: url(/stream?thumbnail=400&image={{audiobook.picture_name}}); ">
+										<div class="pCard_text">
+											<h2><a href="/audiobook/{{audiobook.media_id}}"  class="ajax-load">{{audiobook.name}}</a></h2>
+											<p class="truncate w-full px-2">{{audiobook.description}}</p>
+										</div>
+										<div class="pCard_add" data-id="audiobook-card-{{loop.index}}"><img src="/src/front_assets/svg/playlist.svg" class=" relative top-2 pt-1 left-0 right-0 mx-auto" width="40"></div>
+									</div>
+
+									<div class="pCard_down">
+										<div>
+											<p>{{lang.translate('Chapters')}}</p>
+											<p>{{audiobook.files|length}}</p>
+										</div>
+										<div>
+											<p>{{lang.translate('Views')}}</p>
+											<p>{{audiobook.viewscount()}}</p>
+										</div>
+										<div>
+											<p>{{lang.translate('Likes')}}</p>
+											<p>{{audiobook.likescount()}}</p>
+										</div>
+									</div>
+
+									<div class="pCard_back">
+                                        <ul class="pb-10 overflow-auto " style="max-height:325px">
+                                        {% for file in audiobook.files %}
+                                        {% include 'views/front/' ~ template ~ '/pages/audiobook/chapter.html.twig' %}
+                                        {% endfor %}
+                                        </ul>
+									</div>
+
+								</div>

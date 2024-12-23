@@ -1,0 +1,10 @@
+<?php 
+
+
+CONST db_host = '__db_host';
+
+CONST db_name = '__db_name';
+
+CONST db_username = '__db_user';
+
+CONST db_password = '__db_password';

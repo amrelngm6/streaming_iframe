@@ -1,0 +1,55 @@
+                        <div class="py-8" id="filter-side" >
+                            <p class="text-lg text-gray-400">{{lang.translate('Filters')}}</p>
+                            <hr class="my-8 opacity-30" />
+                            <ul class="dark:text-gray-300 flex gap-4 lg:block">
+                                <li class="relative show-child w-full">
+                                    <div class="flex w-full">
+                                        <span class="w-full text-base dark:text-gray-300  text-gray-600 ">{{lang.translate('Genre')}}</span>
+                                        <img class="filter-arrow w-4 h-4 mt-2" src="/src/front_assets/svg/arrow.svg" />
+                                    </div>
+                                    <div class="py-3 inline-block ">
+                                        <span class="{{item.lang_content.title ?? 'hidden'}} text-xs rounded-full py-1 px-2 bg-gray-300 text-gray-800  gap-2 inline-block">    
+                                            <span class="px-2 flex gap-2">{{item.lang_content.title}} </span> 
+                                        </span> 
+                                    </div>
+                                    <div class="show-on-hover absolute w-40 lg:top-[-30px] top-[30px] lg:left-[100%] dark:bg-gray-900 bg-white  z-10 p-8 space-y-3">
+                                        {% for genre in genres %}
+                                        <p><a href="/{{genre.lang_content.prefix}}?params[sort_by]={{app.params.sort_by}}&params[date]={{app.params.date}}&params[title]={{app.params.title}}" class="ajax-load">{{genre.lang_content.title}}</a></p>
+                                        {% endfor %}
+                                    </div>
+                                </li>
+                                <li class="relative show-child w-full">
+                                    <div class="flex w-full">
+                                        <span class="w-full text-base dark:text-gray-300  text-gray-600 ">{{lang.translate('Sort')}}</span>
+                                        <img class="filter-arrow w-4 h-4 mt-2" src="/src/front_assets/svg/arrow.svg" />
+                                    </div>
+                                    <div class="py-3 inline-block  ">
+                                        <span class="{{app.params.sort_by != '' ? '' : 'hidden'}} text-xs rounded-full py-1 px-2 bg-gray-300 text-gray-800  gap-2 inline-block">    
+                                            <span class="px-2 flex gap-2">{{lang.translate(app.params.sort_by)}} </span> 
+                                        </span> 
+                                    </div>
+                                    <div class="show-on-hover absolute w-40 lg:top-[-30px] top-[30px] lg:left-[100%] dark:bg-gray-900 bg-white  z-10 p-8 space-y-3">
+                                        {% for type in ['best','new','old'] %}
+                                        <p><a href="?params[sort_by]={{type}}&params[date]={{app.params.date}}&params[title]={{app.params.title}}" class="ajax-load">{{lang.translate(type)}} {{lang.translate('First')}}</a></p>
+                                        {% endfor %}
+                                    </div>
+                                </li>
+                                <li class="relative show-child w-full ">
+                                    <div class="flex w-full">
+                                        <span class="w-full text-base dark:text-gray-300  text-gray-600 ">{{lang.translate('Date')}}</span>
+                                        <img class="filter-arrow w-4 h-4 mt-2" src="/src/front_assets/svg/arrow.svg" />
+                                    </div>
+                                    <div class="py-2 inline-block ">
+                                        <span class="text-xs rounded-full py-1 px-2 bg-gray-300 text-gray-800 {{app.params.date != '' ? '' : 'hidden'}}  gap-2 inline-block">    
+                                            <span class="px-2 flex gap-2">{{lang.translate('last ' ~ app.params.date)}} </span> 
+                                        </span> 
+                                    </div>
+                                    <div class="show-on-hover absolute w-40 lg:top-[-30px] top-[30px] lg:left-[100%] dark:bg-gray-900 bg-white  w-40 z-10 p-8 space-y-3">
+                                        {% for period in ['day','week','month', 'year'] %}
+                                        <p><a href="?params[sort_by]={{app.params.sort_by}}&params[date]={{period}}&params[title]={{app.params.title}}" class="ajax-load">{{lang.translate(period)}}</a></p>
+                                        {% endfor %}
+                                        <p><a href="?params[sort_by]={{app.params.sort_by}}&params[title]={{app.params.title}}" class="ajax-load">{{lang.translate('All')}}</a></p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>

@@ -1,0 +1,34 @@
+
+            <form action="/front_api/create" method="post" enctype="multipart/form-data" id="upload-step" class="ajax-form relative text-primary  w-full  rounded-2xl bg-white dark:bg-gray-900  p-8 pb-20">
+                <div class="loader absolute w-full h-full left-0 top-0 bg-white opacity-50 dark:bg-gray-900   z-10"></div>
+                <input type="hidden" name="type" value="Iframe.upload" />
+                <input type="hidden" name="params[type]" value="{{type}}" />
+                <h2 class="text-2xl dark:text-gray-300 ">{{lang.translate('Add Iframe')}}</h2>
+                
+                <div class="lg:flex my-4 py-6 relative" id="upload-media-form">
+                    <label class="flex p-8 dark:bg-gray-800  bg-gray-200 rounded-3xl w-40 h-40 border border-1 border-dashed	border-rose-600">
+                        <img src="/src/front_assets/svg/videos-active.svg" class="dark:opacity-30" />
+                    </label>
+                    <div class="p-8 ">
+                    
+                        <div  class="mt-4 relative flex lg:w-96 w-full max-h-64 overflow-auto flex-col rounded-lg border border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-sm" id="station-popup-or">
+                            <nav class="dark:text-gray-300 flex min-w-[240px] flex-col gap-1 p-1.5" >
+                                <span class="text-center">{{lang.translate('Iframe Link')}}</span>
+                            </nav>
+                        </div>
+                        
+                        <div class="mt-4 relative lg:w-96 w-full max-h-64 overflow-auto flex-col rounded-lg border border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-sm">
+                            <nav class="flex min-w-[240px] flex-col gap-1 p-1.5" >
+                                <input placeholder="{{lang.translate('Add Iframe Link directly')}}" name="params[link]"  type="text"  class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  />
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class=" dark:text-gray-300 float-right inline-block px-6 py-2 rounded-2xl border transition hover:border-rose-600 border-rose-400">{{lang.translate('Next')}}</button>
+                
+            </form>
+
+{% if app.customer.can_do('videos') != true %}
+{% include 'views/front/' ~ app.SystemSetting.template ~ '/popups/subscribe-popup.html.twig' %}
+{% endif %}

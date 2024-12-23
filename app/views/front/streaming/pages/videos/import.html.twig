@@ -1,0 +1,25 @@
+                <div class="py-4 px-2 w-full">             
+
+                    <div>
+                        <div class="flex flex-wrap -mx-3 mb-6">
+                            <div class="relative w-full md:w-full px-3 mb-2 mt-2 max-w-lg mx-auto">
+                                <div class="absolute  inset-y-0 start-0 flex items-center mx-6 pointer-events-none">
+                                    <svg class="h-4 w-4 text-gray-500 dark:text-gray-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 21">
+                                        <path d="M16.6725 16.6412L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <input rel="nofollow" name="params[title]" value="{{app.params.title}}" type="text" id="voice-search" data-element="search-result-popup" data-form="new-item-form" class="search bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{lang.translate('Search for media items')}}" required />
+                                <span class="cursor-pointer absolute inset-y-0 end-0 flex items-center px-6">
+                                    {% include 'views/front/streaming/popups/speech-to-text.html.twig' %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    
+                </div>
+
+{% if app.customer.can_do('videos') != true %}
+{% include 'views/front/' ~ app.SystemSetting.template ~ '/popups/subscribe-popup.html.twig' %}
+{% endif %}

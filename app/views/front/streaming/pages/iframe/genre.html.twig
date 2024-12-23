@@ -1,0 +1,17 @@
+<div class="py-4 px-2 w-full">
+    {% set customer = app.customer_auth() %}
+
+    {% include 'views/front/' ~ template ~ '/includes/filter-top.html.twig' %}
+
+    {% set video_items = list %}
+
+    {% include 'views/front/' ~ template ~ '/includes/home_videos.html.twig' %}
+
+    <div class="w-full relative  rounded-lg ">
+        <div class="w-full ">
+            {% set view_items_limit = app.SystemSetting.view_videos_limit %}
+            {% include 'views/front/' ~ template ~ '/includes/pagination.html.twig' %}
+        </div>
+    </div>
+	<div class="h-10"></div>
+</div>

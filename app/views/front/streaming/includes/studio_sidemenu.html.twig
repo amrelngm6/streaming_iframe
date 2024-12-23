@@ -1,0 +1,14 @@
+
+                <div style="min-width:145px" class="pb-4 lg:px-0 px-1 lg:w-72 w-full  relative overflow-hidden h-full dark:text-gray-300">
+                    <div class="lg:block hidden  text-slate-400 text-opacity-70  text-base font-normal tracking-wide">{{lang.translate('Dashboard MENU')}}</div>
+                    <ul class="pt-2 font-normal lg:block grid grid-cols-3 gap-2 lg:text-left text-center  ">
+                        {% for menuItem in app.studioMenu %}
+                        <li class="w-full dark:hover:text-gray-200" id="menu-{{loop.index}}">
+                            <a href="{{menuItem.link}}" class="w-full flex gap gap-4 ajax-load ">
+                                <span class="py-2 block  my-1 lg:border-r w-full dark:border-gray-700 border-gray-50  {{menuItem.link == app.request.pathInfo}} ? 'text-rose-500' : '' " >{{menuItem.title}} </span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                </div>

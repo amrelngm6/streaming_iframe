@@ -1,0 +1,68 @@
+
+
+                                        <div class="package bg-white dark:bg-gray-800 show-child shadow-md ">
+                                            <div class="img relative overflow-hidden" style="background-image: url(/stream?thumbnail=300&dir=videos/screenshots&image={{media_item.picture_name}})">
+                                                <a href="/video/{{media_item.media_id}}" class="ajax-load block relative h-40 w-full "  >
+                                                
+                                                    <span  class="video-image-item block w-full append-video-pictures" id="video-pictures-{{media_item.media_id}}" >
+                                                        
+                                                        <!-- Add more images if needed -->
+                                                    </span>
+                                                </a>
+                                                <div class="save show-on-hover cursor-pointer absolute z-10">
+                                                    <p class="span video-side-popup" data-path="{{media_item.main_file.path}}" ><img src="/src/front_assets/svg/videos.svg" class="w-6 dark:brightness-200" /></p>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="text ">
+                                                <div class="relative ">
+                                                    <div class="overflow-hidden">
+                                                        <a href="/video/{{media_item.media_id}}"  class="truncate  ajax-load h3 text-md pb-2 hover:text-rose-400 text-gray-400 dark:text-gray-100 hover:text-rose-500 relative">
+                                                            {{media_item.name}}
+                                                        </a>
+                                                    </div>
+                                                    <span title="{{media_item.name}}" class="tooltiptext wide">{{media_item.name}}</span>
+                                                </div>
+                                                <p class="p text-xs font-normal flex gap-4">
+                                                    <a href="/artist/{{media_item.author_id}}"  class="ajax-load w-full block relative text-gray-500 text-opacity-75 text-sm  tracking-tight  hover:text-rose-400">{{media_item.artist.name}}</a>
+                                                </p>
+
+                                                {% set item = media_item %}
+                                                {% set itemId = media_item.media_id %}
+                                                {% set itemType = 'media' %}
+                                                <div class="w-full flex gap-4 pt-2 hover:text-rose-400 text-gray-400 dark:text-gray-100">
+                                                    {% include 'views/front/' ~ template ~ '/includes/item-stats.html.twig' %}
+                                                    <span class="flex-1 text-right">{{media_item.field.duration|date("i:s")}}</span>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                        
+
+<script>
+$(function(){
+    let pics = [ {% for i in [1,2,3,4,5,6,7,8,9,10] %} 'screenshot_{{i}}_{{media_item.picture_name|split('_')[2]}}', {% endfor %} ];
+    let appended_{{media_item.media_id}} = false
+    jQuery(document).on('mouseenter', '#video-pictures-{{media_item.media_id}}', function(){
+        if (appended_{{media_item.media_id}})
+            return;
+
+        const fragment = document.createDocumentFragment();
+        pics.forEach(url => {
+            const img = document.createElement('img');
+            img.src = '/stream?thumbnail=300&dir=videos/screenshots&image='+url;
+            fragment.appendChild(img);
+        });
+        jQuery('#video-pictures-{{media_item.media_id}}').html(fragment);
+        appended_{{media_item.media_id}} = true
+    });
+    jQuery(document).on('mouseleave', '#video-pictures-{{media_item.media_id}}', function(){
+        
+        appended_{{media_item.media_id}} = false;
+
+        jQuery('#video-pictures-{{media_item.media_id}}').html('');
+    })
+})
+</script>

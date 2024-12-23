@@ -1,0 +1,84 @@
+<div class="px-2 lg:flex ">
+
+	{% include 'views/front/' ~ template ~ '/includes/studio_sidemenu.html.twig' %}
+
+	<div class="dark:text-gray-300 w-full gap-6 overflow-hidden dark:bg-gray-900 bg-white   px-2 py-8 lg:p-8  rounded-lg shadow shadow-lg relative">
+
+		<div class="box">
+			<div class="box-header with-border">
+				<h4 class="box-title text-2xl">{{lang.translate('Channels')}}</h4>
+				<p class="text-fade">{{lang.translate('List of created Channels')}}</p>
+			</div>
+            <hr class="my-6" />
+			<div class="box-body pt-0">
+                <div class="table-responsive">
+					<table class="table mb-0 w-full">
+						<thead class="py-4">
+							<tr class="py-4 text-left">
+								<th style="width: 50px">{{lang.translate('Title')}}</th>
+								<th class="min-w-40 lg:min-w-56"></th>
+								<th style="min-width: 100px">{{lang.translate('Stats')}}</th>
+								<th class="text-center py-8 min-h-20" >{{lang.translate('Streaming')}}</th>
+								<th class="text-center py-8 min-h-20" >{{lang.translate('Actions')}}</th>
+							</tr>
+						</thead>
+						<tbody>
+        				{% for item in list.items %}
+							<tr >
+								<td class="py-2">
+									<div class="bg-lightest h-50 w-50 l-h-50 rounded text-center overflow-hidden">
+										<img src="/stream?thumbnail=100&image={{item.picture_name}}" class="h-50 align-self-end" alt="">
+									</div>
+								</td>
+								<td class="px-2 text-primary">
+									<a href="/channel/{{item.channel_id}}" class="ajax-load text-dark font-weight-600  font-size-16 hover:text-rose-500">{{item.name}}</a>
+								</td>
+								<td>
+									<div class="text-sm text-gray-100 flex gap-2 ">
+										<span class=" cursor-pointer text-sm text-gray-100 flex gap-2 relative">
+											<img class="w-5" src="/src/front_assets/svg/{{ app.is_dark ? 'white' : 'blank'}}-heart.svg" />
+											<span id="views-count">{{item.likescount()}}</span>
+											<span class="tooltiptext left text-xs">{{lang.translate('Likes')}}</span>
+										</span>
+										<span class=" cursor-pointer text-sm text-gray-100 flex gap-2 relative">
+											<img class="w-5" src="/src/front_assets/svg/{{ app.is_dark ? 'views-white' : 'views'}}.svg" />
+											<span id="views-count">{{item.viewscount()}}</span>
+											<span class="tooltiptext left text-xs">{{lang.translate('Views')}}</span>
+										</span>
+										<span class=" cursor-pointer text-sm text-gray-100 flex gap-2 relative">
+											<span class="tooltiptext left text-xs">{{lang.translate('Comments')}}</span>
+											<img class="w-5" src="/src/front_assets/svg/{{ app.is_dark ? 'comments-white' : 'comments'}}.svg" />
+											<span id="comments-">{{item.commentscount()}}</span>
+										</span>
+									</div>
+								</td>
+								
+								<td class="text-center py-4">
+									<a href="/channels/manage/{{item.channel_id}}" class=" hover:text-rose-500" >{{lang.translate('Manage')}}</a>
+								</td>
+								<td class="text-center py-4 flex ">
+									<a href="/channels/edit/{{item.channel_id}}" class="ajax-load waves-effect waves-light mx-auto btn btn-primary rounded-full relative">
+										<span class="tooltiptext left text-xs">{{lang.translate('Edit')}}</span>
+										<img src="/src/front_assets/svg/edit-2.svg" class="w-5 dark:brightness-200" />
+									</a>
+									
+									<a href="/front_api/delete?type=Channel.delete&params[channel_id]={{item.channel_id}}" data-confirm="{{lang.translate('Are you sure')}}" date-confirm-text="{{lang.translate('Delete this item')}}" class="ajax-link mx-auto group relative   text-lg shadow">
+										<span class="tooltiptext left text-xs">{{lang.translate('Delete')}}</span>
+										<img src="/src/front_assets/svg/delete-white.svg" class="w-5 dark:brightness-200" />
+									</a>
+								</td>
+							</tr>
+                            {% endfor %}
+						</tbody>
+					</table>
+				</div>
+				{% set view_items_limit = app.SystemSetting.view_channels_limit %}
+				{% include 'views/front/' ~ template ~ '/includes/pagination.html.twig' %}                    
+                    
+			</div>
+		</div>
+
+	</div>
+
+</div>
+

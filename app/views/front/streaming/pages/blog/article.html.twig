@@ -1,0 +1,76 @@
+
+            <div class="py-4 article-page h-full overflow-hidden rounded-2xl" x-data="{}">                     
+                    
+                <div class="my-4 h-full lg:flex overflow-hidden rounded-2xl leading-7">                     
+                    
+                    <div class="overflow-hidden w-96 p-4 lg:p-0" id="playlist-parent">
+                        <div class=" p-8 relative overflow-hidden  rounded-2xl w-full lg:w-80" id="playlist-side" >
+                            <div class="artist-overlay top-[-20px] left-0 absolute w-full h-full py-20 bg-gradient-to-b from-gray-800 to-black"></div>
+                            <img src="/stream?thumbnail=800&image={{item.picture_name}}"  class="absolute bg-img left-0 top-0" />
+                            <div class=" w-full  rounded-2xl text-white mx-auto text-center relative z-10 ">
+                                <img src="/stream?thumbnail=300&image={{item.picture_name}}"  class="w-full h-full lg:w-56 lg:h-56 rounded-full shadow-xl" />
+                                <div class="py-8 text-left ">
+                                    <span>{{lang.translate('Article')}}</span>
+                                    <h1 class="lg:text-4xl text-2xl ">{{item.name}}</h1>
+                                    
+                                    <div class="gap-4 py-2">
+                                        <span class="w-full block text-sm text-gray-100 py-1">{{lang.translate('Author')}} : {{item.user.name}}</span>
+                                        <span class="w-full block text-sm text-gray-100 py-1">{{lang.translate('Date')}} : {{item.created_at|date('M d, Y')}}</span>
+                                    </div>
+                                    <hr class="opacity-20 my-2" />
+                                    <div class="w-full flex gap-2 h-8">
+                                        {% set customer = app.customer_auth() %}
+                                        {% set itemId = item.id %}
+                                        {% set itemType = 'article' %}
+                                        {% include 'views/front/' ~ template ~ '/includes/item-stats.html.twig' %}
+                                        <span x-on:click="jQuery('#show-box-path').val('{{item.lang_content.prefix}}'); jQuery('#share-popup').removeClass('hidden')" class="cursor-pointer mx-2 text-sm text-gray-100 pt-2"><img src="/src/front_assets/svg/share.svg" class="w-5"></span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="relative z-10 w-full  gap-4 bg-white dark:bg-gray-900  rounded-2xl p-8 h-full">
+                        
+                        <div class="w-full 	mb-10 relative text-primary" id="latest-uploads">
+                            <h1 class="dark:text-gray-300 text-2xl  ">{{item.lang_content.title}}</h1>
+                            <hr class="w-10 my-4 " />
+                            <div class="my-10 " ></div>
+                            <div class="pb-20 ">
+                                {{item.lang_content.content|raw|nl2br}}
+                            </div>
+                            
+                            <div class="w-full 	my-10 relative text-primary pb-10" id="latest-comments">
+                                <h3 class="text-2xl font-normal dark:text-gray-300">{{lang.translate('Comments')}} <a href="javascript:;" x-on:click="jQuery('#comments-form').toggleClass('hidden')" class="float-right text-base font-normal">{{lang.translate('Add your comment')}}</a></h3>
+                                <div class="my-4 " ></div>
+                                <div id="tracks-list" class="w-full overflow-auto  ">
+                                    <div class="w-full mx-auto hidden" id="comments-form" >
+                                        {% set id = item.id %}
+                                        {% set comments = item.comments %}
+                                        {% include 'views/front/' ~ template ~ '/includes/comment-form.html.twig' %}
+                                    </div>
+                                    {% if item.comments|length > 0 %}
+                                    <div class="w-full mx-auto">
+                                        {% include 'views/front/' ~ template ~ '/includes/comments.html.twig'%}
+                                    </div>
+                                    {% endif  %}
+                                </div>
+                                <div class="my-10 " ></div>
+                                <div class="z-10 absolute bottom-0 bg-gradient-to-b from-transparent dark:to-gray-900 to-white w-full h-20"></div>
+                            </div>
+                            <div class="z-10 absolute bottom-0 bg-gradient-to-b from-transparent dark:to-gray-900 to-white w-full h-20"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+                
+
+            </div>
+
+<style>
+.article-page li {
+    margin: 10px 15px;
+    list-style: circle;
+}
+</style>

@@ -1,0 +1,9 @@
+<div class="px-4 pt-6 w-full h-20">
+				{% set c = list.count - ((view_items_limit ?? app.SystemSetting.view_items_limit) * (app.params.page > 0 ? app.params.page : 1)) %}
+				{% if c > 0 %}
+				<a href="?params[page]={{app.params.page ? (app.params.page + 1) : 2}}&params[sort_by]={{app.params.sort_by}}&params[date]={{app.params.date}}&params[title]={{app.params.title}}" class="ajax-load float-right dark:text-gray-300 mx-auto inline-block px-6 py-2 rounded-2xl border transition hover:border-rose-600 border-rose-400">{{lang.translate('Next')}}</a>
+				{% endif %}
+				{% if app.params.page > 1 %}
+				<a href="?params[page]={{(app.params.page - 1)}}&params[sort_by]={{app.params.sort_by}}&params[date]={{app.params.date}}&params[title]={{app.params.title}}" class="ajax-load float-left dark:text-gray-300 mx-auto inline-block px-6 py-2 rounded-2xl border transition hover:border-rose-600 border-rose-400">{{lang.translate('Previous')}}</a>
+				{% endif %}
+</div>

@@ -1,0 +1,11 @@
+                    <ul class="flex pb-20 gap-4 text-primary relative z-10">
+                         {% for menuitem in app.front_menu('footer1') %}
+                        <li   class="hover:text-rose-500" id="footermenu-{{loop.index}}" >
+                            <a href="/{{menuitem.page.link}}" class="w-full flex gap gap-4 ajax-load ">
+                                {{menuitem.page.lang_content.title|raw}}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    
