@@ -1,7 +1,7 @@
 <?php
 
-// error_reporting(0); 
-error_reporting(E_ALL); 
+error_reporting(0); 
+// error_reporting(E_ALL); 
 session_start(); 
 date_default_timezone_set('Africa/Cairo');
 
@@ -46,11 +46,15 @@ $capsule->addConnection([
     'charset' => 'utf8',
     'collation' => 'utf8_unicode_ci',
     'prefix' => '',
+    'options'   => [
+        PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))"
+    ],
 ]);
 
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 $capsule->connection()->enableQueryLog();
+
 // Disable ONLY_FULL_GROUP_BY globally
 Capsule::statement("SET GLOBAL sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
 
