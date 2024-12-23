@@ -347,6 +347,7 @@ class IframeController extends CustomController
             $params['name'] = '';
             $params['picture'] = '';
             $params['author_id'] = $this->app->customer_id() ?? 0;
+            $params['created_by'] = $this->app->customer_id() ?? 0;
 			$params['status'] = isset($params['status']) ? 'on' : null;
 
             $params['files'] = [[
