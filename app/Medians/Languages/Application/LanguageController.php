@@ -82,6 +82,8 @@ class LanguageController extends CustomController
 		        'columns' => $this->columns(),
 		        'fillable' => $this->fillable(),
 		        'items' => $this->repo->get(),
+				'object_name'=> 'Language',
+				'object_key'=> 'language_id',
 		    ]);
 			
 		} catch (\Exception $e) {
