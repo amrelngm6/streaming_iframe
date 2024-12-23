@@ -91,6 +91,10 @@ class APIController extends CustomController
 				case 'Translation.create':
 					$return = (new Languages\Application\TranslationController)->store();
 					break;
+
+				case 'Language.create':
+					$return = (new Languages\Application\LanguageController)->store();
+					break;
 		
 		
 				case 'PaymentMethod.create':
